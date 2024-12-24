@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MealPlanService.Core", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostService.Core", "src\PostService\PostService.Core\PostService.Core.csproj", "{F4199B0F-5B85-4942-914D-E7F85D6DF115}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nutrition.ApiGateway", "src\Nutrition.ApiGateway\Nutrition.ApiGateway.csproj", "{B85039FB-25FA-4DB0-B1E2-7ED17A7A8264}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +155,10 @@ Global
 		{F4199B0F-5B85-4942-914D-E7F85D6DF115}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4199B0F-5B85-4942-914D-E7F85D6DF115}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4199B0F-5B85-4942-914D-E7F85D6DF115}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B85039FB-25FA-4DB0-B1E2-7ED17A7A8264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B85039FB-25FA-4DB0-B1E2-7ED17A7A8264}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B85039FB-25FA-4DB0-B1E2-7ED17A7A8264}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B85039FB-25FA-4DB0-B1E2-7ED17A7A8264}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -184,6 +190,7 @@ Global
 		{6BFC769D-7D73-46C5-B320-B8E1DBA12604} = {9E9C0D43-F798-45D4-B821-85E0F9470103}
 		{21B65D4B-F884-4F2B-BC6B-BE89FD4F89A6} = {40818098-7F87-4A9A-9AD3-CD025F894AE6}
 		{F4199B0F-5B85-4942-914D-E7F85D6DF115} = {7251ECCF-E351-4BB5-9938-95E9B5F911A2}
+		{B85039FB-25FA-4DB0-B1E2-7ED17A7A8264} = {B122DB00-21E0-4BE9-BCD1-1786F3B95814}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD8CDA70-C9EF-4C82-9517-9363D709C383}

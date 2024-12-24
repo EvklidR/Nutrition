@@ -8,4 +8,6 @@ builder.AddProject<Projects.MealPlanService_API>("mealplanservice-api");
 
 builder.AddProject<Projects.PostService_API>("postservice-api");
 
+builder.AddProject<Projects.Nutrition_ApiGateway>("nutrition-apigateway");
+
 builder.Build().Run();
