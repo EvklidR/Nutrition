@@ -12,8 +12,6 @@
 
   <ItemGroup>
     <Folder Include="MSSQL\Migrations\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -44,6 +44,10 @@ namespace UserService.Api.Middleware
                     statusCode = HttpStatusCode.Unauthorized;
                     result = unauthorEx.Message;
                     break;
+                case NotFound notFoundEx:
+                    statusCode = HttpStatusCode.NotFound;
+                    result = notFoundEx.Message;
+                    break;
                 default:
                     statusCode = HttpStatusCode.InternalServerError;
                     result = exception.Message;
