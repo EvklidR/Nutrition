@@ -19,7 +19,6 @@ namespace UserService.API.Controllers
             _mediator = mediator;
         }
 
-        [Authorize(Roles = "admin")]
         [HttpPost]
         [ServiceFilter(typeof(UserIdFilter))]
         public async Task<IActionResult> CreateProfile([FromBody] CreateProfileDTO profileDto)
