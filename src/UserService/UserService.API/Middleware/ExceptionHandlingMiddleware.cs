@@ -2,15 +2,17 @@
 using Newtonsoft.Json;
 using System.Net;
 
-namespace UserService.Api.Middleware
+namespace UserService.API.Middleware
 {
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
-        public ExceptionHandlingMiddleware(RequestDelegate next)
+        public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -21,11 +23,11 @@ namespace UserService.Api.Middleware
             }
             catch (Exception ex)
             {
-                await HandleExceptionAsync(context, ex);
+                await HandleExceptionAsync(context, ex, _logger);
             }
         }
 
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception, ILogger logger)
         {
             HttpStatusCode statusCode;
             object result;
@@ -53,6 +55,8 @@ namespace UserService.Api.Middleware
                     result = exception.Message;
                     break;
             }
+
+            logger.LogError($"Error occurred during execution. Code: {statusCode}, message: {result}");
 
             context.Response.StatusCode = (int)statusCode;
             context.Response.ContentType = "application/json";

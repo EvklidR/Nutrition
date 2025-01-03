@@ -5,8 +5,8 @@ namespace UserService.Application.Interfaces
 {
     public interface ITokenService
     {
-        string GenerateAccessToken(User user);
-        string GenerateRefreshToken();
+        Task<string> GenerateAccessToken(User user);
+        Task<string> GenerateRefreshToken(User user);
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
     }
 }

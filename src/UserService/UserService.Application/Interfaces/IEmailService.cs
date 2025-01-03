@@ -1,8 +1,10 @@
-﻿namespace EventsService.Application.Interfaces
+﻿using System.Globalization;
+
+namespace UserService.Application.Interfaces
 {
     public interface IEmailService
     {
-        int GenerateCode();
-        void SendEmail(string email, string subject, string body);
+        Task SendEmailAsync(string email, string subject, string body);
+        Task SendConfirmationEmailAsync(string email, string link);
     }
 }
