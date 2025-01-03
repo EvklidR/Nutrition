@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsAspireHost>true</IsAspireHost>
+    <UserSecretsId>05dbd0c5-116d-4bb6-b221-dd4c9b0ff33b</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FoodService\FoodService.API\FoodService.API.csproj" />
+    <ProjectReference Include="..\MealPlanService\MealPlanService.API\MealPlanService.API.csproj" />
+    <ProjectReference Include="..\Nutrition.ApiGateway\Nutrition.ApiGateway.csproj" />
+    <ProjectReference Include="..\PostService\PostService.API\PostService.API.csproj" />
+    <ProjectReference Include="..\UserService\UserService.API\UserService.API.csproj" />
+  </ItemGroup>
+
+</Project>
