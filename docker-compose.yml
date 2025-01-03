@@ -1,6 +1,0 @@
-services:
-  userservice.api:
-    image: ${DOCKER_REGISTRY-}userserviceapi
-    build:
-      context: src
-      dockerfile: UserService/UserService.API/Dockerfile
