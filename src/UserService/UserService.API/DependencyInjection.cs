@@ -104,7 +104,8 @@ namespace UserService.API.DependencyInjection
                 options.Tokens.AuthenticatorTokenProvider = null;
             })
             .AddRoles<IdentityRole<Guid>>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
             return services;
         }

@@ -17,7 +17,7 @@ namespace UserService.Application.UseCases.Commands
             var profile = await _profileRepository.GetByIdAsync(request.profileId);
 
             if (profile == null)
-                throw new NotFound("Profile not found.");
+                throw new NotFound("Profile not found");
 
             if (request.userId != profile!.UserId)
                 throw new Unauthorized("Owner isn't valid");

@@ -34,7 +34,7 @@ namespace UserService.Application.UseCases.Commands
             {
                 foreach (var prof in existingProfiles)
                 {
-                    if (prof.Name == profile.Name && prof != profile)
+                    if (prof.Name == request.profileDto.Name && prof != profile)
                     {
                         throw new AlreadyExists("Profile with this name in your account already exists");
                     }

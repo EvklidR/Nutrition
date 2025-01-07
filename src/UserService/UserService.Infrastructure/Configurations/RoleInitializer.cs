@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using System.Text;
@@ -13,23 +14,30 @@ namespace UserService.Infrastructure.Configurations
         private readonly RoleManager<IdentityRole<Guid>> _roleManager;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public RoleInitializer(
             UserManager<User> userManager,
             RoleManager<IdentityRole<Guid>> roleManager,
             IEmailService emailService,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _emailService = emailService;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task InitializeAsync()
         {
             string adminEmail = _configuration["AdminData:email"];
             string password = _configuration["AdminData:password"];
+
+            string applicationUrl = _configuration["profiles:https:applicationUrl"]
+                                     ?? _configuration["profiles:http:applicationUrl"]
+                                     ?? "https://localhost:7075";
 
             if (await _roleManager.FindByNameAsync("admin") == null)
             {
@@ -48,13 +56,13 @@ namespace UserService.Infrastructure.Configurations
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(admin);
                     var code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-                    var confirmationLink = $"https://localhost:7075/confirmEmail?userId={admin.Id}&code={code}";
+                    var confirmationLink = $"{applicationUrl}/User/confirmEmail?userId={admin.Id}&code={code}";
 
                     await _emailService.SendConfirmationEmailAsync(adminEmail, $"<a href='{confirmationLink}'>Confirm</a>");
-
                     await _userManager.AddToRoleAsync(admin, "admin");
                 }
             }
         }
+
     }
 }

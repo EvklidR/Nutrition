@@ -23,10 +23,11 @@ namespace UserService.Application.UseCases.Commands
         {
             var email = request.email;
 
-            var user = new User();
-
-            await _userManager.SetUserNameAsync(user, email);
-            await _userManager.SetEmailAsync(user, email);
+            var user = new User
+            {
+                Email = email,
+                UserName = email
+            };
 
             var result = await _userManager.CreateAsync(user, request.password);
 
@@ -35,9 +36,16 @@ namespace UserService.Application.UseCases.Commands
                 var errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
                 throw new BadRequest(errorMessage);
             }
-            await _userManager.AddToRoleAsync(user, "user");
 
-            _mediator.Send(new SendConfirmationToEmailCommand(user, request.url, user.Email));
+            var roleResult = await _userManager.AddToRoleAsync(user, "user");
+            if (!roleResult.Succeeded)
+            {
+                var errorMessage = string.Join(", ", roleResult.Errors.Select(e => e.Description));
+                throw new BadRequest(errorMessage);
+            }
+
+            await _mediator.Send(new SendConfirmationToEmailCommand(user, request.url, user.Email));
         }
+
     }
 }

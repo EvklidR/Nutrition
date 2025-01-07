@@ -31,6 +31,8 @@ namespace UserService.Infrastructure.DependencyInjection
 
             services.AddHangfireServer();
 
+            services.AddHttpContextAccessor();
+
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IProfileRepository, ProfileRepository>();
