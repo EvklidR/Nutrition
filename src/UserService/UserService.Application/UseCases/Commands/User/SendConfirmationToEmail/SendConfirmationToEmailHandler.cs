@@ -22,6 +22,7 @@ namespace UserService.Application.UseCases.Commands
             var code = request.isChange
                 ? await _userManager.GenerateChangeEmailTokenAsync(request.user, request.email)
                 : await _userManager.GenerateEmailConfirmationTokenAsync(request.user);
+
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
             var userId = request.user.Id;

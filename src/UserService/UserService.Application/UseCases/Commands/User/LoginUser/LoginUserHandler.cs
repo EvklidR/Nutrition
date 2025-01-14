@@ -26,12 +26,14 @@ public class LoginUserHandler : ICommandHandler<LoginUserCommand, AuthenticatedR
         }
 
         var passwordValid = await _userManager.CheckPasswordAsync(user, request.password);
+
         if (!passwordValid)
         {
             throw new Unauthorized("Login failed. Invalid email or password");
         }
 
         var accessToken = await _tokenService.GenerateAccessToken(user);
+
         var refreshToken = await _tokenService.GenerateRefreshToken(user);
 
         return new AuthenticatedResponse { AccessToken = accessToken, RefreshToken = refreshToken };

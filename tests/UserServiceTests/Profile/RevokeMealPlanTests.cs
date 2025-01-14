@@ -72,7 +72,7 @@ namespace UserServiceTests
             await handler.Handle(command, CancellationToken.None);
 
             // Assert
-            profile.MealPlanId.Should().Be(null);
+            profile.ThereIsMealPlan.Should().Be(false);
             profileRepositoryMock.Verify(repo => repo.Update(profile), Times.Once);
             profileRepositoryMock.Verify(repo => repo.SaveChangesAsync(), Times.Once);
         }

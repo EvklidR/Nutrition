@@ -16,8 +16,10 @@ namespace UserService.Infrastructure.DependencyInjection
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddGrpc();
+
             services.AddSingleton<IMealPlanService>(sp =>
-                new MealPlanServiceClient(configuration["GrpcServices:MealPlanUrl"]));
+                new MealPlanServiceClient(configuration["GrpcServices:MealPlanServiceUrl"]));
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -30,8 +32,6 @@ namespace UserService.Infrastructure.DependencyInjection
                 .UseSqlServerStorage(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddHangfireServer();
-
-            services.AddHttpContextAccessor();
 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IEmailService, EmailService>();

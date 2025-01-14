@@ -22,8 +22,8 @@ namespace UserService.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginUserCommand command)
         {
-            _logger.LogInformation("here");
             var response = await _mediator.Send(command);
+
             return Ok(response);
         }
 
@@ -32,7 +32,9 @@ namespace UserService.API.Controllers
         public async Task<IActionResult> Register(RegisterUserCommand command)
         {
             var origin = (string)HttpContext.Items["RequestOrigin"]!;
+
             await _mediator.Send(command with { url = origin });
+
             return Ok();
         }
 
@@ -40,6 +42,7 @@ namespace UserService.API.Controllers
         public async Task<IActionResult> Refresh(RefreshTokenCommand command)
         {
             var response = await _mediator.Send(command);
+
             return Ok(response);
         }
 
@@ -49,7 +52,9 @@ namespace UserService.API.Controllers
         public async Task<IActionResult> Revoke(RevokeTokenCommand command)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
+
             await _mediator.Send(command with { userId = userId });
+
             return NoContent();
         }
 
@@ -58,7 +63,9 @@ namespace UserService.API.Controllers
         public async Task<IActionResult> ConfirmEmail([FromQuery] SendConfirmationToEmailCommand request)
         {
             var origin = (string)HttpContext.Items["RequestOrigin"]!;
+
             await _mediator.Send(request with { url = origin });
+
             return Ok();
         }
 
@@ -66,6 +73,7 @@ namespace UserService.API.Controllers
         public async Task<IActionResult> ConfirmEmail([FromQuery] ConfirmEmailCommand command) 
         {
             await _mediator.Send(command);
+
             return Ok();
         }
     }

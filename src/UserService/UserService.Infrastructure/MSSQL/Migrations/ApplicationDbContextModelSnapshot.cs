@@ -174,12 +174,12 @@ namespace UserService.Infrastructure.Migrations
                     b.Property<double>("Height")
                         .HasColumnType("float");
 
-                    b.Property<Guid?>("MealPlanId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ThereIsMealPlan")
+                        .HasColumnType("bit");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");

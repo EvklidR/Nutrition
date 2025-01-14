@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="MSSQL\Migrations\" />
+    <Folder Include="Mongo\" />
     <Folder Include="Repositories\" />
     <Folder Include="Services\" />
   </ItemGroup>

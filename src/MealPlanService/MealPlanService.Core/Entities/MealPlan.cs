@@ -1,12 +1,19 @@
-﻿namespace MealPlanService.Core.Entities
+﻿using MealPlanService.Core.Enums;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace MealPlanService.Core.Entities
 {
     public class MealPlan
     {
-        public Guid Id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Purpose { get; set; }
-        public string Type { get; set; }
-        public List<MealPlanElement> Elements { get; set; } = new List<MealPlanElement>();
+        public MealPlanType Type { get; set; }
+
+        public List<MealPlanDay> Days { get; set; }
     }
 }

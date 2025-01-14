@@ -23,6 +23,7 @@ namespace UserService.Application.UseCases.Commands
                 throw new Unauthorized("Owner isn't valid");
 
             _profileRepository.Delete(profile);
+
             await _profileRepository.SaveChangesAsync();
         }
     }

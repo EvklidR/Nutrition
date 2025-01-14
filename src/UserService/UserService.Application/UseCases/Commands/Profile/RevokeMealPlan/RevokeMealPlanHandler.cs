@@ -13,15 +13,16 @@ namespace UserService.Application.UseCases.Commands
         public async Task Handle(RevokeMealPlanCommand request, CancellationToken cancellationToken)
         {
             var profile = await _profileRepository.GetByIdAsync(request.profileId);
+
             if (profile == null)
                 throw new NotFound("Profile not found");
 
             if (request.userId != profile!.UserId)
                 throw new Unauthorized("Owner isn't valid");
 
-            profile.MealPlanId = null;
-
+            profile.ThereIsMealPlan = false;
             _profileRepository.Update(profile);
+
             await _profileRepository.SaveChangesAsync();
         }
     }

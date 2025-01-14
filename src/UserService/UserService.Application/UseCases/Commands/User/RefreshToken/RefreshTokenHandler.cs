@@ -31,6 +31,7 @@ namespace UserService.Application.UseCases.Commands
             }
 
             var user = await _userManager.FindByEmailAsync(username!);
+
             if (user == null)
             {
                 throw new Unauthorized("User not found");

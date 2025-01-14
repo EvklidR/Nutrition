@@ -6,6 +6,7 @@ package userService;
 
 service CheckUserService {
     rpc CheckUser (CheckUserRequest) returns (CheckUserResponse);
+    rpc CheckProfileBelonging (CheckProfileBelongingRequest) returns (CheckProfileBelongingResponse);
 }
 
 message CheckUserRequest {
@@ -14,4 +15,13 @@ message CheckUserRequest {
 
 message CheckUserResponse {
     bool exists = 1;
+}
+
+message CheckProfileBelongingRequest {
+    string userId = 1;
+    string profileId = 2;
+}
+
+message CheckProfileBelongingResponse {
+    bool belong = 1;
 }

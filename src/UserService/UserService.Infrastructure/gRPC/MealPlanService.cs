@@ -18,14 +18,12 @@ namespace UserService.Infrastructure.gRPC
         }
 
         public async Task<DailyNeedsResponse> GetDailyNeedsByMealPlanAsync(
-            Guid mealPlanId,
             Guid userId,
             double bodyWeight,
             double dailyKcal)
         {
             var request = new GetKcalAndMacrosRequest
             {
-                MealPlanId = mealPlanId.ToString(),
                 ProfileId = userId.ToString(),
                 BodyWeight = bodyWeight,
                 DailyKcal = dailyKcal
@@ -34,6 +32,7 @@ namespace UserService.Infrastructure.gRPC
             try
             {
                 var response = await _client.CalculateKcalAndMacrosAsync(request);
+
                 return new DailyNeedsResponse(response.Calories, response.Proteins, response.Fats, response.Carbohydrates);
             }
             catch (RpcException ex)

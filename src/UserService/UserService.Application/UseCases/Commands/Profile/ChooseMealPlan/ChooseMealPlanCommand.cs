@@ -1,4 +1,4 @@
 ﻿namespace UserService.Application.UseCases.Commands
 {
-    public record ChooseMealPlanCommand(Guid mealPlanId, Guid profileId, Guid userId) : ICommand;
+    public record ChooseMealPlanCommand(string mealPlanId, Guid profileId, Guid userId) : ICommand;
 }

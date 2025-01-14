@@ -26,8 +26,10 @@ namespace UserService.API.Controllers
             Guid userId = (Guid)HttpContext.Items["UserId"]!;
             profileDto.UserId = userId;
             var command = new CreateProfileCommand(profileDto);
+
             var result = await _mediator.Send(command);
-            return CreatedAtAction(null, result);
+
+            return Ok(result);
         }
 
         [Authorize]
@@ -44,11 +46,13 @@ namespace UserService.API.Controllers
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [HttpPatch("choose-meal-plan")]
-        public async Task<IActionResult> ChooseMealPlan(Guid profileId, Guid mealPlanId)
+        public async Task<IActionResult> ChooseMealPlan(Guid profileId, string mealPlanId)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
             var command = new ChooseMealPlanCommand(mealPlanId, profileId, userId);
+
             await _mediator.Send(command);
+
             return NoContent();
         }
 
@@ -59,7 +63,9 @@ namespace UserService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
             var command = new DeleteProfileCommand(profileId, userId);
+
             await _mediator.Send(command);
+
             return NoContent();
         }
 
@@ -70,7 +76,9 @@ namespace UserService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
             var query = new GetUserProfilesQuery(userId);
+
             var result = await _mediator.Send(query);
+
             return Ok(result);
         }
 
@@ -81,7 +89,9 @@ namespace UserService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
             var query = new GetProfileByIdQuery(profileId, userId);
+
             var result = await _mediator.Send(query);
+
             return Ok(result);
         }
 
@@ -92,7 +102,9 @@ namespace UserService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
             var command = new RevokeMealPlanCommand(profileId, userId);
+
             await _mediator.Send(command);
+
             return NoContent();
         }
 
@@ -103,7 +115,9 @@ namespace UserService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
             var command = new UpdateProfileCommand(profileDto, userId);
+
             await _mediator.Send(command);
+
             return NoContent();
         }
 

@@ -38,6 +38,7 @@ namespace UserService.Application.UseCases.Commands
             }
 
             var roleResult = await _userManager.AddToRoleAsync(user, "user");
+
             if (!roleResult.Succeeded)
             {
                 var errorMessage = string.Join(", ", roleResult.Errors.Select(e => e.Description));

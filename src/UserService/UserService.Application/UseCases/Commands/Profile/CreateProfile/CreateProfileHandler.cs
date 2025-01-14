@@ -25,12 +25,14 @@ namespace UserService.Application.UseCases.Commands
             var profile = _mapper.Map<Domain.Entities.Profile>(request.profileDto);
 
             var userExists = await _userManager.FindByIdAsync(profile.UserId.ToString());
+
             if (userExists == null)
             {
                 throw new Unauthorized("User does not exist");
             }
 
             var existingProfiles = await _profileRepository.GetAllByUserAsync(profile.UserId);
+
             if (existingProfiles != null)
             {
                 foreach (var prof in existingProfiles)
@@ -43,7 +45,9 @@ namespace UserService.Application.UseCases.Commands
             }
             profile.DesiredGlassesOfWater = profile.Gender == Gender.Female ? 11 : 15;
             _profileRepository.Add(profile);
+
             await _profileRepository.SaveChangesAsync();
+
             return profile;
         }
     }
