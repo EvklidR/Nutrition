@@ -6,7 +6,7 @@ using MealPlanService.Grpc;
 
 namespace MealPlanService.API.gRPC
 {
-    public class MealPlanService : GrpcMealPlanService.GrpcMealPlanServiceBase
+    public class MealPlanService : GRPCMealPlanService.GRPCMealPlanServiceBase
     { 
         private readonly ProfilePlanService _userPlanService;
 

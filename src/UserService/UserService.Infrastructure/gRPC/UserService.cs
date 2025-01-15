@@ -5,7 +5,7 @@ using UserService.Grpc;
 
 namespace UserService.Infrastructure.gRPC
 {
-    public class UserService : CheckUserService.CheckUserServiceBase
+    public class UserService : GRPCUserService.GRPCUserServiceBase
     {
         private readonly IMediator _mediator;
         public UserService(IMediator mediator)

@@ -4,31 +4,31 @@ using MealPlanService.BusinessLogic.DTOs;
 using MealPlanService.BusinessLogic.Models;
 using MealPlanService.Core.Entities;
 using MealPlanService.Core.Enums;
-using MealPlanService.Infrastructure.Repositories;
 using MealPlanService.Infrastructure.Services;
+using MealPlanService.Infrastructure.Repositories.Interfaces;
 
 namespace MealPlanService.BusinessLogic.Services
 {
     public class ProfilePlanService
     {
-        private readonly ProfileMealPlanRepository _usersMealPlanRepository;
-        private readonly MealPlanRepository _mealPlanRepository;
+        private readonly IProfileMealPlanRepository _usersMealPlanRepository;
+        private readonly IMealPlanRepository _mealPlanRepository;
         private readonly MealPlanService _mealPlanService;
         private readonly UserService _userService;
         private readonly IMapper _mapper;
 
         public ProfilePlanService(
-            ProfileMealPlanRepository usersMealPlanRepository,
-            MealPlanRepository mealPlanRepository,
-            IMapper mapper,
+            IProfileMealPlanRepository usersMealPlanRepository,
+            IMealPlanRepository mealPlanRepository,
             MealPlanService mealPlanService,
-            UserService userService)
+            UserService userService,
+            IMapper mapper)
         {
             _usersMealPlanRepository = usersMealPlanRepository;
             _mealPlanRepository = mealPlanRepository;
             _mealPlanService = mealPlanService;
-            _mapper = mapper;
             _userService = userService;
+            _mapper = mapper;
         }
 
         public async Task<List<Recommendation>?> GetRecommendations(string profileId)
@@ -42,17 +42,17 @@ namespace MealPlanService.BusinessLogic.Services
         {
             if (await _userService.CheckProfileBelonging(userId, profileMealPlanDTO.ProfileId))
             {
+                var plan = await _mealPlanRepository.GetByIdAsync(profileMealPlanDTO.MealPlanId);
+
+                if (plan == null)
+                {
+                    throw new NotFound("Meal plan not found");
+                }
+
                 var userPlan = await _usersMealPlanRepository.GetActiveProfilePlan(profileMealPlanDTO.ProfileId);
 
                 if (userPlan != null)
                 {
-                    var plan = await _mealPlanRepository.GetByIdAsync(profileMealPlanDTO.MealPlanId);
-
-                    if (plan == null)
-                    {
-                        throw new NotFound("Meal plan not found");
-                    }
-
                     userPlan.EndDate = DateOnly.FromDateTime(DateTime.Now);
                     userPlan.IsActive = false;
 

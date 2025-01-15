@@ -1,10 +1,11 @@
 ﻿using MealPlanService.Core.Entities;
 using MealPlanService.Infrastructure.MongoDB;
+using MealPlanService.Infrastructure.Repositories.Interfaces;
 using MongoDB.Driver;
 
 namespace MealPlanService.Infrastructure.Repositories
 {
-    public class ProfileMealPlanRepository : BaseRepository<ProfileMealPlan>
+    public class ProfileMealPlanRepository : BaseRepository<ProfileMealPlan>, IProfileMealPlanRepository
     {
         private readonly MongoDBContext _context;
         public ProfileMealPlanRepository(MongoDBContext context)

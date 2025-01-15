@@ -4,19 +4,19 @@ using MealPlanService.BusinessLogic.Exceptions;
 using MealPlanService.BusinessLogic.Models;
 using MealPlanService.Core.Entities;
 using MealPlanService.Core.Enums;
-using MealPlanService.Infrastructure.Repositories;
+using MealPlanService.Infrastructure.Repositories.Interfaces;
 
 namespace MealPlanService.BusinessLogic.Services
 {
     public class MealPlanService
     {
-        private readonly MealPlanRepository _mealPlanRepository;
-        private readonly ProfileMealPlanRepository _profileMealPlanRepository;
+        private readonly IMealPlanRepository _mealPlanRepository;
+        private readonly IProfileMealPlanRepository _profileMealPlanRepository;
         private readonly IMapper _mapper;
 
         public MealPlanService(
-            MealPlanRepository mealPlanRepository,
-            ProfileMealPlanRepository profileMealPlanRepository,
+            IMealPlanRepository mealPlanRepository,
+            IProfileMealPlanRepository profileMealPlanRepository,
             IMapper mapper
 )
         {
@@ -44,6 +44,11 @@ namespace MealPlanService.BusinessLogic.Services
 
         public async Task DeleteMealPlanAsync(string mealPlanId)
         {
+            var mealPlan = await _mealPlanRepository.GetByIdAsync(mealPlanId);
+            if (mealPlan == null)
+            {
+                throw new NotFound("Meal plan not found");
+            }
             await _mealPlanRepository.DeleteAsync(mealPlanId);
             var profilePlans = await _profileMealPlanRepository.GetByMealPlan(mealPlanId);
 
@@ -57,6 +62,11 @@ namespace MealPlanService.BusinessLogic.Services
 
         public async Task UpdateMealPlanAsync(MealPlan updatedMealPlan)
         {
+            var existingMealPlan = await _mealPlanRepository.GetByIdAsync(updatedMealPlan.Id);
+            if (existingMealPlan == null)
+            {
+                throw new NotFound("Meal plan not found");
+            }
             var mealPlan = _mapper.Map<MealPlan>(updatedMealPlan);
 
             await _mealPlanRepository.UpdateAsync(updatedMealPlan);

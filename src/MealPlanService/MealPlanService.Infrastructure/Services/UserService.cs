@@ -5,15 +5,15 @@ namespace MealPlanService.Infrastructure.Services
 {
     public class UserService
     {
-        private readonly CheckUserService.CheckUserServiceClient _client;
+        private readonly GRPCUserService.GRPCUserServiceClient _client;
 
         public UserService(string address)
         {
             var channel = GrpcChannel.ForAddress(address);
-            _client = new CheckUserService.CheckUserServiceClient(channel);
+            _client = new GRPCUserService.GRPCUserServiceClient(channel);
         }
 
-        public async Task<bool> CheckProfileBelonging(
+        public virtual async Task<bool> CheckProfileBelonging(
             string userId,
             string profileId)
         {

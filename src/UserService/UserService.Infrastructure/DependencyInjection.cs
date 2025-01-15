@@ -7,7 +7,7 @@ using UserService.Domain.Interfaces.Repositories;
 using UserService.Infrastructure.Services;
 using UserService.Infrastructure.Configurations;
 using UserService.Application.Interfaces;
-using UserService.Infrastructure.Grpc;
+using UserService.Infrastructure.gRPC;
 using Hangfire;
 
 namespace UserService.Infrastructure.DependencyInjection
@@ -19,7 +19,7 @@ namespace UserService.Infrastructure.DependencyInjection
             services.AddGrpc();
 
             services.AddSingleton<IMealPlanService>(sp =>
-                new MealPlanServiceClient(configuration["GrpcServices:MealPlanServiceUrl"]));
+                new MealPlanService(configuration["GrpcServices:MealPlanServiceUrl"]));
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

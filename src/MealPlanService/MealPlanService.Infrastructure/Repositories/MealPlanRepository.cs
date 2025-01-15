@@ -2,11 +2,12 @@
 using MealPlanService.Core.Enums;
 using MealPlanService.Infrastructure.MongoDB;
 using MealPlanService.Infrastructure.Projections;
+using MealPlanService.Infrastructure.Repositories.Interfaces;
 using MongoDB.Driver;
 
 namespace MealPlanService.Infrastructure.Repositories
 {
-    public class MealPlanRepository : BaseRepository<MealPlan>
+    public class MealPlanRepository : BaseRepository<MealPlan>, IMealPlanRepository
     {
         public MealPlanRepository(
             MongoDBContext context)

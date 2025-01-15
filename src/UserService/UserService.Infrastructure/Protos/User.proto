@@ -4,7 +4,7 @@ option csharp_namespace = "UserService.Grpc";
 
 package userService;
 
-service CheckUserService {
+service GRPCUserService {
     rpc CheckUser (CheckUserRequest) returns (CheckUserResponse);
     rpc CheckProfileBelonging (CheckProfileBelongingRequest) returns (CheckProfileBelongingResponse);
 }

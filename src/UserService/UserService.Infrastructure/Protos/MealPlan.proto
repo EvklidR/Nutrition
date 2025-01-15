@@ -2,7 +2,7 @@
 
 option csharp_namespace = "UserService.Grpc";
 
-service MealPlanService {
+service GRPCMealPlanService {
     rpc CalculateKcalAndMacros (GetKcalAndMacrosRequest) returns (GetKcalAndMacrosResponse);
 }
 

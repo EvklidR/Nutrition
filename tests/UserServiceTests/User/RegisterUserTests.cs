@@ -45,10 +45,6 @@ namespace UserServiceTests
 
             _userManagerMock.Setup(um => um.CreateAsync(It.IsAny<User>(), command.password))
                 .ReturnsAsync(IdentityResult.Success);
-            _userManagerMock.Setup(um => um.SetEmailAsync(It.IsAny<User>(), command.email))
-                .ReturnsAsync(IdentityResult.Success);
-            _userManagerMock.Setup(um => um.SetUserNameAsync(It.IsAny<User>(), command.email))
-                .ReturnsAsync(IdentityResult.Success);
             _userManagerMock.Setup(um => um.AddToRoleAsync(It.IsAny<User>(), "user"))
                 .ReturnsAsync(IdentityResult.Success);
 
@@ -57,8 +53,6 @@ namespace UserServiceTests
 
             // Assert
             _userManagerMock.Verify(um => um.CreateAsync(It.IsAny<User>(), command.password), Times.Once);
-            _userManagerMock.Verify(um => um.SetEmailAsync(It.IsAny<User>(), command.email), Times.Once);
-            _userManagerMock.Verify(um => um.SetUserNameAsync(It.IsAny<User>(), command.email), Times.Once);
             _userManagerMock.Verify(um => um.AddToRoleAsync(It.IsAny<User>(), "user"), Times.Once);
             _mediatorMock.Verify(m => m.Send(It.IsAny<SendConfirmationToEmailCommand>(), It.IsAny<CancellationToken>()), Times.Once);
         }
@@ -86,27 +80,6 @@ namespace UserServiceTests
             // Assert
             var errors = await act.Should().ThrowAsync<BadRequest>();
             errors.Which.Errors.Should().ContainSingle("Password is too weak");
-        }
-
-        [Fact]
-        public async Task Should_Throw_BadRequest_When_SetEmail_Fails()
-        {
-            // Arrange
-            var command = new RegisterUserCommand(
-                _faker.Internet.Email(),
-                _faker.Internet.Password(),
-                null
-            );
-
-            _userManagerMock.Setup(um => um.SetEmailAsync(It.IsAny<User>(), command.email))
-                .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Invalid email format" }));
-
-            // Act
-            Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
-
-            // Assert
-            var errors = await act.Should().ThrowAsync<BadRequest>();
-            errors.Which.Errors.Should().ContainSingle("Invalid email format");
         }
 
         [Fact]

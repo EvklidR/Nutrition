@@ -4,6 +4,7 @@ using MealPlanService.Infrastructure.MongoDB;
 using MealPlanService.Infrastructure.Repositories;
 using MealPlanService.Infrastructure.Options;
 using MealPlanService.Infrastructure.Services;
+using MealPlanService.Infrastructure.Repositories.Interfaces;
 
 namespace MealPlanService.Infrastructure.DependencyInjection
 {
@@ -17,8 +18,8 @@ namespace MealPlanService.Infrastructure.DependencyInjection
             services.Configure<MongoDBOptions>(configuration.GetSection("ConnectionStrings"));
             services.AddScoped<MongoDBContext>();
 
-            services.AddScoped<MealPlanRepository>();
-            services.AddScoped<ProfileMealPlanRepository>();
+            services.AddScoped<IMealPlanRepository, MealPlanRepository>();
+            services.AddScoped<IProfileMealPlanRepository, ProfileMealPlanRepository>();
 
             return services;
         }

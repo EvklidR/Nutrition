@@ -7,14 +7,14 @@ using UserService.Grpc;
 
 namespace UserService.Infrastructure.gRPC
 {
-    class MealPlanServiceClient : IMealPlanService
+    class MealPlanService : IMealPlanService
     {
-        private readonly MealPlanService.MealPlanServiceClient _client;
+        private readonly GRPCMealPlanService.GRPCMealPlanServiceClient _client;
 
-        public MealPlanServiceClient(string address)
+        public MealPlanService(string address)
         {
             var channel = GrpcChannel.ForAddress(address);
-            _client = new MealPlanService.MealPlanServiceClient(channel);
+            _client = new GRPCMealPlanService.GRPCMealPlanServiceClient(channel);
         }
 
         public async Task<DailyNeedsResponse> GetDailyNeedsByMealPlanAsync(
