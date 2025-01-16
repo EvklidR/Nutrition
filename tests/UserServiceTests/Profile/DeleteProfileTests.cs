@@ -11,25 +11,27 @@ namespace UserServiceTests
     public class DeleteProfileTests
     {
         private readonly Faker _faker;
+        private readonly Mock<IProfileRepository> _profileRepositoryMock;
+        private DeleteProfileHandler _handler;
 
         public DeleteProfileTests()
         {
             _faker = new Faker();
+            _profileRepositoryMock = new Mock<IProfileRepository>();
+            _handler = new DeleteProfileHandler(_profileRepositoryMock.Object);
         }
 
         [Fact]
         public async Task Handler_Should_Throw_NotFound_When_Profile_Does_Not_Exist()
         {
             // Arrange
-            var profileRepositoryMock = new Mock<IProfileRepository>();
-            profileRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))
+            _profileRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync((Profile)null);
 
-            var handler = new DeleteProfileHandler(profileRepositoryMock.Object);
             var command = new DeleteProfileCommand(_faker.Random.Guid(), _faker.Random.Guid());
 
             // Act
-            Func<Task> act = async () => await handler.Handle(command, CancellationToken.None);
+            Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<NotFound>().WithMessage("Profile not found");
@@ -41,15 +43,13 @@ namespace UserServiceTests
             // Arrange
             var profile = new Profile { UserId = _faker.Random.Guid() };
 
-            var profileRepositoryMock = new Mock<IProfileRepository>();
-            profileRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))
+            _profileRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(profile);
 
-            var handler = new DeleteProfileHandler(profileRepositoryMock.Object);
             var command = new DeleteProfileCommand(_faker.Random.Guid(), _faker.Random.Guid());
 
             // Act
-            Func<Task> act = async () => await handler.Handle(command, CancellationToken.None);
+            Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<Unauthorized>().WithMessage("Owner isn't valid");
@@ -64,20 +64,17 @@ namespace UserServiceTests
 
             var profile = new Profile { UserId = userId };
 
-            var profileRepositoryMock = new Mock<IProfileRepository>();
-            profileRepositoryMock.Setup(repo => repo.GetByIdAsync(profileId))
+            _profileRepositoryMock.Setup(repo => repo.GetByIdAsync(profileId))
                 .ReturnsAsync(profile);
 
-            var handler = new DeleteProfileHandler(profileRepositoryMock.Object);
             var command = new DeleteProfileCommand(profileId, userId);
 
             // Act
-            await handler.Handle(command, CancellationToken.None);
+            await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            profileRepositoryMock.Verify(repo => repo.Delete(profile), Times.Once);
-            profileRepositoryMock.Verify(repo => repo.SaveChangesAsync(), Times.Once);
+            _profileRepositoryMock.Verify(repo => repo.Delete(profile), Times.Once);
+            _profileRepositoryMock.Verify(repo => repo.SaveChangesAsync(), Times.Once);
         }
     }
-
 }

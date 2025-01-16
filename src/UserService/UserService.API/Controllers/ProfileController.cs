@@ -36,7 +36,7 @@ namespace UserService.API.Controllers
         public async Task<IActionResult> CalculateDailyNeeds(Guid profileId)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
-            var query = new CalculateDailyNeedsQuery(profileId, userId);
+            var query = new CalculateDailyNutrientsQuery(profileId, userId);
             var result = await _mediator.Send(query);
             return Ok(result);
         }

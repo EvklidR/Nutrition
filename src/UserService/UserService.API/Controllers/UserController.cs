@@ -22,7 +22,6 @@ namespace UserService.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginUserCommand command)
         {
-            _logger.LogInformation("here");
             var response = await _mediator.Send(command);
             return Ok(response);
         }

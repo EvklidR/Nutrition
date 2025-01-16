@@ -43,7 +43,9 @@ namespace UserService.Application.UseCases.Commands
             }
             profile.DesiredGlassesOfWater = profile.Gender == Gender.Female ? 11 : 15;
             _profileRepository.Add(profile);
+
             await _profileRepository.SaveChangesAsync();
+
             return profile;
         }
     }

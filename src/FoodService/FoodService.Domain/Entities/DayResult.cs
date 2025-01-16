@@ -8,7 +8,6 @@
         public double? Weight { get; set; }
         public int GlassesOfWater { get; set; } = 0;
 
-
         public List<Meal> Meals { get; set; } = new List<Meal>();
     }
 }

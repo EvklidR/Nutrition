@@ -17,6 +17,7 @@ namespace UserServiceTests
         private readonly Mock<UserManager<User>> _userManagerMock;
         private readonly Mock<IRefreshTokenTokenRepository> _refreshTokenRepositoryMock;
         private readonly Faker _faker;
+        private readonly RefreshTokenHandler _handler;
 
         public RefreshTokenHandlerTests()
         {
@@ -27,8 +28,13 @@ namespace UserServiceTests
             );
             _refreshTokenRepositoryMock = new Mock<IRefreshTokenTokenRepository>();
             _faker = new Faker();
-        }
 
+            _handler = new RefreshTokenHandler(
+                _userManagerMock.Object,
+                _tokenServiceMock.Object,
+                _refreshTokenRepositoryMock.Object
+            );
+        }
 
         [Fact]
         public async Task Should_Throw_Unauthorized_When_User_Not_Found()
@@ -50,14 +56,8 @@ namespace UserServiceTests
             _userManagerMock.Setup(um => um.FindByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync((User)null);
 
-            var handler = new RefreshTokenHandler(
-                _userManagerMock.Object,
-                _tokenServiceMock.Object,
-                _refreshTokenRepositoryMock.Object
-            );
-
             // Act
-            Func<Task> act = async () => await handler.Handle(command, CancellationToken.None);
+            Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<Unauthorized>().WithMessage("User not found");
@@ -87,14 +87,8 @@ namespace UserServiceTests
             _refreshTokenRepositoryMock.Setup(repo => repo.GetAllByUserAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(new List<RefreshToken>());
 
-            var handler = new RefreshTokenHandler(
-                _userManagerMock.Object,
-                _tokenServiceMock.Object,
-                _refreshTokenRepositoryMock.Object
-            );
-
             // Act
-            Func<Task> act = async () => await handler.Handle(command, CancellationToken.None);
+            Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<Unauthorized>().WithMessage("There is no refresh token");
@@ -133,14 +127,8 @@ namespace UserServiceTests
             _tokenServiceMock.Setup(ts => ts.GenerateAccessToken(user))
                 .ReturnsAsync(newAccessToken);
 
-            var handler = new RefreshTokenHandler(
-                _userManagerMock.Object,
-                _tokenServiceMock.Object,
-                _refreshTokenRepositoryMock.Object
-            );
-
             // Act
-            var result = await handler.Handle(command, CancellationToken.None);
+            var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             result.Should().NotBeNull();

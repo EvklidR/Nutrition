@@ -7,6 +7,7 @@ namespace UserService.API.Extentions
         public async static Task InitializeAdmin(this IApplicationBuilder app)
         {
             using IServiceScope scope = app.ApplicationServices.CreateScope();
+
             RoleInitializer initializer = scope.ServiceProvider.GetRequiredService<RoleInitializer>();
 
             await initializer.InitializeAsync();

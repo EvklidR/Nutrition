@@ -15,6 +15,8 @@ namespace UserServiceTests
         private readonly Mock<UserManager<User>> _userManagerMock;
         private readonly Faker _faker;
 
+        private readonly LoginUserHandler _handler;
+
         public LoginUserTests()
         {
             _tokenServiceMock = new Mock<ITokenService>();
@@ -23,6 +25,8 @@ namespace UserServiceTests
                 null, null, null, null, null, null, null, null
             );
             _faker = new Faker();
+
+            _handler = new LoginUserHandler(_tokenServiceMock.Object, _userManagerMock.Object);
         }
 
         [Fact]
@@ -34,10 +38,8 @@ namespace UserServiceTests
             _userManagerMock.Setup(um => um.FindByEmailAsync(It.IsAny<string>()))
                 .ReturnsAsync((User)null);
 
-            var handler = new LoginUserHandler(_tokenServiceMock.Object, _userManagerMock.Object);
-
             // Act
-            Func<Task> act = async () => await handler.Handle(command, CancellationToken.None);
+            Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<Unauthorized>().WithMessage("Login failed. Invalid email or password");
@@ -55,10 +57,8 @@ namespace UserServiceTests
             _userManagerMock.Setup(um => um.CheckPasswordAsync(It.IsAny<User>(), It.IsAny<string>()))
                 .ReturnsAsync(false);
 
-            var handler = new LoginUserHandler(_tokenServiceMock.Object, _userManagerMock.Object);
-
             // Act
-            Func<Task> act = async () => await handler.Handle(command, CancellationToken.None);
+            Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<Unauthorized>().WithMessage("Login failed. Invalid email or password");
@@ -82,10 +82,8 @@ namespace UserServiceTests
             _tokenServiceMock.Setup(ts => ts.GenerateRefreshToken(It.IsAny<User>()))
                 .ReturnsAsync(refreshToken);
 
-            var handler = new LoginUserHandler(_tokenServiceMock.Object, _userManagerMock.Object);
-
             // Act
-            var result = await handler.Handle(command, CancellationToken.None);
+            var result = await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             result.Should().NotBeNull();

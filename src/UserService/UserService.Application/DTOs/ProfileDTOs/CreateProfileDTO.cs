@@ -5,7 +5,7 @@ namespace UserService.Application.DTOs
     public class CreateProfileDTO
     {
         public Guid? UserId { get; set; }
-        public string Name { get; set; } = null!;
+        public string Name { get; set; }
         public double Weight { get; set; }
         public double Height { get; set; }
         public DateOnly Birthday { get; set; }

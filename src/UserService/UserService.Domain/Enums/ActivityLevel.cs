@@ -2,10 +2,10 @@
 {
     public enum ActivityLevel
     {
-        sedentary,
-        low,
-        medium,
-        high,
-        veryHigh
+        Sedentary,
+        Low,
+        Medium,
+        High,
+        VeryHigh
     }
 }

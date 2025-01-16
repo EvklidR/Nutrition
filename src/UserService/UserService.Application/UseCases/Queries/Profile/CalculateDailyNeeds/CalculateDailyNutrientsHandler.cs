@@ -6,19 +6,19 @@ using UserService.Domain.Interfaces.Repositories;
 
 namespace UserService.Application.UseCases.Queries
 {
-    public class CalculateDailyNeedsHandler : IQueryHandler<CalculateDailyNeedsQuery, DailyNeedsResponse>
+    public class CalculateDailyNutrientsHandler : IQueryHandler<CalculateDailyNutrientsQuery, DailyNeedsResponse>
     {
         private readonly IProfileRepository _profileRepository;
         private readonly IMealPlanService _mealPlanService;
 
-        public CalculateDailyNeedsHandler(IProfileRepository profileRepository, IMealPlanService mealPlanService)
+        public CalculateDailyNutrientsHandler(IProfileRepository profileRepository, IMealPlanService mealPlanService)
         {
             _profileRepository = profileRepository;
             _mealPlanService = mealPlanService;
         }
 
         public async Task<DailyNeedsResponse> Handle(
-            CalculateDailyNeedsQuery request,
+            CalculateDailyNutrientsQuery request,
             CancellationToken cancellationToken)
         {
             var profile = await _profileRepository.GetByIdAsync(request.profileId);
@@ -29,7 +29,9 @@ namespace UserService.Application.UseCases.Queries
             }
 
             if (request.userId != profile!.UserId)
+            {
                 throw new Unauthorized("Owner isn't valid");
+            }
 
             DailyNeedsResponse response;
 
@@ -106,11 +108,11 @@ namespace UserService.Application.UseCases.Queries
         {
             return activityLevel switch
             {
-                ActivityLevel.sedentary => 1.2,
-                ActivityLevel.low => 1.375,
-                ActivityLevel.medium => 1.55,
-                ActivityLevel.high => 1.725,
-                ActivityLevel.veryHigh => 1.9,
+                ActivityLevel.Sedentary => 1.2,
+                ActivityLevel.Low => 1.375,
+                ActivityLevel.Medium => 1.55,
+                ActivityLevel.High => 1.725,
+                ActivityLevel.VeryHigh => 1.9,
                 _ => 0
             };
         }
