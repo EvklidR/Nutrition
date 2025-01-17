@@ -26,7 +26,7 @@ namespace MealPlanService.API.gRPC
             var responce = new CalculateKcalAndMacrosResponse();
             try
             {
-                var resp = await _userPlanService.CalculateKcalAndMacros(requestForCalc);
+                var resp = await _userPlanService.CalculateDailyNutrientsAsync(requestForCalc);
 
                 responce.Calories = resp.Calories;
                 responce.Proteins = resp.Proteins;

@@ -1,9 +1,10 @@
 ﻿using Grpc.Net.Client;
 using MealPlanService.Grpc;
+using MealPlanService.Infrastructure.Services.Interfaces;
 
 namespace MealPlanService.Infrastructure.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly GRPCUserService.GRPCUserServiceClient _client;
 
@@ -13,7 +14,7 @@ namespace MealPlanService.Infrastructure.Services
             _client = new GRPCUserService.GRPCUserServiceClient(channel);
         }
 
-        public virtual async Task<bool> CheckProfileBelonging(
+        public async Task<bool> CheckProfileBelonging(
             string userId,
             string profileId)
         {

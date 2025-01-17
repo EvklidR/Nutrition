@@ -6,6 +6,7 @@ using MealPlanService.Core.Entities;
 using MealPlanService.Core.Enums;
 using MealPlanService.Infrastructure.Services;
 using MealPlanService.Infrastructure.Repositories.Interfaces;
+using MealPlanService.Infrastructure.Services.Interfaces;
 
 namespace MealPlanService.BusinessLogic.Services
 {
@@ -14,14 +15,14 @@ namespace MealPlanService.BusinessLogic.Services
         private readonly IProfileMealPlanRepository _usersMealPlanRepository;
         private readonly IMealPlanRepository _mealPlanRepository;
         private readonly MealPlanService _mealPlanService;
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
         public ProfilePlanService(
             IProfileMealPlanRepository usersMealPlanRepository,
             IMealPlanRepository mealPlanRepository,
             MealPlanService mealPlanService,
-            UserService userService,
+            IUserService userService,
             IMapper mapper)
         {
             _usersMealPlanRepository = usersMealPlanRepository;
@@ -75,7 +76,7 @@ namespace MealPlanService.BusinessLogic.Services
             }
         }
 
-        public async Task<List<ProfileMealPlan>?> GetProfilePlans(string userId, string profileId)
+        public async Task<List<ProfileMealPlan>?> GetProfilePlansAsync(string userId, string profileId)
         {
             if (await _userService.CheckProfileBelonging(userId, profileId))
             {
@@ -121,7 +122,7 @@ namespace MealPlanService.BusinessLogic.Services
             }
         }
 
-        public async Task<DailyNeedsResponse> CalculateKcalAndMacros(RequestForCalculating requestForCalculating) // for gprc only
+        public async Task<DailyNeedsResponse> CalculateDailyNutrientsAsync(RequestForCalculating requestForCalculating) // for gprc only
         {
             var day = await _mealPlanService.GetCurrentDay(requestForCalculating.ProfileId);
 

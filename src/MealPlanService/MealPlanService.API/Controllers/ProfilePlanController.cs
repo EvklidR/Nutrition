@@ -50,7 +50,7 @@ namespace MealPlanService.API.Controllers
         {
             var userId = (string)HttpContext.Items["UserId"]!;
 
-            var plans = await _userPlanService.GetProfilePlans(userId, profileId);
+            var plans = await _userPlanService.GetProfilePlansAsync(userId, profileId);
 
             return Ok(plans);
         }
