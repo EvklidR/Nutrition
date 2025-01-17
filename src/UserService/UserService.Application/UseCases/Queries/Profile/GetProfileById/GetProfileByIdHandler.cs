@@ -16,10 +16,15 @@ namespace UserService.Application.UseCases.Queries
         {
             var profile = await _profileRepository.GetByIdAsync(request.profileId);
             if (profile == null)
+            {
                 throw new NotFound("profile not found");
+            }    
 
             if (profile.UserId != request.userId)
+            {
                 throw new Unauthorized("Owner isn't valid");
+            }
+
             return profile;
         }
     }

@@ -11,10 +11,6 @@ namespace UserService.Application.UseCases.Commands
                 .NotNull()
                 .WithMessage("Profile data is required.")
                 .SetValidator(updateValidator);
-
-            RuleFor(x => x.userId)
-                .NotEmpty()
-                .WithMessage("User ID must be provided");
         }
     }
 }

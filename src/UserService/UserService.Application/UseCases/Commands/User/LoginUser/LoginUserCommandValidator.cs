@@ -6,11 +6,14 @@ namespace UserService.Application.UseCases.Commands
     {
         public LoginUserCommandValidator()
         {
-            RuleFor(x => x.email).NotEmpty()
-                .EmailAddress().WithMessage("invalid email");
+            RuleFor(x => x.email)
+                .NotEmpty()
+                .EmailAddress()
+                .WithMessage("invalid email");
 
             RuleFor(x => x.password)
-                .NotEmpty().WithMessage("Password must be provided");
+                .NotEmpty()
+                .WithMessage("Password must be provided");
         }
     }
 }

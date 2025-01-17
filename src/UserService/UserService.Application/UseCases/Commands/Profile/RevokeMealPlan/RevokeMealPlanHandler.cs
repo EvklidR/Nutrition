@@ -22,6 +22,7 @@ namespace UserService.Application.UseCases.Commands
             profile.MealPlanId = null;
 
             _profileRepository.Update(profile);
+
             await _profileRepository.SaveChangesAsync();
         }
     }
