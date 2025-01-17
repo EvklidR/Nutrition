@@ -1,4 +1,4 @@
-﻿namespace PostService.Application.Exceptions
+﻿namespace PostService.BusinessLogic.Exceptions
 {
     public class AlreadyExists : Exception
     {

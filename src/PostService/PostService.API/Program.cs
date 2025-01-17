@@ -1,3 +1,6 @@
+using PostService.API.DependencyInjection;
+using PostService.BusinessLogic.DependencyInjection;
+using PostService.Infrastructure.DependencyInjection;
 
 namespace PostService.API;
 
@@ -7,19 +10,16 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.AddServiceDefaults();
-
-        // Add services to the container.
-
-        builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddInfrastructureServices(builder.Configuration);
+        builder.Services.AddApplicationServices();
+        builder.Services.AddApiServices(builder, builder.Configuration);
 
         var app = builder.Build();
 
         app.MapDefaultEndpoints();
 
-        // Configure the HTTP request pipeline.
+        app.UseCors("AllowSpecificOrigin");
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -30,6 +30,7 @@ public class Program
 
         app.UseAuthorization();
 
+        //app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.MapControllers();
 
