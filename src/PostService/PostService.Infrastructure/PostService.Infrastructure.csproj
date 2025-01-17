@@ -7,9 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="MSSQL\Migrations\" />
+    <Compile Remove="MSSQL\**" />
+    <EmbeddedResource Remove="MSSQL\**" />
+    <None Remove="MSSQL\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Repositories\" />
     <Folder Include="Services\" />
+    <Folder Include="MongoDB\" />
   </ItemGroup>
 
 </Project>
