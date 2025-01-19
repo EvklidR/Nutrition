@@ -7,9 +7,6 @@ namespace UserService.Application.Validators
     {
         public CreateProfileDTOValidator()
         {
-            RuleFor(x => x.UserId)
-                .NotEmpty().WithMessage("User id must be provided");
-
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Name is required.")
                 .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");

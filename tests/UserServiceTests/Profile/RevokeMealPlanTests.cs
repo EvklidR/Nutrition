@@ -60,7 +60,7 @@ namespace UserServiceTests
         {
             // Arrange
             var userId = _faker.Random.Guid();
-            var profile = new Profile { UserId = userId, MealPlanId = _faker.Random.Guid() };
+            var profile = new Profile { UserId = userId, ThereIsMealPlan = true };
 
             _profileRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(profile);
@@ -71,7 +71,7 @@ namespace UserServiceTests
             await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            profile.MealPlanId.Should().Be(null);
+            profile.ThereIsMealPlan.Should().Be(false);
             _profileRepositoryMock.Verify(repo => repo.Update(profile), Times.Once);
             _profileRepositoryMock.Verify(repo => repo.SaveChangesAsync(), Times.Once);
         }

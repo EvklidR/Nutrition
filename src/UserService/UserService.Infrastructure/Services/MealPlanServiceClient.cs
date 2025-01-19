@@ -16,20 +16,19 @@ namespace UserService.Infrastructure.Grpc
         }
 
         public async Task<DailyNeedsResponse> GetDailyNeedsByMealPlanAsync(
-            Guid mealPlanId,
             Guid profileId,
             double bodyWeight,
             double dailyKcal)
         {
             var request = new GetKcalAndMacrosRequest
             {
-                MealPlanId = mealPlanId.ToString(),
                 ProfileId = profileId.ToString(),
                 BodyWeight = bodyWeight,
                 DailyKcal = dailyKcal
             };
 
             var response = await _client.CalculateKcalAndMacrosAsync(request);
+
             return new DailyNeedsResponse(response.Calories, response.Proteins, response.Fats, response.Carbohydrates);
         }
     }

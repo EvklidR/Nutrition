@@ -19,6 +19,8 @@ public class Program
 
         var app = builder.Build();
 
+        app.MapGrpcService<Infrastructure.gRPC.UserService>();
+
         app.UseCors("AllowSpecificOrigin");
 
         app.UseHangfireDashboard();

@@ -35,21 +35,19 @@ namespace UserService.Application.UseCases.Queries
 
             DailyNeedsResponse response;
 
-            if (profile.MealPlanId == null)
-            {
-                response = CalculateDailyMacros(profile);
-            }
-            else
+            if (profile.ThereIsMealPlan)
             {
                 response = await _mealPlanService.GetDailyNeedsByMealPlanAsync(
-                    (Guid)profile.MealPlanId,
                     profile.Id,
                     profile.Weight,
                     CalculateDailyCalories(profile));
             }
+            else
+            {
+                response = CalculateDailyMacros(profile);
+            }
 
             return response;
-
         }
 
         // calculated using the Harris-Benedict formula

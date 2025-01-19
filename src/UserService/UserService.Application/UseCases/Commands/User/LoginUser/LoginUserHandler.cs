@@ -26,6 +26,7 @@ public class LoginUserHandler : ICommandHandler<LoginUserCommand, AuthenticatedR
         }
 
         var passwordValid = await _userManager.CheckPasswordAsync(user, request.password);
+
         if (!passwordValid)
         {
             throw new Unauthorized("Login failed. Invalid email or password");

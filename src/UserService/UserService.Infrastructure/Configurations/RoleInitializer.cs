@@ -14,20 +14,17 @@ namespace UserService.Infrastructure.Configurations
         private readonly RoleManager<IdentityRole<Guid>> _roleManager;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public RoleInitializer(
             UserManager<User> userManager,
             RoleManager<IdentityRole<Guid>> roleManager,
             IEmailService emailService,
-            IConfiguration configuration,
-            IHttpContextAccessor httpContextAccessor)
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _emailService = emailService;
             _configuration = configuration;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task InitializeAsync()
@@ -50,10 +47,13 @@ namespace UserService.Infrastructure.Configurations
             if (await _userManager.FindByNameAsync(adminEmail) == null)
             {
                 var admin = new User { Email = adminEmail, UserName = adminEmail };
+
                 IdentityResult result = await _userManager.CreateAsync(admin, password);
+
                 if (result.Succeeded)
                 {
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(admin);
+
                     var code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
                     var confirmationLink = $"{applicationUrl}/User/confirmEmail?userId={admin.Id}&code={code}";

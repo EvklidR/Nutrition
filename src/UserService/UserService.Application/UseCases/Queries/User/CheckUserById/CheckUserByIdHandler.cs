@@ -15,6 +15,7 @@ namespace UserService.Application.UseCases.Queries
         public async Task<bool> Handle(CheckUserByIdQuery request, CancellationToken cancellationToken)
         {
             var existUser = await _userManager.FindByIdAsync(request.userId.ToString());
+
             return existUser != null;
         }
     }

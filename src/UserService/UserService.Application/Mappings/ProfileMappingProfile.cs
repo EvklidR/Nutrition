@@ -14,7 +14,7 @@ namespace UserService.Application.Mappings
                 .ForMember(dest => dest.UserId, opt => opt.Ignore())
                 .ForMember(dest => dest.Birthday, opt => opt.Ignore())
                 .ForMember(dest => dest.Gender, opt => opt.Ignore())
-                .ForMember(dest => dest.MealPlanId, opt => opt.Ignore())
+                .ForMember(dest => dest.ThereIsMealPlan, opt => opt.Ignore())
 
                 .ForMember(dest => dest.Name, opt => opt.MapFrom((src, dest) => src.Name ?? dest.Name))
                 .ForMember(dest => dest.Weight, opt => opt.MapFrom((src, dest) => src.Weight ?? dest.Weight))

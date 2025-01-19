@@ -24,7 +24,7 @@ namespace UserService.Application.UseCases.Commands
                 throw new Unauthorized("Owner isn't valid");
             }
 
-            profile.MealPlanId = request.mealPlanId;
+            profile.ThereIsMealPlan = true;
 
             _profileRepository.Update(profile);
 

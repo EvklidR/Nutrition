@@ -14,7 +14,6 @@ namespace UserService.Domain.Entities
         public Gender Gender { get; set; }
         public ActivityLevel ActivityLevel { get; set; }
         public int DesiredGlassesOfWater { get; set; }
-        public Guid? MealPlanId { get; set; }
-
+        public bool ThereIsMealPlan { get; set; } = false;
     }
 }

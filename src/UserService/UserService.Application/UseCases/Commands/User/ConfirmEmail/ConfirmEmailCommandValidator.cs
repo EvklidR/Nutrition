@@ -6,9 +6,6 @@ namespace UserService.Application.UseCases.Commands
     {
         public ConfirmEmailCommandValidator() 
         {
-            RuleFor(command => command.userId)
-                .NotEmpty().WithMessage("User ID must not be empty");
-
             RuleFor(command => command.code)
                 .NotEmpty().WithMessage("Confirmation code must not be empty");
 

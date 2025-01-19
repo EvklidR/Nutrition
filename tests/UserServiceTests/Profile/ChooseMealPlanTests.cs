@@ -31,7 +31,7 @@ namespace UserServiceTests
                 .Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync((Profile)null);
 
-            var command = new ChooseMealPlanCommand(_faker.Random.Guid(), _faker.Random.Guid(), _faker.Random.Guid());
+            var command = new ChooseMealPlanCommand(_faker.Random.Guid(), _faker.Random.Guid());
 
             // Act
             Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
@@ -50,7 +50,7 @@ namespace UserServiceTests
                 .Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(profile);
 
-            var command = new ChooseMealPlanCommand(_faker.Random.Guid(), _faker.Random.Guid(), _faker.Random.Guid());
+            var command = new ChooseMealPlanCommand(_faker.Random.Guid(), _faker.Random.Guid());
 
             // Act
             Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
@@ -63,7 +63,6 @@ namespace UserServiceTests
         public async Task Handler_Should_Update_Profile_When_Valid_Command_Is_Provided()
         {
             // Arrange
-            var mealPlanId = _faker.Random.Guid();
             var profileId = _faker.Random.Guid();
             var userId = _faker.Random.Guid();
 
@@ -73,13 +72,12 @@ namespace UserServiceTests
                 .Setup(repo => repo.GetByIdAsync(profileId))
                 .ReturnsAsync(profile);
 
-            var command = new ChooseMealPlanCommand(mealPlanId, profileId, userId);
+            var command = new ChooseMealPlanCommand(profileId, userId);
 
             // Act
             await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            profile.MealPlanId.Should().Be(mealPlanId);
             _profileRepositoryMock.Verify(repo => repo.Update(profile), Times.Once);
             _profileRepositoryMock.Verify(repo => repo.SaveChangesAsync(), Times.Once);
         }

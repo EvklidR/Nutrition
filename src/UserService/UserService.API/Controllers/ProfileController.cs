@@ -26,7 +26,9 @@ namespace UserService.API.Controllers
             Guid userId = (Guid)HttpContext.Items["UserId"]!;
             profileDto.UserId = userId;
             var command = new CreateProfileCommand(profileDto);
+
             var result = await _mediator.Send(command);
+
             return CreatedAtAction(null, result);
         }
 
@@ -37,7 +39,9 @@ namespace UserService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
             var query = new CalculateDailyNutrientsQuery(profileId, userId);
+
             var result = await _mediator.Send(query);
+
             return Ok(result);
         }
 
@@ -47,8 +51,10 @@ namespace UserService.API.Controllers
         public async Task<IActionResult> ChooseMealPlan(Guid profileId, Guid mealPlanId)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
-            var command = new ChooseMealPlanCommand(mealPlanId, profileId, userId);
+            var command = new ChooseMealPlanCommand(profileId, userId);
+
             await _mediator.Send(command);
+
             return NoContent();
         }
 
@@ -59,7 +65,9 @@ namespace UserService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
             var command = new DeleteProfileCommand(profileId, userId);
+
             await _mediator.Send(command);
+
             return NoContent();
         }
 
@@ -81,7 +89,9 @@ namespace UserService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
             var query = new GetProfileByIdQuery(profileId, userId);
+
             var result = await _mediator.Send(query);
+
             return Ok(result);
         }
 
@@ -92,7 +102,9 @@ namespace UserService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
             var command = new RevokeMealPlanCommand(profileId, userId);
+
             await _mediator.Send(command);
+
             return NoContent();
         }
 
@@ -103,7 +115,9 @@ namespace UserService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
             var command = new UpdateProfileCommand(profileDto, userId);
+
             await _mediator.Send(command);
+
             return NoContent();
         }
 

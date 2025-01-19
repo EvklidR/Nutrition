@@ -23,10 +23,14 @@ namespace UserService.Application.UseCases.Commands
             var profile = await _profileRepository.GetByIdAsync(request.profileDto.Id);
 
             if (profile == null)
+            {
                 throw new NotFound("Profile not found.");
+            }
 
             if (request.userId != profile!.UserId)
+            {
                 throw new Unauthorized("Owner isn't valid");
+            }
 
             var existingProfiles = await _profileRepository.GetAllByUserAsync(profile.UserId);
 
