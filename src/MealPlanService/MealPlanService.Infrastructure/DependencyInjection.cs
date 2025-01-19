@@ -5,6 +5,7 @@ using MealPlanService.Infrastructure.Repositories;
 using MealPlanService.Infrastructure.Options;
 using MealPlanService.Infrastructure.Services;
 using MealPlanService.Infrastructure.Repositories.Interfaces;
+using MealPlanService.Infrastructure.Services.Interfaces;
 
 namespace MealPlanService.Infrastructure.DependencyInjection
 {
@@ -12,8 +13,7 @@ namespace MealPlanService.Infrastructure.DependencyInjection
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton(sp =>
-                new UserService(configuration["GrpcServices:UserServiceUrl"]));
+            services.AddScoped<IUserService>(provider => new UserService(configuration["GrpcServices:UserServiceUrl"]));
 
             services.Configure<MongoDBOptions>(configuration.GetSection("ConnectionStrings"));
             services.AddScoped<MongoDBContext>();

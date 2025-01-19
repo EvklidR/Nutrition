@@ -33,6 +33,7 @@ namespace MealPlanService.API.Controllers
         public async Task<IActionResult> GetMealPlans([FromQuery] MealPlanType? type, [FromQuery] int? page, [FromQuery] int? size)
         {
             MealPlansResponse response = await _mealPlanService.GetMealPlansAsync(type, page, size);
+
             return Ok(response);
         }
 
@@ -46,6 +47,7 @@ namespace MealPlanService.API.Controllers
         public async Task<IActionResult> CreateMealPlan([FromBody] CreateMealPlanDTO mealPlanDto)
         {
             var createdMealPlan = await _mealPlanService.CreateMealPlanAsync(mealPlanDto);
+
             return Ok(createdMealPlan);
         }
 
@@ -59,6 +61,7 @@ namespace MealPlanService.API.Controllers
         public async Task<IActionResult> DeleteMealPlan(string id)
         {
             await _mealPlanService.DeleteMealPlanAsync(id);
+
             return NoContent();
         }
 
@@ -72,6 +75,7 @@ namespace MealPlanService.API.Controllers
         public async Task<IActionResult> UpdateMealPlan([FromBody] MealPlan updatedMealPlanDto)
         {
             await _mealPlanService.UpdateMealPlanAsync(updatedMealPlanDto);
+
             return NoContent();
         }
     }

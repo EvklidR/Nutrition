@@ -4,7 +4,7 @@ namespace MealPlanService.BusinessLogic.Models
 {
     public class MealPlansResponse
     {
-        public List<MealPlanDTO> MealPlans { get; set; }
+        public List<MealPlanDTO>? MealPlans { get; set; }
         public long TotalCount { get; set; }
     }
 }

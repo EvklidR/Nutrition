@@ -7,10 +7,6 @@ namespace MealPlanService.BusinessLogic.Validators
     {
         public UpdateMealPlanDTOValidator(MealPlanDayDTOValidator dayValidator)
         {
-            RuleFor(x => x.Id)
-                .NotEmpty()
-                .WithMessage("Id must be provided");
-
             RuleFor(x => x.Name)
                     .NotEmpty().WithMessage("Name is required")
                     .MaximumLength(50).WithMessage("Name must not exceed 100 characters");

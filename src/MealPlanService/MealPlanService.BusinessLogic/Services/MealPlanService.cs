@@ -29,7 +29,12 @@ namespace MealPlanService.BusinessLogic.Services
         {
             var (mealPlans, totalCount) = await _mealPlanRepository.GetAllAsync(type, page, size);
 
-            MealPlansResponse mealPlansResponse = new MealPlansResponse() { MealPlans = mealPlans, TotalCount = totalCount };
+            MealPlansResponse mealPlansResponse = new MealPlansResponse 
+            { 
+                MealPlans = mealPlans,
+                TotalCount = totalCount
+            };
+
             return mealPlansResponse;
         }
 
@@ -45,11 +50,14 @@ namespace MealPlanService.BusinessLogic.Services
         public async Task DeleteMealPlanAsync(string mealPlanId)
         {
             var mealPlan = await _mealPlanRepository.GetByIdAsync(mealPlanId);
+
             if (mealPlan == null)
             {
                 throw new NotFound("Meal plan not found");
             }
+
             await _mealPlanRepository.DeleteAsync(mealPlanId);
+
             var profilePlans = await _profileMealPlanRepository.GetByMealPlan(mealPlanId);
 
             foreach (var profilePlan in profilePlans) 
@@ -57,16 +65,18 @@ namespace MealPlanService.BusinessLogic.Services
                 await _profileMealPlanRepository.DeleteAsync(profilePlan.Id);
             }
 
-            //message for broker
+            //TODO: send message for broker
         }
 
         public async Task UpdateMealPlanAsync(MealPlan updatedMealPlan)
         {
             var existingMealPlan = await _mealPlanRepository.GetByIdAsync(updatedMealPlan.Id);
+
             if (existingMealPlan == null)
             {
                 throw new NotFound("Meal plan not found");
             }
+
             var mealPlan = _mapper.Map<MealPlan>(updatedMealPlan);
 
             await _mealPlanRepository.UpdateAsync(updatedMealPlan);
@@ -90,7 +100,6 @@ namespace MealPlanService.BusinessLogic.Services
 
             DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
             int daysPassed = currentDate.DayNumber - userPlan.StartDate.DayNumber;
-
             var numberOfDay = daysPassed % mealPlan.Days.Count + 1;
 
             var day = mealPlan.Days.FirstOrDefault(d => d.DayNumber == numberOfDay);
@@ -99,6 +108,7 @@ namespace MealPlanService.BusinessLogic.Services
             {
                 throw new NotFound("Meal plan day not found");
             }
+
             return day;
         }
     }

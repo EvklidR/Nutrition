@@ -4,6 +4,7 @@ using FluentValidation;
 using MealPlanService.BusinessLogic.Services;
 using MealPlanService.Infrastructure.Services.Interfaces;
 using MealPlanService.Infrastructure.Services;
+using Microsoft.Extensions.Configuration;
 
 
 namespace UserProfileService.BusinessLogic.DependencyInjection
@@ -17,8 +18,6 @@ namespace UserProfileService.BusinessLogic.DependencyInjection
 
             services.AddScoped<MealPlanService.BusinessLogic.Services.MealPlanService>();
             services.AddScoped<ProfilePlanService>();
-
-            services.AddScoped<IUserService, UserService>();
 
             return services;
 

@@ -14,16 +14,14 @@ namespace MealPlanService.Infrastructure.Repositories
 
         public async Task<T?> GetByIdAsync(string id)
         {
-            ObjectId objectId;
-            try
+            if (ObjectId.TryParse(id, out ObjectId mealPlanId))
             {
-                objectId = new ObjectId(id);
+                return await _collection.Find(Builders<T>.Filter.Eq("_id", mealPlanId)).FirstOrDefaultAsync();
             }
-            catch
+            else 
             {
                 return null;
             }
-            return await _collection.Find(Builders<T>.Filter.Eq("_id", objectId)).FirstOrDefaultAsync();
         }
 
         public virtual async Task CreateAsync(T entity)
