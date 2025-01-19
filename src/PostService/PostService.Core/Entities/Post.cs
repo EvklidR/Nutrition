@@ -11,6 +11,9 @@ namespace PostService.Core.Entities
 
         public string? Name { get; set; }
         public string Text { get; set; }
+        public DateOnly Date { get; set; }
+        public string OwnerEmail { get; set; }
+        public string OwnerId { get; set; }
         public List<string> KeyWords { get; set; } = [];
         public List<Comment> Comments { get; set; } = [];
         public List<string> UserLikeIds { get; set; } = [];

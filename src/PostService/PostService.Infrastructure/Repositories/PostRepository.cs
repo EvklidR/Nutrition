@@ -2,7 +2,6 @@
 using PostService.Core.Entities;
 using PostService.Infrastructure.MongoDB;
 using PostService.Infrastructure.Repositories.Interfaces;
-using PostService.Infrastructure.Repositories.Projections;
 
 namespace PostService.Infrastructure.Repositories
 {
@@ -22,7 +21,7 @@ namespace PostService.Infrastructure.Repositories
             return post;
         }
 
-        public async Task<(IEnumerable<PostDTO>?, long totalCount)> GetAllAsync(List<string>? words, int? page, int? size, string userId)
+        public async Task<(IEnumerable<Post>? posts, long totalCount)> GetAllAsync(List<string>? words, int? page, int? size)
         {
             var filter = Builders<Post>.Filter.Empty;
 
@@ -31,18 +30,7 @@ namespace PostService.Infrastructure.Repositories
                 filter = Builders<Post>.Filter.Text(string.Join(" ", words));
             }
 
-            var query = _posts
-                .Find(filter)
-                .Project(post => new PostDTO
-                {
-                    Id = post.Id.ToString(),
-                    Name = post.Name,
-                    Text = post.Text,
-                    KeyWords = post.KeyWords,
-                    AmountOfLikes = post.UserLikeIds.Count,
-                    AmountOfComments = post.Comments.Count,
-                    IsLiked = post.UserLikeIds.Contains(userId)
-                });
+            var query = _posts.Find(filter);
 
             var totalCount = await _posts.CountDocumentsAsync(filter);
 
@@ -54,22 +42,20 @@ namespace PostService.Infrastructure.Repositories
             return (await query.ToListAsync(), totalCount);
         }
 
-
-
-        public async Task AddPostAsync(Post post)
+        public async Task AddAsync(Post post)
         {
             await _posts.InsertOneAsync(post);
         }
 
-        public async Task DeletePostAsync(string postId)
+        public async Task DeleteAsync(string postId)
         {
             var filter = Builders<Post>.Filter.Eq(p => p.Id, postId);
             await _posts.DeleteOneAsync(filter);
         }
 
-        public async Task UpdatePostAsync(string postId, Post updatedPost)
+        public async Task UpdateAsync(Post updatedPost)
         {
-            var filter = Builders<Post>.Filter.Eq(p => p.Id, postId);
+            var filter = Builders<Post>.Filter.Eq(p => p.Id, updatedPost.Id);
             var update = Builders<Post>.Update
                 .Set(p => p.Name, updatedPost.Name)
                 .Set(p => p.Text, updatedPost.Text)

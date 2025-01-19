@@ -2,7 +2,6 @@
 using PostService.Core.Entities;
 using PostService.Infrastructure.MongoDB;
 using PostService.Infrastructure.Repositories.Interfaces;
-using PostService.Infrastructure.Repositories.Projections;
 
 namespace PostService.Infrastructure.Repositories
 {
@@ -14,7 +13,15 @@ namespace PostService.Infrastructure.Repositories
             _posts = context.Posts;
         }
 
-        public async Task<IEnumerable<CommentDTO>?> GetAllAsync(string postId, int? page, int? size, string userId)
+        public async Task<Comment?> GetByIdAsync(Guid commentId)
+        {
+            var filter = Builders<Post>.Filter.ElemMatch(p => p.Comments, c => c.Id == commentId);
+            var post = await _posts.Find(filter).FirstOrDefaultAsync();
+
+            return post?.Comments.FirstOrDefault(c => c.Id == commentId);
+        }
+
+        public async Task<IEnumerable<Comment>?> GetAllAsync(string postId, int? page, int? size)
         {
             var filter = Builders<Post>.Filter.Eq(p => p.Id, postId);
             var post = await _posts.Find(filter).FirstOrDefaultAsync();
@@ -24,16 +31,7 @@ namespace PostService.Infrastructure.Repositories
                 return null;
             }
 
-            var comments = post.Comments.Select(comment => new CommentDTO
-            {
-                Id = comment.Id,
-                OwnerEmail = comment.OwnerEmail,
-                OwnerId = comment.OwnerId,
-                Date = comment.Date,
-                Text = comment.Text,
-                AmountOfLikes = comment.UserLikeIds.Count,
-                IsLiked = comment.UserLikeIds.Contains(userId)
-            });
+            var comments = post.Comments.AsEnumerable();
 
             if (page.HasValue && size.HasValue)
             {
@@ -43,8 +41,7 @@ namespace PostService.Infrastructure.Repositories
             return comments;
         }
 
-
-        public async Task AddCommentAsync(string postId, Comment comment)
+        public async Task AddAsync(string postId, Comment comment)
         {
             var filter = Builders<Post>.Filter.Eq(p => p.Id, postId);
             var update = Builders<Post>.Update.Push(p => p.Comments, comment);
@@ -52,7 +49,7 @@ namespace PostService.Infrastructure.Repositories
             await _posts.UpdateOneAsync(filter, update);
         }
 
-        public async Task UpdateCommentAsync(Comment updatedComment)
+        public async Task UpdateAsync(Comment updatedComment)
         {
             var filter = Builders<Post>.Filter.ElemMatch(p => p.Comments, c => c.Id == updatedComment.Id);
             var update = Builders<Post>.Update.Set("Comments.$", updatedComment);
@@ -60,9 +57,9 @@ namespace PostService.Infrastructure.Repositories
             await _posts.UpdateOneAsync(filter, update);
         }
 
-        public async Task DeleteCommentAsync(string postId, Guid commentId)
+        public async Task DeleteAsync(Guid commentId)
         {
-            var filter = Builders<Post>.Filter.Eq(p => p.Id, postId);
+            var filter = Builders<Post>.Filter.ElemMatch(p => p.Comments, c => c.Id == commentId);
             var update = Builders<Post>.Update.PullFilter(p => p.Comments, c => c.Id == commentId);
 
             await _posts.UpdateOneAsync(filter, update);

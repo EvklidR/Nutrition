@@ -1,4 +1,4 @@
-﻿namespace PostService.Infrastructure.Repositories.Projections
+﻿namespace PostService.BusinessLogic.DTOs.Comment
 {
     public class CommentDTO
     {
