@@ -4,6 +4,8 @@ using PostService.Infrastructure.Repositories;
 using PostService.Infrastructure.Options;
 using PostService.Infrastructure.Repositories.Interfaces;
 using Microsoft.Extensions.Configuration;
+using PostService.Infrastructure.gRPC.Interfaces;
+using PostService.Infrastructure.gRPC;
 
 namespace PostService.Infrastructure.DependencyInjection
 {
@@ -16,6 +18,8 @@ namespace PostService.Infrastructure.DependencyInjection
 
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
+
+            services.AddScoped<IUserService>(provider => new UserService(configuration["GrpcServices:UserServiceUrl"]));
 
             return services;
         }

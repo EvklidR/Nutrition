@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
-using PostService.Application.Exceptions;
+using PostService.BusinessLogic.Exceptions;
 
 namespace PostService.Application.Behaviors
 {

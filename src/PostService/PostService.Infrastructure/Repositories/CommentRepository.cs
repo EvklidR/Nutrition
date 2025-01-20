@@ -13,7 +13,7 @@ namespace PostService.Infrastructure.Repositories
             _posts = context.Posts;
         }
 
-        public async Task<Comment?> GetByIdAsync(Guid commentId)
+        public async Task<Comment?> GetByIdAsync(string commentId)
         {
             var filter = Builders<Post>.Filter.ElemMatch(p => p.Comments, c => c.Id == commentId);
             var post = await _posts.Find(filter).FirstOrDefaultAsync();
@@ -43,6 +43,8 @@ namespace PostService.Infrastructure.Repositories
 
         public async Task AddAsync(string postId, Comment comment)
         {
+            comment.Id = Guid.NewGuid().ToString();
+
             var filter = Builders<Post>.Filter.Eq(p => p.Id, postId);
             var update = Builders<Post>.Update.Push(p => p.Comments, comment);
 
@@ -57,7 +59,7 @@ namespace PostService.Infrastructure.Repositories
             await _posts.UpdateOneAsync(filter, update);
         }
 
-        public async Task DeleteAsync(Guid commentId)
+        public async Task DeleteAsync(string commentId)
         {
             var filter = Builders<Post>.Filter.ElemMatch(p => p.Comments, c => c.Id == commentId);
             var update = Builders<Post>.Update.PullFilter(p => p.Comments, c => c.Id == commentId);

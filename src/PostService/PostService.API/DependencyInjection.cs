@@ -51,7 +51,7 @@ namespace PostService.API.DependencyInjection
 
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Meal Plan Service API",
+                    Title = "Post Service API",
                     Version = "v1"
                 });
 

@@ -10,14 +10,16 @@ namespace PostService.API.Filters
         {
             var user = context.HttpContext.User;
             var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+            var userNameClaim = user.FindFirst(ClaimTypes.Name);
 
-            if (userIdClaim == null)
+            if (userIdClaim == null || userNameClaim == null)
             {
                 context.Result = new UnauthorizedResult();
                 return;
             }
 
             context.HttpContext.Items["UserId"] = userIdClaim.Value;
+            context.HttpContext.Items["UserName"] = userNameClaim.Value;
         }
     }
 }

@@ -2,6 +2,7 @@
 using PostService.Infrastructure.Options;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace PostService.Infrastructure.MongoDB
 {
@@ -13,10 +14,11 @@ namespace PostService.Infrastructure.MongoDB
         {
             var settings = mongoSettings.Value;
             var client = new MongoClient(settings.ConnectionURI);
+            
             _database = client.GetDatabase(settings.DatabaseName);
 
             var indexKeys = Builders<Post>.IndexKeys
-                .Text(x => x.Name)
+                .Text(x => x.Title)
                 .Text(x => x.Text)
                 .Text(x => x.KeyWords);
 

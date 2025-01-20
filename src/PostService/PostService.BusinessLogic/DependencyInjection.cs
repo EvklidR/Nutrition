@@ -2,8 +2,6 @@
 using System.Reflection;
 using FluentValidation;
 using PostService.BusinessLogic.Services;
-using PostService.Infrastructure.Services.Interfaces;
-using PostService.Infrastructure.Services;
 
 
 namespace PostService.BusinessLogic.DependencyInjection
@@ -15,10 +13,8 @@ namespace PostService.BusinessLogic.DependencyInjection
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
-            services.AddScoped<MealPlanService.BusinessLogic.Services.MealPlanService>();
-            services.AddScoped<ProfilePlanService>();
-
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<Services.PostService>();
+            services.AddScoped<CommentService>();
 
             return services;
 

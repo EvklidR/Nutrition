@@ -1,4 +1,5 @@
 using PostService.API.DependencyInjection;
+using PostService.API.Middleware;
 using PostService.BusinessLogic.DependencyInjection;
 using PostService.Infrastructure.DependencyInjection;
 
@@ -30,7 +31,7 @@ public class Program
 
         app.UseAuthorization();
 
-        //app.UseMiddleware<ExceptionHandlingMiddleware>();
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.MapControllers();
 

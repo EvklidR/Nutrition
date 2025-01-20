@@ -1,8 +1,11 @@
-﻿namespace PostService.Core.Entities
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
+
+namespace PostService.Core.Entities
 {
     public class Comment
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string OwnerEmail { get; set; }
         public string OwnerId { get; set; }
         public DateOnly Date {  get; set; }
