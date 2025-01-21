@@ -87,7 +87,7 @@ namespace MealPlanService.BusinessLogic.Services
             }
         }
 
-        public async Task DeleteProfilePlansAsync(string profileId) //For rabbitMQ when profile is deleted
+        public async Task DeleteProfilePlansAsync(string profileId)
         {
             var plans = await _usersMealPlanRepository.GetAllAsync(profileId);
 
@@ -121,7 +121,7 @@ namespace MealPlanService.BusinessLogic.Services
             }
         }
 
-        public async Task<DailyNeedsResponse> CalculateDailyNutrientsAsync(RequestForCalculating request) // for gprc only
+        public async Task<DailyNeedsResponse> CalculateDailyNutrientsAsync(RequestForCalculating request)
         {
             var day = await _mealPlanService.GetCurrentDay(request.ProfileId);
 
@@ -157,45 +157,71 @@ namespace MealPlanService.BusinessLogic.Services
         private void SetValueWithPerKgType(DailyNeedsResponse response, NutrientOfDay nutrient, RequestForCalculating request)
         {
             if (nutrient.NutrientType == NutrientType.Protein)
+            {
                 response.Proteins = (double)nutrient.Value! * request.BodyWeight;
+            }
             else if (nutrient.NutrientType == NutrientType.Fat)
+            {
                 response.Fats = (double)nutrient.Value! * request.BodyWeight;
+            }
             else if (nutrient.NutrientType == NutrientType.Carbohydrate)
+            {
                 response.Carbohydrates = (double)nutrient.Value! * request.BodyWeight;
+            }
         }
 
         private void SetValueWithPersentType(DailyNeedsResponse response, NutrientOfDay nutrient)
         {
             double caloriesFromPercentage = (double)nutrient.Value! * response.Calories;
+
             if (nutrient.NutrientType == NutrientType.Protein)
+            {
                 response.Proteins = caloriesFromPercentage / 4;
+            }
             else if (nutrient.NutrientType == NutrientType.Fat)
+            {
                 response.Fats = caloriesFromPercentage / 9;
+            }
             else if (nutrient.NutrientType == NutrientType.Carbohydrate)
+            {
                 response.Carbohydrates = caloriesFromPercentage / 4;
+            }
         }
 
         private void SetValueWithFixedType(DailyNeedsResponse response, NutrientOfDay nutrient)
         {
             if (nutrient.NutrientType == NutrientType.Protein)
+            {
                 response.Proteins = (double)nutrient.Value!;
+            }
             else if (nutrient.NutrientType == NutrientType.Fat)
+            {
                 response.Fats = (double)nutrient.Value!;
+            }
             else if (nutrient.NutrientType == NutrientType.Carbohydrate)
+            {
                 response.Carbohydrates = (double)nutrient.Value!;
+            }
         }
 
         private void SetValueWithDefaultType(DailyNeedsResponse response, NutrientOfDay nutrient)
         {
             double remainingCalories = response.Calories - (response.Proteins * 4 + response.Fats * 9 + response.Carbohydrates * 4);
+
             if (remainingCalories > 0)
             {
                 if (nutrient.NutrientType == NutrientType.Protein)
+                {
                     response.Proteins = remainingCalories / 4;
+                }
                 else if (nutrient.NutrientType == NutrientType.Fat)
+                {
                     response.Fats = remainingCalories / 9;
+                }
                 else if (nutrient.NutrientType == NutrientType.Carbohydrate)
+                {
                     response.Carbohydrates = remainingCalories / 4;
+                }
             }
         }
     }
