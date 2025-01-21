@@ -16,6 +16,7 @@ namespace UserService.Infrastructure.gRPC
         public override async Task<CheckUserResponse> CheckUser(CheckUserRequest request, ServerCallContext context)
         {
             var responce = new CheckUserResponse();
+
             if (Guid.TryParse(request.UserId, out Guid userId)) 
             {
                 responce.Exists = await _mediator.Send(new CheckUserByIdQuery(userId));
@@ -24,6 +25,7 @@ namespace UserService.Infrastructure.gRPC
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "User id is't Guid type"));
             }
+
             return responce;
         }
     }
