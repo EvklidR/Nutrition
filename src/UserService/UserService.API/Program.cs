@@ -21,6 +21,8 @@ public class Program
 
         app.UseCors("AllowSpecificOrigin");
 
+        app.MapGrpcService<Infrastructure.gRPC.UserService>();
+
         app.UseHangfireDashboard();
 
         app.MapDefaultEndpoints();

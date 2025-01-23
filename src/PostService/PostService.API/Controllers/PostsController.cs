@@ -6,6 +6,9 @@ using PostService.BusinessLogic.Models;
 
 namespace PostService.API.Controllers
 {
+    /// <summary>
+    /// Controller fo managing posts.
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class PostsController : ControllerBase
@@ -65,8 +68,8 @@ namespace PostService.API.Controllers
         [HttpPost]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreatePost([FromBody] CreatePostDTO createPostDTO)
+        [ProducesResponseType(typeof(PostDTO), StatusCodes.Status200OK)]
+        public async Task<IActionResult> CreatePost([FromForm] CreatePostDTO createPostDTO)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
             var userName = (string)HttpContext.Items["UserName"]!;
@@ -101,7 +104,6 @@ namespace PostService.API.Controllers
         /// Updates an existing post.
         /// </summary>
         /// <param name="updatePostDTO">The data required to update the post.</param>
-        /// <returns>No content on success.</returns>
         [HttpPut]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
@@ -119,7 +121,6 @@ namespace PostService.API.Controllers
         /// Likes a post by its ID.
         /// </summary>
         /// <param name="postId">The ID of the post to like.</param>
-        /// <returns>No content on success.</returns>
         [HttpPost("{postId}/like")]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
@@ -128,7 +129,7 @@ namespace PostService.API.Controllers
         {
             var userId = (string)HttpContext.Items["UserId"]!;
 
-            await _postService.LikePost(postId, userId);
+            await _postService.LikePostAsync(postId, userId);
 
             return NoContent();
         }

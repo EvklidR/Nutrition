@@ -6,6 +6,8 @@ using PostService.Infrastructure.Repositories.Interfaces;
 using Microsoft.Extensions.Configuration;
 using PostService.Infrastructure.gRPC.Interfaces;
 using PostService.Infrastructure.gRPC;
+using PostService.Infrastructure.Services.Interfaces;
+using PostService.Infrastructure.Services;
 
 namespace PostService.Infrastructure.DependencyInjection
 {
@@ -20,6 +22,11 @@ namespace PostService.Infrastructure.DependencyInjection
             services.AddScoped<ICommentRepository, CommentRepository>();
 
             services.AddScoped<IUserService>(provider => new UserService(configuration["GrpcServices:UserServiceUrl"]));
+
+            var appKey = configuration["DropBox:AppKey"];
+            var appSecret = configuration["DropBox:AppSecret"];
+            var refresh = configuration["DropBox:RefreshToken"];
+            services.AddScoped<IImageService>(provider => new ImageService(appKey, appSecret, refresh));
 
             return services;
         }

@@ -87,7 +87,7 @@ namespace PostService.BusinessLogic.Services
             await _commentRepository.UpdateAsync(comment);
         }
 
-        public async Task LikeComment(string commentId, string userId)
+        public async Task LikeCommentAsync(string commentId, string userId)
         {
             var comment = await _commentRepository.GetByIdAsync(commentId);
 
@@ -96,7 +96,14 @@ namespace PostService.BusinessLogic.Services
                 throw new NotFound("Comment not found");
             }
 
-            comment.UserLikeIds.Add(userId);
+            if (comment.UserLikeIds.Contains(userId))
+            {
+                comment.UserLikeIds.Remove(userId);
+            }
+            else
+            {
+                comment.UserLikeIds.Add(userId);
+            }
 
             await _commentRepository.UpdateAsync(comment);
         }

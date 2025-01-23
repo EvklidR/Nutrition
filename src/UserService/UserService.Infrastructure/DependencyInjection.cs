@@ -16,6 +16,8 @@ namespace UserService.Infrastructure.DependencyInjection
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddGrpc();
+
             services.AddSingleton<IMealPlanService>(sp =>
                 new MealPlanServiceClient(configuration["GrpcServices:MealPlanUrl"]));
 

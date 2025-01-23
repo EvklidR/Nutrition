@@ -5,7 +5,7 @@ using UserService.Grpc;
 
 namespace UserService.Infrastructure.gRPC
 {
-    public class UserService : CheckUserService.CheckUserServiceBase
+    public class UserService : GRPCUserService.GRPCUserServiceBase
     {
         private readonly IMediator _mediator;
         public UserService(IMediator mediator)
@@ -25,6 +25,11 @@ namespace UserService.Infrastructure.gRPC
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "User id is't Guid type"));
             }
             return responce;
+        }
+
+        public async override Task<CheckProfileBelongingResponse> CheckProfileBelonging(CheckProfileBelongingRequest request, ServerCallContext context)
+        {
+            throw new NotImplementedException();
         }
     }
 }

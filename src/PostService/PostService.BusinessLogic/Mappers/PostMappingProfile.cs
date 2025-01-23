@@ -10,8 +10,8 @@ namespace PostService.BusinessLogic.Mappers
         {
             CreateMap<CreatePostDTO, Post>()
                 .ForMember(
-                dest => dest.Date, 
-                opt => opt.MapFrom((src, dest) => dest.Date = DateOnly.FromDateTime(DateTime.Now)));
+                dest => dest.CreatedDate, 
+                opt => opt.MapFrom((src, dest) => dest.CreatedDate = DateOnly.FromDateTime(DateTime.Now)));
 
             CreateMap<UpdatePostDTO, Post>();
 
