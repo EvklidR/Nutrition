@@ -1,9 +1,7 @@
-﻿namespace FoodService.Domain.Entities
+﻿namespace FoodService.Application.Models
 {
-    public abstract class Food
+    public class ProductResponse
     {
-        public Guid Id { get; set; }
-        public string UserId { get; set; }
         public string Name { get; set; }
         public double Calories { get; set; }
         public double Proteins { get; set; }

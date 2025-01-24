@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-option csharp_namespace = "UserService.Grpc";
+option csharp_namespace = "FoodService.Grpc";
 
 package userService;
 

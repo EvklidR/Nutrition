@@ -22,7 +22,7 @@ namespace FoodService.Infrastructure.Repositories
 
         public virtual async Task<IEnumerable<T>?> GetAllAsync(int profileId)
         {
-            return await _dbSet.ToListAsync();
+            return await _dbSet.Where(e => EF.Property<int>(e, "ProfileId") == profileId).ToListAsync();
         }
 
         public void Add(T entity)

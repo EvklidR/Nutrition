@@ -5,28 +5,25 @@ using FoodService.Application.Exceptions;
 namespace FoodService.Application.Behaviors
 {
     public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : IRequest<TResponse>
     {
-        private readonly IEnumerable<IValidator<TRequest>> _validators;
+        private readonly IValidator<TRequest>? _validator;
 
-        public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+        public ValidationBehavior(IValidator<TRequest>? validator)
         {
-            _validators = validators;
+            _validator = validator;
         }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
-            var context = new ValidationContext<TRequest>(request);
-
-            var failures = _validators
-                .Select(v => v.Validate(context))
-                .SelectMany(result => result.Errors)
-                .Where(f => f != null)
-                .ToList();
-
-            if (failures.Count != 0)
+            if (_validator != null)
             {
-                throw new BadRequest(failures.Select(f => f.ErrorMessage).ToArray());
+                var context = new ValidationContext<TRequest>(request);
+                var validationResult = await _validator.ValidateAsync(context, cancellationToken);
+
+                if (!validationResult.IsValid)
+                {
+                    throw new BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
+                }
             }
 
             return await next();
