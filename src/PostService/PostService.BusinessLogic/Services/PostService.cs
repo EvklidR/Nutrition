@@ -187,9 +187,12 @@ namespace PostService.BusinessLogic.Services
 
             foreach (var file in files)
             {
-                if (file.Length > 0 && markdownText.Contains(file.FileName))
+                var isFileValid = file.Length > 0 && markdownText.Contains(file.FileName);
+
+                if (isFileValid)
                 {
                     var dropboxPath = $"/Posts/{Guid.NewGuid()}_{file.FileName}";
+
                     using (var stream = file.OpenReadStream())
                     {
                         var imageUrl = await _imageService.UploadImageAsync(stream, dropboxPath);
@@ -202,7 +205,9 @@ namespace PostService.BusinessLogic.Services
             {
                 var fileName = entry.Key;
                 var imageUrl = entry.Value;
+
                 var pattern = $@"!\[\]\({Regex.Escape(fileName)}\)";
+
                 markdownText = Regex.Replace(markdownText, pattern, $"![Image]({imageUrl})");
             }
 
