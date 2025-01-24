@@ -39,7 +39,7 @@ namespace PostServiceTests
             _updatePostFaker = new Faker<UpdatePostDTO>()
                 .RuleFor(dto => dto.Id, f => f.Random.AlphaNumeric(24))
                 .RuleFor(dto => dto.Text, f => f.Lorem.Paragraph())
-                .RuleFor(dto => dto.Files, f => new List<Microsoft.AspNetCore.Http.IFormFile>());
+                .RuleFor(dto => dto.NewFiles, f => new List<Microsoft.AspNetCore.Http.IFormFile>());
 
             var configuration = new MapperConfiguration(cfg =>
             {

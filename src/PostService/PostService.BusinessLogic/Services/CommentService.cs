@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using PostService.BusinessLogic.DTOs.Comment;
-using PostService.BusinessLogic.DTOs.Post;
 using PostService.BusinessLogic.Exceptions;
 using PostService.Core.Entities;
 using PostService.Infrastructure.Repositories.Interfaces;

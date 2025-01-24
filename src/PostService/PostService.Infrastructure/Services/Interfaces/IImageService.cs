@@ -2,7 +2,8 @@
 {
     public interface IImageService
     {
-        Task<string> UploadImageAsync(Stream fileStream, string dropboxPath);
+        Task<bool> UploadImageAsync(Stream fileStream, string dropboxPath);
         Task<bool> DeleteImageAsync(string dropboxPath);
+        Task<Stream?> DownloadImageAsync(string dropboxPath);
     }
 }

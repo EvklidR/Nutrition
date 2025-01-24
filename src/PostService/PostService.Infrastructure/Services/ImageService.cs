@@ -7,22 +7,30 @@ namespace PostService.Infrastructure.Services
     public class ImageService : IImageService
     {
         private readonly DropboxClient _dropboxClient;
+        private readonly ICacheService _cacheService;
 
-        public ImageService(string appKey, string appSecret, string refreshToken)
+        public ImageService(string appKey, string appSecret, string refreshToken, ICacheService cacheService)
         {
             _dropboxClient = new DropboxClient(refreshToken, appKey, appSecret);
+            _cacheService = cacheService;
         }
 
-        public async Task<string> UploadImageAsync(Stream fileStream, string dropboxPath)
+        public async Task<bool> UploadImageAsync(Stream fileStream, string dropboxPath)
         {
-            var uploadResult = await _dropboxClient.Files.UploadAsync(
-                path: dropboxPath,
-                mode: WriteMode.Add.Instance,
-                body: fileStream
-            );
+            try
+            {
+                var uploadResult = await _dropboxClient.Files.UploadAsync(
+                    path: dropboxPath,
+                    mode: WriteMode.Add.Instance,
+                    body: fileStream
+                );
 
-            var sharedLink = await _dropboxClient.Sharing.CreateSharedLinkWithSettingsAsync(uploadResult.PathLower);
-            return sharedLink.Url.Replace("&dl=0", "&raw=1");
+                return true;
+            }
+            catch 
+            { 
+                return false;
+            }
         }
 
         public async Task<bool> DeleteImageAsync(string dropboxPath)
@@ -30,11 +38,37 @@ namespace PostService.Infrastructure.Services
             try
             {
                 await _dropboxClient.Files.DeleteV2Async(dropboxPath);
+
                 return true;
             }
-            catch (Exception ex) 
+            catch
             {
                 return false;
+            }
+        }
+
+        public async Task<Stream?> DownloadImageAsync(string dropboxPath)
+        {
+            try
+            {
+                var cachedResponse = await _cacheService.GetCachedImageAsync(dropboxPath);
+
+                if (cachedResponse != null)
+                {
+                    return cachedResponse;
+                }
+
+                var downloadResponse = await _dropboxClient.Files.DownloadAsync(dropboxPath);
+
+                var contentBytes = await downloadResponse.GetContentAsByteArrayAsync();
+
+                await _cacheService.WriteImageAsync(dropboxPath, contentBytes);
+
+                return new MemoryStream(contentBytes);
+            }
+            catch
+            {
+                return null;
             }
         }
     }

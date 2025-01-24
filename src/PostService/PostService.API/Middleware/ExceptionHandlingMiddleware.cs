@@ -34,10 +34,6 @@ namespace PostService.API.Middleware
 
             switch (exception)
             {
-                case AlreadyExists alreadyExistsEx:
-                    statusCode = HttpStatusCode.Conflict;
-                    result = alreadyExistsEx.Message;
-                    break;
                 case BadRequest badRequestEx:
                     statusCode = HttpStatusCode.BadRequest;
                     result = badRequestEx.Errors;
