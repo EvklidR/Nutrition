@@ -1,0 +1,27 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "MealPlanService.Grpc";
+
+package userService;
+
+service GRPCUserService {
+    rpc CheckUser (CheckUserRequest) returns (CheckUserResponse);
+    rpc CheckProfileBelonging (CheckProfileBelongingRequest) returns (CheckProfileBelongingResponse);
+}
+
+message CheckUserRequest {
+    string userId = 1;
+}
+
+message CheckUserResponse {
+    bool exists = 1;
+}
+
+message CheckProfileBelongingRequest {
+    string userId = 1;
+    string profileId = 2;
+}
+
+message CheckProfileBelongingResponse {
+    bool belong = 1;
+}

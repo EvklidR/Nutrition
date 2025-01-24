@@ -1,3 +1,7 @@
+using MealPlanService.API.DependencyInjection;
+using MealPlanService.API.Middleware;
+using MealPlanService.Infrastructure.DependencyInjection;
+using UserProfileService.BusinessLogic.DependencyInjection;
 
 namespace MealPlanService.API;
 
@@ -7,24 +11,25 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.AddServiceDefaults();
-
-        // Add services to the container.
-
-        builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddInfrastructureServices(builder.Configuration);
+        builder.Services.AddApplicationServices();
+        builder.Services.AddApiServices(builder, builder.Configuration);
 
         var app = builder.Build();
 
+        app.UseCors("AllowSpecificOrigin");
+
+        app.MapGrpcService<gRPC.MealPlanService>();
+
         app.MapDefaultEndpoints();
 
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.UseHttpsRedirection();
 

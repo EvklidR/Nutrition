@@ -78,8 +78,9 @@ namespace UserServiceTests
             await _handler.Handle(command, CancellationToken.None);
 
             // Assert
-            _profileRepositoryMock.Verify(repo => repo.Update(profile), Times.Once);
-            _profileRepositoryMock.Verify(repo => repo.SaveChangesAsync(), Times.Once);
+            profile.ThereIsMealPlan.Should().Be(true);
+            profileRepositoryMock.Verify(repo => repo.Update(profile), Times.Once);
+            profileRepositoryMock.Verify(repo => repo.SaveChangesAsync(), Times.Once);
         }
     }
 }

@@ -55,7 +55,6 @@ namespace UserService.Infrastructure.Configurations
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(admin);
 
                     var code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
-
                     var confirmationLink = $"{applicationUrl}/User/confirmEmail?userId={admin.Id}&code={code}";
 
                     await _emailService.SendConfirmationEmailAsync(adminEmail, $"<a href='{confirmationLink}'>Confirm</a>");

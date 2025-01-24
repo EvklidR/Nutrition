@@ -29,7 +29,7 @@ namespace UserService.API.Controllers
 
             var result = await _mediator.Send(command);
 
-            return CreatedAtAction(null, result);
+            return Ok(result);
         }
 
         [Authorize]
@@ -48,7 +48,7 @@ namespace UserService.API.Controllers
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [HttpPatch("choose-meal-plan")]
-        public async Task<IActionResult> ChooseMealPlan(Guid profileId, Guid mealPlanId)
+        public async Task<IActionResult> ChooseMealPlan(Guid profileId, string mealPlanId)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
             var command = new ChooseMealPlanCommand(profileId, userId);
@@ -78,7 +78,9 @@ namespace UserService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
             var query = new GetUserProfilesQuery(userId);
+
             var result = await _mediator.Send(query);
+
             return Ok(result);
         }
 

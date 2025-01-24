@@ -33,6 +33,7 @@ public class LoginUserHandler : ICommandHandler<LoginUserCommand, AuthenticatedR
         }
 
         var accessToken = await _tokenService.GenerateAccessToken(user);
+
         var refreshToken = await _tokenService.GenerateRefreshToken(user);
 
         return new AuthenticatedResponse { AccessToken = accessToken, RefreshToken = refreshToken };

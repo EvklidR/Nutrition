@@ -18,6 +18,7 @@ namespace UserService.Infrastructure.Services
         public async Task SendConfirmationEmailAsync(string email, string link)
         {
             string message = "Please, press here to confirm your email " + link;
+
             await SendEmailAsync(email, "Confirmation", message);
         }
 

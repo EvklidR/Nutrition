@@ -7,7 +7,7 @@ using UserService.Domain.Interfaces.Repositories;
 using UserService.Infrastructure.Services;
 using UserService.Infrastructure.Configurations;
 using UserService.Application.Interfaces;
-using UserService.Infrastructure.Grpc;
+using UserService.Infrastructure.gRPC;
 using Hangfire;
 
 namespace UserService.Infrastructure.DependencyInjection
@@ -32,8 +32,6 @@ namespace UserService.Infrastructure.DependencyInjection
                 .UseSqlServerStorage(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddHangfireServer();
-
-            services.AddHttpContextAccessor();
 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IEmailService, EmailService>();

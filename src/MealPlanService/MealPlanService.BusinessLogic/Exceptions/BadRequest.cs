@@ -1,4 +1,4 @@
-﻿namespace MealPlanService.Application.Exceptions
+﻿namespace MealPlanService.BusinessLogic.Exceptions
 {
     public class BadRequest : Exception
     {

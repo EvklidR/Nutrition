@@ -1,0 +1,20 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "MealPlanService.Grpc";
+
+service GRPCMealPlanService {
+    rpc CalculateKcalAndMacros (CalculateKcalAndMacrosRequest) returns (CalculateKcalAndMacrosResponse);
+}
+
+message CalculateKcalAndMacrosRequest {
+    string profileId = 2;
+    double bodyWeight = 3;
+    double dailyKcal = 4;
+}
+
+message CalculateKcalAndMacrosResponse {
+    double calories = 1;
+    double proteins = 2;
+    double fats = 3;
+    double carbohydrates = 4;
+}

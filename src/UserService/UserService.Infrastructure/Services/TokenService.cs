@@ -64,6 +64,7 @@ namespace UserService.Infrastructure.Services
             var token = new RefreshToken() { Token = refreshToken, UserId = user.Id };
 
             _refreshTokenTokenRepository.Add(token);
+
             await _refreshTokenTokenRepository.SaveChangesAsync();
 
             BackgroundJob.Schedule(
@@ -91,6 +92,7 @@ namespace UserService.Infrastructure.Services
         public async Task DeleteToken(RefreshToken token)
         {
             _refreshTokenTokenRepository.Delete(token);
+
             await _refreshTokenTokenRepository.SaveChangesAsync();
         }
 

@@ -37,14 +37,14 @@ namespace UserService.Application.UseCases.Queries
 
             if (profile.ThereIsMealPlan)
             {
+                response = CalculateDailyMacros(profile);
+            }
+            else
+            {
                 response = await _mealPlanService.GetDailyNeedsByMealPlanAsync(
                     profile.Id,
                     profile.Weight,
                     CalculateDailyCalories(profile));
-            }
-            else
-            {
-                response = CalculateDailyMacros(profile);
             }
 
             return response;
