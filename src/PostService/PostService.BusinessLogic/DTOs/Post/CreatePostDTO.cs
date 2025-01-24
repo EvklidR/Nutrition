@@ -9,6 +9,7 @@ namespace PostService.BusinessLogic.DTOs.Post
         public List<string> KeyWords { get; set; } = [];
         public string? OwnerEmail { get; set; }
         public string? OwnerId { get; set; }
+
         public List<IFormFile> Files { get; set; } = [];
     }
 }

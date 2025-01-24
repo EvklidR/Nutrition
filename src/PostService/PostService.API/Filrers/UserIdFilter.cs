@@ -15,6 +15,7 @@ namespace PostService.API.Filters
             if (userIdClaim == null || userNameClaim == null)
             {
                 context.Result = new UnauthorizedResult();
+
                 return;
             }
 

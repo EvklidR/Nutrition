@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using PostService.Core.Entities;
+using PostService.Infrastructure.Extentions;
 using PostService.Infrastructure.MongoDB;
 using PostService.Infrastructure.Repositories.Interfaces;
 
@@ -28,23 +29,19 @@ namespace PostService.Infrastructure.Repositories
             {
                 return null;
             }
-
-
         }
 
         public async Task<(IEnumerable<Post>? posts, long totalCount)> GetByUserIdAsync(string userId, int? page, int? size)
         {
             var filter = Builders<Post>.Filter.Eq(p => p.OwnerId, userId);
-            var query = _posts.Find(filter);
 
             var totalCount = await _posts.CountDocumentsAsync(filter);
 
-            if (page.HasValue && size.HasValue)
-            {
-                query = query.Skip((page.Value - 1) * size.Value).Limit(size.Value);
-            }
+            var posts = (IEnumerable<Post>)await _posts.Find(filter).ToListAsync();
 
-            return (await query.ToListAsync(), totalCount);
+            posts = posts.GetPaginated(page, size);
+
+            return (posts, totalCount);
         }
 
         public async Task<(IEnumerable<Post>? posts, long totalCount)> GetAllAsync(List<string>? words, int? page, int? size)
@@ -55,17 +52,14 @@ namespace PostService.Infrastructure.Repositories
             {
                 filter = Builders<Post>.Filter.Text(string.Join(" ", words));
             }
-
-            var query = _posts.Find(filter);
-
+            
             var totalCount = await _posts.CountDocumentsAsync(filter);
 
-            if (page.HasValue && size.HasValue)
-            {
-                query = query.Skip((page.Value - 1) * size.Value).Limit(size.Value);
-            }
+            var posts = (IEnumerable<Post>)await _posts.Find(filter).ToListAsync();
 
-            return (await query.ToListAsync(), totalCount);
+            posts = posts.GetPaginated(page, size);
+
+            return (posts, totalCount);
         }
 
         public async Task AddAsync(Post post)

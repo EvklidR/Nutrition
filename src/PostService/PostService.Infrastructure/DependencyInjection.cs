@@ -8,6 +8,7 @@ using PostService.Infrastructure.gRPC.Interfaces;
 using PostService.Infrastructure.gRPC;
 using PostService.Infrastructure.Services.Interfaces;
 using PostService.Infrastructure.Services;
+using PostService.Infrastructure.MongoDB.Configurators;
 
 namespace PostService.Infrastructure.DependencyInjection
 {
@@ -17,16 +18,25 @@ namespace PostService.Infrastructure.DependencyInjection
         {
             services.Configure<MongoDBOptions>(configuration.GetSection("ConnectionStrings"));
             services.AddScoped<MongoDBContext>();
+            services.AddScoped<PostConfigurator>();
 
             services.AddScoped<IPostRepository, PostRepository>();
             services.AddScoped<ICommentRepository, CommentRepository>();
 
             services.AddScoped<IUserService>(provider => new UserService(configuration["GrpcServices:UserServiceUrl"]));
 
-            var appKey = configuration["DropBox:AppKey"];
-            var appSecret = configuration["DropBox:AppSecret"];
-            var refresh = configuration["DropBox:RefreshToken"];
-            services.AddScoped<IImageService>(provider => new ImageService(appKey, appSecret, refresh));
+            services.AddScoped<IImageService>(provider =>
+            {
+                var configuration = provider.GetRequiredService<IConfiguration>();
+                var appKey = configuration["DropBox:AppKey"];
+                var appSecret = configuration["DropBox:AppSecret"];
+                var refresh = configuration["DropBox:RefreshToken"];
+                var cacheService = provider.GetRequiredService<ICacheService>();
+
+                return new ImageService(appKey, appSecret, refresh, cacheService);
+            });
+
+            services.AddScoped<ICacheService, RedisCacheService>();
 
             return services;
         }

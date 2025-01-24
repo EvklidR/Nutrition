@@ -18,7 +18,11 @@ namespace PostService.BusinessLogic.Services
         private readonly IUserService _userService;
         private readonly IImageService _imageService;
 
-        public PostService(IPostRepository postRepository, IMapper mapper, IUserService userService, IImageService imageService)
+        public PostService(
+            IPostRepository postRepository,
+            IMapper mapper,
+            IUserService userService, 
+            IImageService imageService)
         {
             _postRepository = postRepository;
             _mapper = mapper;
@@ -26,7 +30,11 @@ namespace PostService.BusinessLogic.Services
             _imageService = imageService;
         }
 
-        public async Task<PostsResponseModel> GetPostsAsync(List<string>? words, int? page, int? size, string userId)
+        public async Task<PostsResponseModel> GetPostsAsync(
+            List<string>? words,
+            int? page,
+            int? size,
+            string userId)
         {
             var response = await _postRepository.GetAllAsync(words, page, size);
 
@@ -35,7 +43,11 @@ namespace PostService.BusinessLogic.Services
                 opts.Items["CurrentUserId"] = userId;
             });
 
-            return new PostsResponseModel() { Posts = postsDTO, TotalCount = response.totalCount };
+            return new PostsResponseModel
+            {
+                Posts = postsDTO,
+                TotalCount = response.totalCount
+            };
         }
 
         public async Task<PostsResponseModel> GetUserPostsAsync(int? page, int? size, string userId)
@@ -47,7 +59,11 @@ namespace PostService.BusinessLogic.Services
                 opts.Items["CurrentUserId"] = userId;
             });
 
-            return new PostsResponseModel() { Posts = postsDTO, TotalCount = response.totalCount };
+            return new PostsResponseModel() 
+            { 
+                Posts = postsDTO,
+                TotalCount = response.totalCount
+            };
         }
 
         public async Task<PostDTO> CreatePostAsync(CreatePostDTO postDTO)
@@ -87,11 +103,7 @@ namespace PostService.BusinessLogic.Services
                 throw new Forbidden("You don't have permission to this action");
             }
 
-            var imageLinks = Regex.Matches(post.Text, @"!\[.*?\]\((.*?)\)")
-                .Cast<Match>()
-                .Select(m => m.Groups[1].Value)
-                .Where(link => link.Contains("dropbox.com"))
-                .ToList();
+            var imageLinks = ExtractLinks(post.Text);
 
             await DeleteImagesAsync(imageLinks);
 
@@ -112,19 +124,11 @@ namespace PostService.BusinessLogic.Services
                 throw new Forbidden("You don't have permission to this action");
             }
 
-            var markdown = await UploadImagesAsync(postDTO.Files, postDTO.Text);
+            var markdown = await UploadImagesAsync(postDTO.NewFiles, postDTO.Text);
 
-            var oldImageLinks = Regex.Matches(post.Text, @"!\[.*?\]\((.*?)\)")
-                .Cast<Match>()
-                .Select(m => m.Groups[1].Value)
-                .Where(link => link.Contains("dropbox.com"))
-                .ToList();
+            var oldImageLinks = ExtractLinks(post.Text);
 
-            var newImageLinks = Regex.Matches(postDTO.Text, @"!\[.*?\]\((.*?)\)")
-                .Cast<Match>()
-                .Select(m => m.Groups[1].Value)
-                .Where(link => link.Contains("dropbox.com"))
-                .ToList();
+            var newImageLinks = ExtractLinks(postDTO.Text);
 
             List<string> linksToDelete = new List<string>();
 
@@ -164,23 +168,6 @@ namespace PostService.BusinessLogic.Services
             await _postRepository.UpdateAsync(post);
         }
         
-        private string ExtractDropboxPath(string link)
-        {
-            try
-            {
-                var uri = new Uri(link);
-                var pathWithoutQuery = uri.AbsolutePath;
-                var pathSegments = pathWithoutQuery.Split('/');
-                var fileName = pathSegments.LastOrDefault();
-
-                return $"/Posts/{fileName}";
-            }
-            catch
-            {
-                return string.Empty;
-            }
-        }
-
         private async Task<string> UploadImagesAsync(List<IFormFile> files, string markdownText)
         {
             var fileNameToUrlMap = new Dictionary<string, string>();
@@ -191,12 +178,20 @@ namespace PostService.BusinessLogic.Services
 
                 if (isFileValid)
                 {
-                    var dropboxPath = $"/Posts/{Guid.NewGuid()}_{file.FileName}";
+                    var extention = file.FileName.Split('.').Last();
+
+                    var dropboxPath = $"/Posts/{Guid.NewGuid()}.{extention}";
 
                     using (var stream = file.OpenReadStream())
                     {
-                        var imageUrl = await _imageService.UploadImageAsync(stream, dropboxPath);
-                        fileNameToUrlMap[file.FileName] = imageUrl;
+                        var success = await _imageService.UploadImageAsync(stream, dropboxPath);
+
+                        if (!success)
+                        {
+                            throw new BadRequest("Failed to load image");
+                        }
+
+                        fileNameToUrlMap[file.FileName] = dropboxPath;
                     }
                 }
             }
@@ -206,9 +201,10 @@ namespace PostService.BusinessLogic.Services
                 var fileName = entry.Key;
                 var imageUrl = entry.Value;
 
-                var pattern = $@"!\[\]\({Regex.Escape(fileName)}\)";
+                var searchPattern = $"![]({fileName})";
+                var replacement = $"![Image]({imageUrl})";
 
-                markdownText = Regex.Replace(markdownText, pattern, $"![Image]({imageUrl})");
+                markdownText = markdownText.Replace(searchPattern, replacement);
             }
 
             return markdownText;
@@ -218,11 +214,9 @@ namespace PostService.BusinessLogic.Services
         {
             foreach (var link in imageLinks)
             {
-                var dropboxPath = ExtractDropboxPath(link);
-
-                if (!string.IsNullOrEmpty(dropboxPath))
+                if (!string.IsNullOrEmpty(link))
                 {
-                    var success = await _imageService.DeleteImageAsync(dropboxPath);
+                    var success = await _imageService.DeleteImageAsync(link);
 
                     if (!success)
                     {
@@ -230,6 +224,28 @@ namespace PostService.BusinessLogic.Services
                     }
                 }
             }
+        }
+
+        public async Task<Stream> GetImageAsync(string imageName)
+        {
+            string decodedUrl = Uri.UnescapeDataString(imageName);
+
+            var imageStream = await _imageService.DownloadImageAsync(decodedUrl);    
+            
+            if (imageStream == null)
+            {
+                throw new NotFound($"Image {decodedUrl} not found");
+            }
+
+            return imageStream;
+        }
+
+        private List<string> ExtractLinks(string text)
+        {
+            return Regex.Matches(text, @"!\[Image\]\((.*?)\)")
+                .Cast<Match>()
+                .Select(m => m.Groups[1].Value)
+                .ToList();
         }
     }
 }

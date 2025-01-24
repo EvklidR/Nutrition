@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PostService.API.Filters;
 using PostService.BusinessLogic.DTOs.Post;
 using PostService.BusinessLogic.Models;
+using PostService.Infrastructure.Services.Interfaces;
 
 namespace PostService.API.Controllers
 {
@@ -132,6 +133,19 @@ namespace PostService.API.Controllers
             await _postService.LikePostAsync(postId, userId);
 
             return NoContent();
+        }
+
+        /// <summary>
+        /// Get image from post.
+        /// </summary>
+        /// <param name="fileName">The path to image.</param>
+        [HttpGet("/{fileName}")]
+        [ProducesResponseType(typeof(File), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetFileAsync(string fileName)
+        {
+            var fileStream = await _postService.GetImageAsync(fileName);
+
+            return File(fileStream, "image/jpeg");
         }
     }
 }
