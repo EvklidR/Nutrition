@@ -6,6 +6,7 @@
         public Guid DayId { get; set; }
         public string Name { get; set; }
 
-        public List<EatenFood> Foods { get; set; } = new List<EatenFood>();
+        public List<EatenProduct> Products { get; set; } = [];
+        public List<EatenDish> Dishes { get; set; } = [];
     }
 }

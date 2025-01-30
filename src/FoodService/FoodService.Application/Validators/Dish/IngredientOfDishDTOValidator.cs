@@ -1,17 +1,15 @@
 ﻿using FluentValidation;
 using FoodService.Application.DTOs;
+using FoodService.Application.DTOs.Dish;
 
 namespace FoodService.Application.Validators
 {
-    public class IngredientOfDishDTOValidator : AbstractValidator<ProductOfDishDTO>
+    public class IngredientOfDishDTOValidator : AbstractValidator<CreateOrUpdateProductOfDishDTO>
     {
         public IngredientOfDishDTOValidator()
         {
-            RuleFor(i => i.IngredientId)
-                .GreaterThan(0).WithMessage("IngredientId must be greater than zero.");
-
             RuleFor(i => i.Weight)
-                .GreaterThan(0).WithMessage("Weight must be greater than zero.");
+                .GreaterThan(0).WithMessage("Weight must be greater than 0");
         }
     }
 }

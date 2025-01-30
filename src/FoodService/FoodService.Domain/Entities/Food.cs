@@ -3,7 +3,7 @@
     public abstract class Food
     {
         public Guid Id { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public string Name { get; set; }
         public double Calories { get; set; }
         public double Proteins { get; set; }

@@ -18,11 +18,4 @@
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UseCases\CommandHandlers\DayResult\" />
-    <Folder Include="UseCases\Commands\DayResult\" />
-    <Folder Include="UseCases\Queries\DayResult\" />
-    <Folder Include="UseCases\QueryHandlers\DayResult\" />
-  </ItemGroup>
-
 </Project>

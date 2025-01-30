@@ -5,7 +5,7 @@ namespace FoodService.Domain.Interfaces
     public interface IUnitOfWork
     {
         IDishRepository DishRepository { get; }
-        IIngredientRepository IngredientRepository { get; }
+        IProductRepository ProductRepository { get; }
         IDayResultRepository DayResultRepository { get; }
         Task SaveChangesAsync();
     }

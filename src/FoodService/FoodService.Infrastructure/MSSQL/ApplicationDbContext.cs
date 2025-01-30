@@ -12,14 +12,12 @@ namespace FoodService.Infrastructure.MSSQL
         public DbSet<DayResult> DayResults { get; set; }
         public DbSet<Meal> Meals { get; set; }
         public DbSet<Dish> Dishes { get; set; }
-        public DbSet<Product> Ingredients { get; set; }
-        public DbSet<ProductOfDish> IngredientOfDishes { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductOfDish> ProductsOfDishes { get; set; }
         public DbSet<EatenFood> EatenFoods { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasDefaultSchema("FoodServiceSchema");
-
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
     }

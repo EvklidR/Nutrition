@@ -22,13 +22,13 @@ namespace FoodService.Infrastructure.Services
                 {
                     foreach (var product in searchResults.Products)
                     {
-                        products.Add(new ProductResponse()
-                            product.Name,
-                            product.Nutrition?.Calories ?? 0,
-                            product.Nutrition?.Protein ?? 0,
-                            product.Nutrition?.Fat ?? 0,
-                            product.Nutrition?.Carbs ?? 0
-                        );
+                        products.Add(new ProductResponse() {
+                            Name = product.Name,
+                            Calories = product.Nutrition?.Calories ?? 0,
+                            Proteins = product.Nutrition?.Protein ?? 0,
+                            Fats = product.Nutrition?.Fat ?? 0,
+                            Carbohydrates = product.Nutrition?.Carbs ?? 0
+                        });
                     }
                 }
 

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FoodService.Application.DTOs;
+using FoodService.Application.DTOs.Dish;
 using Microsoft.AspNetCore.Http;
 
 namespace FoodService.Application.Validators
@@ -8,12 +9,9 @@ namespace FoodService.Application.Validators
     {
         public CreateDishDTOValidator(IngredientOfDishDTOValidator ingredientOfDishDTOValidator)
         {
-            RuleFor(d => d.ProfileId)
-                .GreaterThan(0).WithMessage("ProfileId must be greater than zero.");
-
             RuleFor(d => d.Name)
-                .NotEmpty().WithMessage("Name is required.")
-                .MaximumLength(100).WithMessage("Name cannot exceed 100 characters.");
+                .NotEmpty().WithMessage("Name is required")
+                .MaximumLength(100).WithMessage("Name cannot exceed 100 characters");
 
             RuleFor(d => d.AmountOfPortions)
                 .GreaterThan(0).WithMessage("Amount should be grater than 0");

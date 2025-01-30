@@ -1,7 +1,5 @@
-﻿using System.Threading.Tasks;
-using FoodService.Domain.Interfaces.Repositories;
+﻿using FoodService.Domain.Interfaces.Repositories;
 using FoodService.Infrastructure.MSSQL;
-using Microsoft.EntityFrameworkCore;
 using FoodService.Domain.Interfaces;
 
 namespace FoodService.Infrastructure.Repositories
@@ -11,7 +9,7 @@ namespace FoodService.Infrastructure.Repositories
         private readonly ApplicationDbContext _context;
 
         private IDishRepository? _dishRepository;
-        private IIngredientRepository? _ingredientRepository;
+        private IProductRepository? _productRepository;
         private IDayResultRepository? _dayResultRepository;
 
         public UnitOfWork(ApplicationDbContext context)
@@ -22,8 +20,8 @@ namespace FoodService.Infrastructure.Repositories
         public IDishRepository DishRepository
             => _dishRepository ??= new DishRepository(_context);
 
-        public IIngredientRepository IngredientRepository
-            => _ingredientRepository ??= new IngredientRepository(_context);
+        public IProductRepository ProductRepository
+            => _productRepository ??= new ProductRepository(_context);
 
         public IDayResultRepository DayResultRepository
             => _dayResultRepository ??= new DayResultRepository(_context);

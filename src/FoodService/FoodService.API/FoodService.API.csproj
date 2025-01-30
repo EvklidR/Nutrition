@@ -10,6 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
@@ -19,13 +24,6 @@
     <ProjectReference Include="..\..\Nutrition.ServiceDefaults\Nutrition.ServiceDefaults.csproj" />
     <ProjectReference Include="..\FoodService.Application\FoodService.Application.csproj" />
     <ProjectReference Include="..\FoodService.Infrastructure\FoodService.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Filters\" />
-    <Folder Include="Grpc\" />
-    <Folder Include="Protos\" />
   </ItemGroup>
 
 </Project>

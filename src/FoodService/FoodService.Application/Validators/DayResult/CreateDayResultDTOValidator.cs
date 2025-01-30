@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FoodService.Application.DTOs;
+using FoodService.Application.DTOs.DayResult;
 
 namespace FoodService.Application.Validators
 {
@@ -8,10 +9,9 @@ namespace FoodService.Application.Validators
         public CreateDayResultDTOValidator()
         {
             RuleFor(dr => dr.Date)
-                .NotEmpty().WithMessage("Date is required.")
+                .NotEmpty().WithMessage("Date is required")
                 .Must(d => d < DateOnly.FromDateTime(DateTime.Now))
-                .WithMessage("The date must be in the past.");
-
+                .WithMessage("The date must be in the past");
         }
     }
 }

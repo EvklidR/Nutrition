@@ -1,4 +1,10 @@
 
+using FoodService.Api.Middleware;
+using FoodService.API.DependencyInjection;
+using FoodService.API.Extentions;
+using FoodService.Application.DependencyInjection;
+using FoodService.Infrastructure.DependencyInjection;
+
 namespace FoodService.API;
 
 public class Program
@@ -7,24 +13,24 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.AddServiceDefaults();
-
-        // Add services to the container.
-
-        builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddApiServices(builder.Configuration);
+        builder.Services.AddInfrastructureServices(builder.Configuration);
+        builder.Services.AddApplicationServices();
 
         var app = builder.Build();
 
+        app.UseCors("AllowSpecificOrigin");
+
         app.MapDefaultEndpoints();
 
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.ApplyMigrations();
         }
+
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.UseHttpsRedirection();
 

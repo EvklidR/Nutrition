@@ -24,18 +24,12 @@ namespace FoodService.Infrastructure.DependencyInjection
 
             services.AddScoped<IDayResultRepository, DayResultRepository>();
             services.AddScoped<IDishRepository, DishRepository>();
-            services.AddScoped<IIngredientRepository, IngredientRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<ISearchProductService, SearchProductService>();
 
-            var imagePath = Path.Combine(Directory.GetCurrentDirectory(), configuration["ImageSettings:ImagePath"]);
-            if (!Directory.Exists(imagePath))
-            {
-                Directory.CreateDirectory(imagePath);
-            }
-
-            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("127.0.0.1:6379"));
+            //services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("127.0.0.1:6379"));
 
             return services;
         }

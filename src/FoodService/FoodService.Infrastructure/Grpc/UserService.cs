@@ -14,16 +14,21 @@ namespace FoodService.Infrastructure.Grpc
             _client = new GRPCUserService.GRPCUserServiceClient(channel);
         }
 
-        public async Task<bool> CheckProfileBelonging(string userId, string profileId)
+        public async Task<bool> CheckProfileBelonging(Guid userId, Guid profileId)
         {
-            throw new NotImplementedException();
+            var request = new CheckProfileBelongingRequest { UserId = userId.ToString(), ProfileId = profileId.ToString() };
+
+            var response = await _client.CheckProfileBelongingAsync(request);
+
+            return response.Belong;
         }
 
-        public async Task<bool> CheckUserByIdAsync(string userId)
+        public async Task<bool> CheckUserByIdAsync(Guid userId)
         {
             var request = new CheckUserRequest { UserId = userId.ToString() };
 
             var response = await _client.CheckUserAsync(request);
+
             return response.Exists;
         }
     }

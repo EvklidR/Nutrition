@@ -2,7 +2,7 @@
 {
     public interface IUserService
     {
-        Task<bool> CheckUserByIdAsync(string userId);
-        Task<bool> CheckProfileBelonging(string userId, string profileId);
+        Task<bool> CheckUserByIdAsync(Guid userId);
+        Task<bool> CheckProfileBelonging(Guid userId, Guid profileId);
     }
 }
