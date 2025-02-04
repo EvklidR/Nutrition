@@ -4,6 +4,6 @@ namespace FoodService.Application.Interfaces
 {
     public interface ISearchProductService
     {
-        Task<List<ProductResponse>?> GetProductsByName(string name);
+        Task<List<ProductResponseFromAPI>?> GetProductsByName(string name);
     }
 }

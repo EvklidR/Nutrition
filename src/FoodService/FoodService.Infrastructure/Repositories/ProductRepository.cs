@@ -11,14 +11,21 @@ namespace FoodService.Infrastructure.Repositories
     {
         public ProductRepository(ApplicationDbContext context) : base(context) { }
 
-        public async Task<IEnumerable<Product>?> GetAllAsync(Guid userId, GetFoodRequestParameters parameters)
+        public async Task<(IEnumerable<Product>?, long)> GetAllAsync(Guid userId, GetFoodRequestParameters parameters)
         {
-            return (IEnumerable<Product>?)await _dbSet
+            var query = _dbSet
+                .Where(d => d.UserId == userId)
                 .GetByName(parameters.Name)
-                .SortByCriteria(parameters.SortAsc, parameters.SortingCriteria)
+                .SortByCriteria(parameters.SortAsc, parameters.SortingCriteria);
+
+            long totalRecords = await query.CountAsync();
+
+            var products = await query
                 .GetPaginated(parameters.Page, parameters.PageSize)
                 .Cast<Product>()
                 .ToListAsync();
+
+            return (products, totalRecords);
         }
     }
 }

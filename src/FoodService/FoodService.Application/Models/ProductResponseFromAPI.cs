@@ -1,6 +1,6 @@
 ﻿namespace FoodService.Application.Models
 {
-    public class ProductResponse
+    public class ProductResponseFromAPI
     {
         public string Name { get; set; }
         public double Calories { get; set; }

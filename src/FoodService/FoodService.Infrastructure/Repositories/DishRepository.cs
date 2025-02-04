@@ -20,17 +20,24 @@ namespace FoodService.Infrastructure.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Dish>?> GetAllAsync(Guid userId, GetFoodRequestParameters parameters)
+        public async Task<(IEnumerable<Dish>?, long)> GetAllAsync(Guid userId, GetFoodRequestParameters parameters)
         {
-            return await _dbSet
+            var query = _dbSet
                 .Where(d => d.UserId == userId)
                 .GetByName(parameters.Name)
-                .SortByCriteria(parameters.SortAsc, parameters.SortingCriteria)
+                .SortByCriteria(parameters.SortAsc, parameters.SortingCriteria);
+
+            long totalRecords = await query.CountAsync();
+
+            var dishes = await query
                 .GetPaginated(parameters.Page, parameters.PageSize)
                 .Cast<Dish>()
                 .Include(d => d.Ingredients)
                 .ToListAsync();
+
+            return (dishes, totalRecords);
         }
+
 
         public override async Task<IEnumerable<Dish>?> GetAllAsync(Guid userId)
         {

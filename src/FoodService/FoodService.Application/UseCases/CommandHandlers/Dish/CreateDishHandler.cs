@@ -1,5 +1,4 @@
-﻿using MediatR;
-using AutoMapper;
+﻿using AutoMapper;
 using FoodService.Domain.Interfaces;
 using FoodService.Application.UseCases.Commands.Dish;
 using FoodService.Application.Exceptions;
@@ -8,20 +7,24 @@ using FoodService.Application.DTOs.Dish;
 
 namespace FoodService.Application.UseCases.CommandHandlers.Dish
 {
-    public class CreateDishHandler : ICommandHandler<CreateDishCommand, FullDishDishDTO>
+    public class CreateDishHandler : ICommandHandler<CreateDishCommand, FullDishDTO>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
+        private readonly IImageService _imageService;
 
-        public CreateDishHandler(IUnitOfWork unitOfWork, IMapper mapper, IUserService userService)
+        public CreateDishHandler(
+            IUnitOfWork unitOfWork,
+            IMapper mapper, IUserService userService, IImageService imageService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userService = userService;
+            _imageService = imageService;
         }
 
-        public async Task<FullDishDishDTO> Handle(CreateDishCommand request, CancellationToken cancellationToken)
+        public async Task<FullDishDTO> Handle(CreateDishCommand request, CancellationToken cancellationToken)
         {
             var doesUserExist = await _userService.CheckUserByIdAsync(
                 request.CreateDishDTO.UserId);
@@ -37,11 +40,15 @@ namespace FoodService.Application.UseCases.CommandHandlers.Dish
 
             await CalculateNutrientsForDish(dish);
 
+            var filePath = await _imageService.UploadImageAsync(request.CreateDishDTO.Image);
+
+            dish.ImageUrl = filePath;
+
             _unitOfWork.DishRepository.Add(dish);
 
             await _unitOfWork.SaveChangesAsync();
 
-            var dishDTO = _mapper.Map<FullDishDishDTO>(dish);
+            var dishDTO = _mapper.Map<FullDishDTO>(dish);
 
             return dishDTO;
         }

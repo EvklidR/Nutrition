@@ -1,9 +1,10 @@
-﻿using MediatR;
-using AutoMapper;
+﻿using AutoMapper;
 using FoodService.Domain.Interfaces;
 using FoodService.Application.Exceptions;
 using FoodService.Application.UseCases.Commands.Dish;
 using FoodService.Application.Interfaces;
+using FoodService.Application.DTOs.Dish;
+using MediatR;
 
 namespace FoodService.Application.UseCases.CommandHandlers.Dish
 {
@@ -11,13 +12,13 @@ namespace FoodService.Application.UseCases.CommandHandlers.Dish
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        //private readonly IImageService _imageService;
+        private readonly IImageService _imageService;
 
-        public UpdateDishHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public UpdateDishHandler(IUnitOfWork unitOfWork, IMapper mapper, IImageService imageService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
-           // _imageService = imageService;
+            _imageService = imageService;
         }
 
         public async Task Handle(UpdateDishCommand request, CancellationToken cancellationToken)
@@ -34,16 +35,11 @@ namespace FoodService.Application.UseCases.CommandHandlers.Dish
                 throw new Forbidden("You dont have access to this entity");
             }
 
+            await UpdateImages(dish, request.UpdateDishDTO);
+
             _mapper.Map(request.UpdateDishDTO, dish);
 
             await CalculateNutrientsForDish(dish);
-
-            //TODO: work with image
-
-            if (request.UpdateDishDTO.Image != null)
-            {
-                //await _imageService.UploadImageAsync();
-            }
 
             await _unitOfWork.SaveChangesAsync();
         }
@@ -77,6 +73,28 @@ namespace FoodService.Application.UseCases.CommandHandlers.Dish
             dish.Fats = dish.Fats / weight;
             dish.Proteins = dish.Proteins / weight;
             dish.Carbohydrates = dish.Carbohydrates / weight;
+        }
+
+        private async Task UpdateImages(Domain.Entities.Dish dish, UpdateDishDTO updateDishDTO) 
+        {
+            if (updateDishDTO.Image != null)
+            {
+                var filePath = await _imageService.UploadImageAsync(updateDishDTO.Image);
+
+                if (dish.ImageUrl != null)
+                {
+                    await _imageService.DeleteImageAsync(dish.ImageUrl);
+                }
+
+                dish.ImageUrl = filePath;
+            }
+            else if (updateDishDTO.DeleteImageIfNull)
+            {
+                if (dish.ImageUrl != null)
+                {
+                    await _imageService.DeleteImageAsync(dish.ImageUrl);
+                }
+            }
         }
     }
 }

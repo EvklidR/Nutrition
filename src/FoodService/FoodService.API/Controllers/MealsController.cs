@@ -8,6 +8,9 @@ using FoodService.API.Filters;
 
 namespace FoodService.API.Controllers
 {
+    /// <summary>
+    /// Controller for managing meals.
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class MealsController : ControllerBase
@@ -19,6 +22,12 @@ namespace FoodService.API.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Retrieves a meal by its ID.
+        /// </summary>
+        /// <param name="mealId">The meal ID.</param>
+        /// <param name="dayId">The day ID associated with the meal.</param>
+        /// <returns>The requested meal.</returns>
         [HttpGet]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
@@ -31,6 +40,11 @@ namespace FoodService.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Creates a new meal.
+        /// </summary>
+        /// <param name="createMealDTO">The meal data.</param>
+        /// <returns>The created meal.</returns>
         [HttpPost]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
@@ -43,6 +57,10 @@ namespace FoodService.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Updates an existing meal.
+        /// </summary>
+        /// <param name="updateMealDTO">Updated meal data.</param>
         [HttpPut]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
@@ -55,10 +73,15 @@ namespace FoodService.API.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Deletes a meal by its ID.
+        /// </summary>
+        /// <param name="mealId">The meal ID.</param>
+        /// <param name="dayId">The day ID associated with the meal.</param>
         [HttpDelete]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        public async Task<IActionResult> DeleteMeal(Guid mealId, [FromQuery] Guid dayId)
+        public async Task<IActionResult> DeleteMeal([FromQuery] Guid mealId, Guid dayId)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 

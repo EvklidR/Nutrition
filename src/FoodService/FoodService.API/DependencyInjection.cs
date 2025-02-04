@@ -23,11 +23,19 @@ namespace FoodService.API.DependencyInjection
                 });
             });
 
-            services.AddControllers();
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<ValidationFilter>();
+            });
+            
             services.AddEndpointsApiExplorer();
 
             services.AddSwaggerGen(c =>
             {
+                var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Food service", Version = "v1" });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

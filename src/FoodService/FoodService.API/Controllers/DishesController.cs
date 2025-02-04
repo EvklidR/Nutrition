@@ -6,9 +6,13 @@ using FoodService.Application.DTOs.Dish;
 using FoodService.Domain.Repositories.Models;
 using Microsoft.AspNetCore.Authorization;
 using FoodService.API.Filters;
+using FoodService.Application.Models;
 
 namespace FoodService.API.Controllers
 {
+    /// <summary>
+    /// Controller for managing dishes.
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     public class DishesController : ControllerBase
@@ -20,10 +24,16 @@ namespace FoodService.API.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Gets a dish by its ID.
+        /// </summary>
+        /// <param name="dishId">The dish ID.</param>
+        /// <returns>The requested dish.</returns>
         [HttpGet("{dishId}")]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        public async Task<ActionResult<FullDishDishDTO>> GetDishById(Guid dishId)
+        [ProducesResponseType(typeof(FullDishDTO), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetDishById(Guid dishId)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
@@ -32,22 +42,34 @@ namespace FoodService.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Retrieves all dishes based on request parameters.
+        /// </summary>
+        /// <param name="parameters">Filtering and sorting parameters.</param>
+        /// <returns>A list of dishes.</returns>
         [HttpGet]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        public async Task<ActionResult<IEnumerable<BriefDishDishDTO>>> GetAllDishes([FromQuery] GetFoodRequestParameters parameters)
+        [ProducesResponseType(typeof(IEnumerable<BriefDishDTO>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetDishes([FromQuery] GetFoodRequestParameters parameters)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
-            var result = await _mediator.Send(new GetAllDishesQuery(userId, parameters));
+            var result = await _mediator.Send(new GetDishesQuery(userId, parameters));
 
             return Ok(result);
         }
 
+        /// <summary>
+        /// Creates a new dish.
+        /// </summary>
+        /// <param name="createDishDTO">Dish data.</param>
+        /// <returns>The created dish.</returns>
         [HttpPost]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        public async Task<ActionResult<FullDishDishDTO>> CreateDish([FromBody] CreateDishDTO createDishDTO)
+        [ProducesResponseType(typeof(FullDishDTO), StatusCodes.Status201Created)]
+        public async Task<IActionResult> CreateDish([FromBody] CreateDishDTO createDishDTO)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
@@ -58,9 +80,14 @@ namespace FoodService.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Updates an existing dish.
+        /// </summary>
+        /// <param name="updateDishDTO">Updated dish data.</param>
         [HttpPut]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateDish([FromBody] UpdateDishDTO updateDishDTO)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
@@ -70,9 +97,14 @@ namespace FoodService.API.Controllers
             return NoContent();
         }
 
-        [HttpDelete]
+        /// <summary>
+        /// Deletes a dish by its ID.
+        /// </summary>
+        /// <param name="dishId">The dish ID.</param>
+        [HttpDelete("{dishId}")]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteDish(Guid dishId)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
@@ -80,6 +112,22 @@ namespace FoodService.API.Controllers
             await _mediator.Send(new DeleteDishCommand(dishId, userId));
 
             return NoContent();
+        }
+
+        /// <summary>
+        /// Retrieves the image of a dish.
+        /// </summary>
+        /// <param name="dishId">The dish ID.</param>
+        /// <returns>The dish image.</returns>
+        [HttpGet("{dishId}/image")]
+        [Authorize]
+        [ProducesResponseType(typeof(FileResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetDishImage(Guid dishId)
+        {
+            var fileStream = await _mediator.Send(new GetDishImageQuery(dishId));
+
+            return File(fileStream, "image/jpeg");
         }
     }
 }

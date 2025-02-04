@@ -1,6 +1,6 @@
 ﻿namespace FoodService.Application.DTOs.Dish
 {
-    public class FullDishDishDTO
+    public class FullDishDTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

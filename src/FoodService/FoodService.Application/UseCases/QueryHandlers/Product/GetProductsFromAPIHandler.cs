@@ -5,7 +5,7 @@ using FoodService.Application.UseCases.Queries.Product;
 
 namespace FoodService.Application.UseCases.QueryHandlers.Product
 {
-    public class GetProductsFromAPIHandler : IQueryHandler<GetProductsFromAPIQuery, List<ProductResponse>?>
+    public class GetProductsFromAPIHandler : IQueryHandler<GetProductsFromAPIQuery, List<ProductResponseFromAPI>?>
     {
         private readonly ISearchProductService _searchProductService;
         public GetProductsFromAPIHandler(ISearchProductService searchProductService)
@@ -13,7 +13,7 @@ namespace FoodService.Application.UseCases.QueryHandlers.Product
             _searchProductService = searchProductService;
         }
 
-        public async Task<List<ProductResponse>?> Handle(GetProductsFromAPIQuery request, CancellationToken cancellationToken)
+        public async Task<List<ProductResponseFromAPI>?> Handle(GetProductsFromAPIQuery request, CancellationToken cancellationToken)
         {
             return await _searchProductService.GetProductsByName(request.Name);
         }

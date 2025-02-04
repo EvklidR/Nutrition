@@ -8,7 +8,7 @@ namespace FoodService.Infrastructure.Services
     {
         private const string ApiUrlSearch = "https://world.openfoodfacts.org/cgi/search.pl?search_terms={0}&json=true&lang=en";
 
-        public async Task<List<ProductResponse>?> GetProductsByName(string productName)
+        public async Task<List<ProductResponseFromAPI>?> GetProductsByName(string productName)
         {
             using (HttpClient client = new HttpClient())
             {
@@ -16,13 +16,13 @@ namespace FoodService.Infrastructure.Services
                 var response = await client.GetStringAsync(url);
                 var searchResults = JsonConvert.DeserializeObject<SearchResponse>(response);
 
-                List<ProductResponse> products = new List<ProductResponse>();
+                List<ProductResponseFromAPI> products = new List<ProductResponseFromAPI>();
 
                 if (searchResults != null && searchResults.Products != null)
                 {
                     foreach (var product in searchResults.Products)
                     {
-                        products.Add(new ProductResponse() {
+                        products.Add(new ProductResponseFromAPI() {
                             Name = product.Name,
                             Calories = product.Nutrition?.Calories ?? 0,
                             Proteins = product.Nutrition?.Protein ?? 0,

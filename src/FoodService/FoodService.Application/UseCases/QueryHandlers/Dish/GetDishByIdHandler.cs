@@ -6,7 +6,7 @@ using FoodService.Application.DTOs.Dish;
 
 namespace FoodService.Application.UseCases.QueryHandlers.Dish
 {
-    public class GetDishByIdHandler : IQueryHandler<GetDishByIdQuery, FullDishDishDTO>
+    public class GetDishByIdHandler : IQueryHandler<GetDishByIdQuery, FullDishDTO>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -17,7 +17,7 @@ namespace FoodService.Application.UseCases.QueryHandlers.Dish
             _mapper = mapper;
         }
 
-        public async Task<FullDishDishDTO> Handle(GetDishByIdQuery request, CancellationToken cancellationToken)
+        public async Task<FullDishDTO> Handle(GetDishByIdQuery request, CancellationToken cancellationToken)
         {
             var dish = await _unitOfWork.DishRepository.GetByIdAsync(request.DishId);
 
@@ -31,7 +31,7 @@ namespace FoodService.Application.UseCases.QueryHandlers.Dish
                 throw new Forbidden("You dont have access to this dish");
             }
 
-            var dishDTO = _mapper.Map<FullDishDishDTO>(dish);
+            var dishDTO = _mapper.Map<FullDishDTO>(dish);
 
             return dishDTO;
         }

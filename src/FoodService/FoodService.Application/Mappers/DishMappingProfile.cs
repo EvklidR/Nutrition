@@ -34,11 +34,11 @@ namespace FoodService.Application.Mapping
                 .ForMember(dest => dest.Fats, opt => opt.MapFrom(src => src.Product.Fats))
                 .ForMember(dest => dest.Carbohydrates, opt => opt.MapFrom(src => src.Product.Carbohydrates));
 
-            CreateMap<Dish, FullDishDishDTO>()
+            CreateMap<Dish, FullDishDTO>()
                 .ForMember(dest => dest.Weight, opt => opt.MapFrom(src => 
                     src.Ingredients.Select(i => i.WeightPerPortion).Sum()));
 
-            CreateMap<Dish, BriefDishDishDTO>()
+            CreateMap<Dish, BriefDishDTO>()
                 .ForMember(dest => dest.Weight, opt => opt.MapFrom(src =>
                     src.Ingredients.Select(i => i.WeightPerPortion).Sum()));
         }

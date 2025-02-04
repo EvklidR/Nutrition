@@ -8,6 +8,9 @@ using FoodService.API.Filters;
 
 namespace FoodService.API.Controllers
 {
+    /// <summary>
+    /// Controller for managing profile day results.
+    /// </summary>
     [Authorize]
     [Route("[controller]")]
     [ApiController]
@@ -20,9 +23,15 @@ namespace FoodService.API.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Creates a new day result.
+        /// </summary>
+        /// <param name="dto">Data for creating a day result.</param>
+        /// <returns>The created day result.</returns>
         [HttpPost]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
+        [ProducesResponseType(typeof(Guid), 200)]
         public async Task<IActionResult> Create([FromBody] CreateDayResultDTO dto)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
@@ -32,9 +41,14 @@ namespace FoodService.API.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("{dayResultId}")]
+        /// <summary>
+        /// Deletes a day result.
+        /// </summary>
+        /// <param name="dayResultId">The ID of the day result.</param>
+        [HttpDelete]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
+        [ProducesResponseType(204)]
         public async Task<IActionResult> Delete(Guid dayResultId)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
@@ -44,9 +58,15 @@ namespace FoodService.API.Controllers
             return NoContent();
         }
 
-        [HttpGet("profile/{profileId}")]
+        /// <summary>
+        /// Gets or creates a day result for a specific profile.
+        /// </summary>
+        /// <param name="profileId">The profile ID.</param>
+        /// <returns>The retrieved or created day result.</returns>
+        [HttpGet("by-profile/{profileId}")]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
+        [ProducesResponseType(typeof(DayResultDTO), 200)]
         public async Task<IActionResult> GetOrCreate(Guid profileId)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
@@ -56,9 +76,14 @@ namespace FoodService.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Updates an existing day result.
+        /// </summary>
+        /// <param name="dto">Updated day result data.</param>
         [HttpPut]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
+        [ProducesResponseType(204)]
         public async Task<IActionResult> Update([FromBody] UpdateDayResultDTO dto)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
@@ -68,10 +93,18 @@ namespace FoodService.API.Controllers
             return NoContent();
         }
 
-        [HttpGet("profile/{profileId}/period")]
+        /// <summary>
+        /// Retrieves a list of day results within a specific period.
+        /// </summary>
+        /// <param name="profileId">The profile ID.</param>
+        /// <param name="startDate">The start date of the period.</param>
+        /// <param name="endDate">The end date of the period.</param>
+        /// <returns>A list of day results.</returns>
+        [HttpGet("by-period/{profileId}")]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        public async Task<IActionResult> GetByPeriod(Guid profileId, [FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
+        [ProducesResponseType(typeof(IEnumerable<DayResultDTO>), 200)]
+        public async Task<IActionResult> GetByPeriod(Guid profileId, DateOnly startDate, DateOnly endDate)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 

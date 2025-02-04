@@ -16,8 +16,13 @@ namespace FoodService.Infrastructure.DependencyInjection
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IUserService>(sp =>
-                new UserService(configuration["GrpcServices:UserServiceUrl"]));
+            services.AddSingleton<IUserService>(provider =>
+            {
+                var url = configuration["GrpcServices:UserServiceUrl"];
+                var cacheService = provider.GetRequiredService<ICacheService>();
+
+                return new UserService(url, cacheService);
+            });
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
@@ -29,7 +34,19 @@ namespace FoodService.Infrastructure.DependencyInjection
 
             services.AddScoped<ISearchProductService, SearchProductService>();
 
-            //services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("127.0.0.1:6379"));
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration["Redis:Url"]));
+            services.AddScoped<ICacheService, RedisCacheService>();
+
+            services.AddScoped<IImageService>(provider =>
+            {
+                var configuration = provider.GetRequiredService<IConfiguration>();
+                var appKey = configuration["DropBox:AppKey"];
+                var appSecret = configuration["DropBox:AppSecret"];
+                var refresh = configuration["DropBox:RefreshToken"];
+                var cacheService = provider.GetRequiredService<ICacheService>();
+
+                return new ImageService(appKey, appSecret, refresh, cacheService);
+            });
 
             return services;
         }

@@ -3,10 +3,11 @@ using FoodService.Domain.Interfaces;
 using FoodService.Application.DTOs.Product;
 using AutoMapper;
 using FoodService.Application.UseCases.Queries.Product;
+using FoodService.Application.Models;
 
 namespace FoodService.Application.UseCases.QueryHandlers.Product
 {
-    public class GetProductsHandler : IRequestHandler<GetProductsQuery, IEnumerable<ProductDTO>?>
+    public class GetProductsHandler : IRequestHandler<GetProductsQuery, ProductsResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -17,13 +18,17 @@ namespace FoodService.Application.UseCases.QueryHandlers.Product
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProductDTO>?> Handle(GetProductsQuery request, CancellationToken cancellationToken)
+        public async Task<ProductsResponse> Handle(GetProductsQuery request, CancellationToken cancellationToken)
         {
-            var products = await _unitOfWork.ProductRepository.GetAllAsync(request.UserId, request.Parameters);
+            var response = await _unitOfWork.ProductRepository.GetAllAsync(request.UserId, request.Parameters);
             
-            var productsDTO = _mapper.Map<List<ProductDTO>>(products);
+            var productsDTO = _mapper.Map<List<ProductDTO>>(response.products);
 
-            return productsDTO;
+            return new ProductsResponse()
+            {
+                Products = productsDTO,
+                TotalCount = response.totalCount
+            };
         }
     }
 }

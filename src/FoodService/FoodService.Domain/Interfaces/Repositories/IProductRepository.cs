@@ -5,6 +5,6 @@ namespace FoodService.Domain.Interfaces.Repositories
 {
     public interface IProductRepository : IBaseRepository<Product>
     {
-        Task<IEnumerable<Product>?> GetAllAsync(Guid userId, GetFoodRequestParameters parameters);
+        Task<(IEnumerable<Product>? products, long totalCount)> GetAllAsync(Guid userId, GetFoodRequestParameters parameters);
     }
 }

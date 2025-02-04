@@ -9,6 +9,7 @@ namespace FoodService.Application.DTOs.Dish
         public string? Description { get; set; }
         public int AmountOfPortions { get; set; }
         public IFormFile? Image { get; set; }
+        public bool DeleteImageIfNull { get; set; } = false;
 
         public List<CreateOrUpdateProductOfDishDTO> Ingredients { get; set; } = [];
     }
