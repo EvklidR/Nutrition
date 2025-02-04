@@ -363,3 +363,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /src/UserService/UserService.API/Dockerfile.original
 /src/UserService/UserService.API/Dockerfile1.original
+/tests/FoodServiceTests/DayResult/CreateDayResultTests.cs
+/tests/FoodServiceTests/FoodServiceTests.csproj
