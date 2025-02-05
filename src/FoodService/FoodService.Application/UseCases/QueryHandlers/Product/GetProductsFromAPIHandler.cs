@@ -1,5 +1,4 @@
-﻿using MediatR;
-using FoodService.Application.Interfaces;
+﻿using FoodService.Application.Interfaces;
 using FoodService.Application.Models;
 using FoodService.Application.UseCases.Queries.Product;
 

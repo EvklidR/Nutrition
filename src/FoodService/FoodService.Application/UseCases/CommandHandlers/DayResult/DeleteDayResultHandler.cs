@@ -1,17 +1,16 @@
-﻿using MediatR;
-using FoodService.Domain.Interfaces;
+﻿using FoodService.Domain.Interfaces;
 using FoodService.Application.Exceptions;
 using FoodService.Application.Interfaces;
 using FoodService.Application.UseCases.Commands.DayResult;
 
 namespace FoodService.Application.UseCases.CommandHandlers.DayResult
 {
-    public class DeleteDayResultCommandHandler : ICommandHandler<DeleteDayResultCommand>
+    public class DeleteDayResultHandler : ICommandHandler<DeleteDayResultCommand>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
 
-        public DeleteDayResultCommandHandler(IUnitOfWork unitOfWork, IUserService userService)
+        public DeleteDayResultHandler(IUnitOfWork unitOfWork, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _userService = userService;

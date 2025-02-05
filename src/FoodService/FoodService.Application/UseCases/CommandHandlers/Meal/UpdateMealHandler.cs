@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MediatR;
 using FoodService.Domain.Interfaces;
 using FoodService.Application.Exceptions;
 using FoodService.Application.UseCases.Commands.Meal;

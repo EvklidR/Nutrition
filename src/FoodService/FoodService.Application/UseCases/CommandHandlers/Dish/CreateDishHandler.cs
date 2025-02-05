@@ -36,8 +36,6 @@ namespace FoodService.Application.UseCases.CommandHandlers.Dish
 
             var dish = _mapper.Map<Domain.Entities.Dish>(request.CreateDishDTO);
             
-            var ingredients = new List<Domain.Entities.Product>();
-
             await CalculateNutrientsForDish(dish);
 
             var filePath = await _imageService.UploadImageAsync(request.CreateDishDTO.Image);

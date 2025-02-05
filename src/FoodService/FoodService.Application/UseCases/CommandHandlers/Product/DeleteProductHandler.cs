@@ -1,5 +1,4 @@
-﻿using MediatR;
-using FoodService.Application.Exceptions;
+﻿using FoodService.Application.Exceptions;
 using FoodService.Domain.Interfaces;
 using FoodService.Application.UseCases.Commands.Product;
 

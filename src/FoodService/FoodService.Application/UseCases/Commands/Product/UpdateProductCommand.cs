@@ -1,5 +1,4 @@
-﻿using MediatR;
-using FoodService.Application.DTOs.Product;
+﻿using FoodService.Application.DTOs.Product;
 
 namespace FoodService.Application.UseCases.Commands.Product
 {

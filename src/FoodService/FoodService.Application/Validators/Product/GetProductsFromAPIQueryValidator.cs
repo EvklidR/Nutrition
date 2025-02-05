@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using FoodService.Application.UseCases.Queries.Product;
 
-namespace FoodService.Application.UseCases.QueryValidators
+namespace FoodService.Application.Validators.Product
 {
     public class GetProductsFromAPIQueryValidator : AbstractValidator<GetProductsFromAPIQuery>
     {

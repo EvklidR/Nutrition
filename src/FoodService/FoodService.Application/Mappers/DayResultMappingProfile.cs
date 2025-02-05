@@ -2,7 +2,7 @@
 using FoodService.Application.DTOs.DayResult;
 using FoodService.Domain.Entities;
 
-namespace FoodService.Application.Mappings
+namespace FoodService.Application.Mappers
 {
     public class DayResultMappingProfile : Profile
     {

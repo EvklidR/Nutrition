@@ -2,7 +2,7 @@
 using FoodService.Application.DTOs.Dish;
 using FoodService.Domain.Entities;
 
-namespace FoodService.Application.Mapping
+namespace FoodService.Application.Mappers
 {
     public class DishMappingProfile : Profile
     {

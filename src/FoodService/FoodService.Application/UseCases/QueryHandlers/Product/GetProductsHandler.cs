@@ -1,5 +1,4 @@
-﻿using MediatR;
-using FoodService.Domain.Interfaces;
+﻿using FoodService.Domain.Interfaces;
 using FoodService.Application.DTOs.Product;
 using AutoMapper;
 using FoodService.Application.UseCases.Queries.Product;
@@ -7,7 +6,7 @@ using FoodService.Application.Models;
 
 namespace FoodService.Application.UseCases.QueryHandlers.Product
 {
-    public class GetProductsHandler : IRequestHandler<GetProductsQuery, ProductsResponse>
+    public class GetProductsHandler : IQueryHandler<GetProductsQuery, ProductsResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;

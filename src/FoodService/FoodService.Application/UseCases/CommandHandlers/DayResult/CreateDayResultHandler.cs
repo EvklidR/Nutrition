@@ -7,14 +7,14 @@ using FoodService.Application.UseCases.Commands.DayResult;
 
 namespace FoodService.Application.UseCases.CommandHandlers.DayResult
 {
-    public class CreateDayResultCommandHandler 
+    public class CreateDayResultHandler 
         : ICommandHandler<CreateDayResultCommand, DayResultDTO>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
 
-        public CreateDayResultCommandHandler(
+        public CreateDayResultHandler(
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IUserService userService)

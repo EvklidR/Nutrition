@@ -1,5 +1,4 @@
 ﻿using FoodService.Application.DTOs.DayResult;
-using MediatR;
 
 namespace FoodService.Application.UseCases.Queries.DayResult
 {

@@ -1,5 +1,4 @@
-﻿using MediatR;
-using FoodService.Application.Exceptions;
+﻿using FoodService.Application.Exceptions;
 using FoodService.Domain.Interfaces;
 using FoodService.Application.Interfaces;
 using FoodService.Application.DTOs.DayResult;
@@ -8,14 +7,14 @@ using FoodService.Application.UseCases.Commands.DayResult;
 
 namespace FoodService.Application.UseCases.CommandHandlers.DayResult
 {
-    public class GetOrCreateDayResultQueryHandler 
+    public class GetOrCreateDayResultHandler 
         : ICommandHandler<GetOrCreateDayResultCommand, DayResultDTO>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public GetOrCreateDayResultQueryHandler(IUnitOfWork unitOfWork, IUserService userService, IMapper mapper)
+        public GetOrCreateDayResultHandler(IUnitOfWork unitOfWork, IUserService userService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _userService = userService;

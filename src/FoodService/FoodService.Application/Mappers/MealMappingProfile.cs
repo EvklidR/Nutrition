@@ -4,7 +4,7 @@ using FoodService.Domain.Entities;
 
 namespace FoodService.Application.Mappers
 {
-    internal class MealMappingProfile : Profile
+    public class MealMappingProfile : Profile
     {
         public MealMappingProfile()
         {
