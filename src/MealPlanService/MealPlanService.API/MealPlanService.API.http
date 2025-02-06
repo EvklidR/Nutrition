@@ -1,0 +1,6 @@
+@MealPlanService.API_HostAddress = http://localhost:5289
+
+GET {{MealPlanService.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
