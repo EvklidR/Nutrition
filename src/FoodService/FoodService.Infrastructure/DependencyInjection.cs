@@ -16,7 +16,7 @@ namespace FoodService.Infrastructure.DependencyInjection
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<IUserService>(provider =>
+            services.AddScoped<IUserService>(provider =>
             {
                 var url = configuration["GrpcServices:UserServiceUrl"];
                 var cacheService = provider.GetRequiredService<ICacheService>();

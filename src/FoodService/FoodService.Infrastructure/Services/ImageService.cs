@@ -68,11 +68,11 @@ namespace FoodService.Infrastructure.Services
         {
             try
             {
-                var response = await _cacheService.GetCachedAsync<Stream?>(dropboxPath);
+                var response = await _cacheService.GetCachedAsync<byte[]?>(dropboxPath);
 
                 if (response.isFound)
                 {
-                    return response.data;
+                    return new MemoryStream(response.data);
                 }
 
                 var downloadResponse = await _dropboxClient.Files.DownloadAsync(dropboxPath);
