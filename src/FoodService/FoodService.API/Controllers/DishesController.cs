@@ -69,7 +69,7 @@ namespace FoodService.API.Controllers
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(typeof(FullDishDTO), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateDish([FromBody] CreateDishDTO createDishDTO)
+        public async Task<IActionResult> CreateDish([FromForm] CreateDishDTO createDishDTO)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
@@ -88,7 +88,7 @@ namespace FoodService.API.Controllers
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateDish([FromBody] UpdateDishDTO updateDishDTO)
+        public async Task<IActionResult> UpdateDish([FromForm] UpdateDishDTO updateDishDTO)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
