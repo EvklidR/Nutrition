@@ -16,7 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\FoodService\FoodService.API\FoodService.API.csproj" />
     <ProjectReference Include="..\MealPlanService\MealPlanService.API\MealPlanService.API.csproj" />
-    <ProjectReference Include="..\Nutrition.ApiGateway\Nutrition.ApiGateway.csproj" />
     <ProjectReference Include="..\PostService\PostService.API\PostService.API.csproj" />
     <ProjectReference Include="..\UserService\UserService.API\UserService.API.csproj" />
   </ItemGroup>

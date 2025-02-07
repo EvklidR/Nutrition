@@ -1,6 +1,38 @@
+version: '3.8'
+
 services:
   userservice.api:
-    image: ${DOCKER_REGISTRY-}userserviceapi
     build:
-      context: src
-      dockerfile: UserService/UserService.API/Dockerfile
+      context: .
+      dockerfile: Dockerfile
+    container_name: src/UserService/UserService.API/Dockerfile
+    depends_on:
+      - mssql_db
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=mssql_db,1433;Database=MyDatabase;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    networks:
+      - my_network
+
+  mssql_db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: mssql_container
+    restart: always
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    networks:
+      - my_network
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+networks:
+  my_network:
+
+volumes:
+  mssql_data:

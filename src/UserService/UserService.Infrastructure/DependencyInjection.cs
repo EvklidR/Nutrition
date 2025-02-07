@@ -19,7 +19,7 @@ namespace UserService.Infrastructure.DependencyInjection
             services.AddGrpc();
 
             services.AddSingleton<IMealPlanService>(sp =>
-                new MealPlanServiceClient(configuration["GrpcServices:MealPlanServiceUrl"]));
+                new MealPlanService(configuration["GrpcServices:MealPlanServiceUrl"]));
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
