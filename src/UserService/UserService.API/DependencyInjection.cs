@@ -34,9 +34,10 @@ namespace UserService.API.DependencyInjection
                 });
             }
 
-            var log = new LoggerConfiguration()
-                     .WriteTo.Http("http://localhost:8080", null) // It will be port of logstash later
-                     .CreateLogger();
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console() // Вывод логов в консоль
+                .CreateLogger();
+
 
             builder.Host.UseSerilog();
 

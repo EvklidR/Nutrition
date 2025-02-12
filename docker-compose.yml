@@ -1,38 +1,90 @@
-version: '3.8'
+version: "3.8"
 
 services:
   userservice.api:
+    image: ${DOCKER_REGISTRY-}userserviceapi
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: src/UserService/UserService.API/Dockerfile
-    depends_on:
-      - mssql_db
+      dockerfile: src/UserService/UserService.API/Dockerfile
     environment:
+      - ASPNETCORE_URLS=http://+:7075
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Server=mssql_db,1433;Database=MyDatabase;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Server=mssql_db,1433;Database=NutritionUserDb;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True;
     ports:
-      - "5000:5000"
-      - "5001:5001"
-    networks:
-      - my_network
+      - "7075:7075"
+    depends_on:
+      mssql_db:
+        condition: service_healthy
+
+  mealplanservice.api:
+    image: ${DOCKER_REGISTRY-}mealplanserviceapi
+    build:
+      context: .
+      dockerfile: src/MealPlanService/MealPlanService.API/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:7132
+      - ConnectionStrings__ConnectionURI=mongodb://mongodb:27017
+      - ConnectionStrings__DatabaseName=MealPlansDB
+    ports:
+      - "7132:7132"
+    depends_on:
+      - mongodb
 
   mssql_db:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: mssql_container
+    image: mcr.microsoft.com/mssql/server:2022-latest
     restart: always
     environment:
       SA_PASSWORD: "YourStrong!Passw0rd"
       ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
     ports:
-      - "1433:1433"
-    networks:
-      - my_network
+      - "1434:1433"
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools18/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourStrong!Passw0rd", "-C", "-Q", "SELECT 1"]
+      interval: 10s
+      retries: 10
+      start_period: 10s
     volumes:
       - mssql_data:/var/opt/mssql
 
-networks:
-  my_network:
+  mongodb:
+    image: mongo:6.0
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=MealPlansDB
+    volumes:
+      - mongodb_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/test --quiet
+      interval: 10s
+      retries: 5
+      start_period: 5s
+
+  nginx:
+    image: nginx:latest
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./src/nginx/conf/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - userservice.api
+      - mealplanservice.api
+
+  foodservice.api:
+    image: ${DOCKER_REGISTRY-}foodserviceapi
+    build:
+      context: .
+      dockerfile: src/FoodService/FoodService.API/Dockerfile
+
+  postservice.api:
+    image: ${DOCKER_REGISTRY-}postserviceapi
+    build:
+      context: .
+      dockerfile: src/PostService/PostService.API/Dockerfile
 
 volumes:
   mssql_data:
+  mongodb_data:

@@ -59,14 +59,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MealPlanService.Core", "src
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostService.Core", "src\PostService\PostService.Core\PostService.Core.csproj", "{F4199B0F-5B85-4942-914D-E7F85D6DF115}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{23C9B71D-4F6A-4F1B-B3B3-01E0A95AF307}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nginx", "nginx", "{6FAA71ED-43B9-44DE-BD4F-4E8775714F44}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "conf", "conf", "{83B7103A-3E80-4DCC-A893-9BAF43E8B9B3}"
 	ProjectSection(SolutionItems) = preProject
-		nginx.conf = nginx.conf
+		src\nginx\conf\nginx.conf = src\nginx\conf\nginx.conf
 	EndProjectSection
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{FDCFF05D-1AF8-40BA-8E4C-9E26B1FC1F1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -162,10 +162,10 @@ Global
 		{F4199B0F-5B85-4942-914D-E7F85D6DF115}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4199B0F-5B85-4942-914D-E7F85D6DF115}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4199B0F-5B85-4942-914D-E7F85D6DF115}.Release|Any CPU.Build.0 = Release|Any CPU
-		{23C9B71D-4F6A-4F1B-B3B3-01E0A95AF307}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23C9B71D-4F6A-4F1B-B3B3-01E0A95AF307}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23C9B71D-4F6A-4F1B-B3B3-01E0A95AF307}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23C9B71D-4F6A-4F1B-B3B3-01E0A95AF307}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDCFF05D-1AF8-40BA-8E4C-9E26B1FC1F1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDCFF05D-1AF8-40BA-8E4C-9E26B1FC1F1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDCFF05D-1AF8-40BA-8E4C-9E26B1FC1F1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDCFF05D-1AF8-40BA-8E4C-9E26B1FC1F1D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
