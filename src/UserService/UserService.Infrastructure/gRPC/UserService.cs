@@ -25,8 +25,22 @@ namespace UserService.Infrastructure.gRPC
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "User id is't Guid type"));
             }
-
             return responce;
+        }
+
+        public async override Task<CheckProfileBelongingResponse> CheckProfileBelonging(CheckProfileBelongingRequest request, ServerCallContext context)
+        {
+            if (Guid.TryParse(request.UserId, out Guid userId) && Guid.TryParse(request.ProfileId, out Guid profileId))
+            {
+                return new CheckProfileBelongingResponse()
+                {
+                    Belong = await _mediator.Send(new CheckProfileBelongingQuery(userId, profileId))
+                };
+            }
+            else
+            {
+                throw new RpcException(new Status(StatusCode.InvalidArgument, "Ids aren't Guid type"));
+            }
         }
 
         public async override Task<CheckProfileBelongingResponse> CheckProfileBelonging(CheckProfileBelongingRequest request, ServerCallContext context)
