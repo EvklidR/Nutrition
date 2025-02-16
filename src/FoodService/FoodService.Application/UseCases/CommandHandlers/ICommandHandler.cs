@@ -1,6 +1,7 @@
-﻿using MediatR;
+﻿using FoodService.Application.UseCases.Commands;
+using MediatR;
 
-namespace FoodService.Application.UseCases.Commands
+namespace FoodService.Application.UseCases.CommandHandlers
 {
     public interface ICommandHandler<in TCommand> : IRequestHandler<TCommand>
                                                                         where TCommand : ICommand
