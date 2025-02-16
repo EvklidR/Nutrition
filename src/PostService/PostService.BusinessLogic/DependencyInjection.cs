@@ -18,8 +18,6 @@ namespace PostService.BusinessLogic.DependencyInjection
             services.AddScoped<Services.PostService>();
             services.AddScoped<CommentService>();
 
-            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration["Redis:Url"]));
-
             return services;
 
         }

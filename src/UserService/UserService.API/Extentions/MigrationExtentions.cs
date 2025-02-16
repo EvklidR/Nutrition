@@ -1,6 +1,4 @@
-﻿using Hangfire;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
 using UserService.Infrastructure.MSSQL;
 
 namespace UserService.API.Extentions
@@ -13,13 +11,6 @@ namespace UserService.API.Extentions
             using ApplicationDbContext context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
             context.Database.Migrate();
-
-            var connectionString = scope.ServiceProvider.GetRequiredService<IConfiguration>()
-                .GetConnectionString("DefaultConnection");
-
-            // Настроим Hangfire с использованием SQL Server
-            GlobalConfiguration.Configuration
-                .UseSqlServerStorage(connectionString);
         }
     }
 }

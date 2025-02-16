@@ -23,8 +23,6 @@ public class Program
 
         app.UseCors("AllowSpecificOrigin");
 
-        app.MapGrpcService<Infrastructure.gRPC.UserService>();
-
         app.UseHangfireDashboard();
 
         app.MapDefaultEndpoints();
@@ -34,6 +32,7 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
             app.ApplyMigrations();
+            app.SetHangfireConfiguration();
         }
 
         app.UseMiddleware<ExceptionHandlingMiddleware>();

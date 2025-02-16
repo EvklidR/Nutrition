@@ -68,6 +68,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "conf", "conf", "{83B7103A-3
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{FDCFF05D-1AF8-40BA-8E4C-9E26B1FC1F1D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "certs", "certs", "{A9802754-7F8E-4FA3-A844-F4BD14D37A5C}"
+	ProjectSection(SolutionItems) = preProject
+		src\PostService\PostService.API\certs\https-cert.crt = src\PostService\PostService.API\certs\https-cert.crt
+		src\PostService\PostService.API\certs\https-cert.key = src\PostService\PostService.API\certs\https-cert.key
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -199,6 +205,7 @@ Global
 		{F4199B0F-5B85-4942-914D-E7F85D6DF115} = {7251ECCF-E351-4BB5-9938-95E9B5F911A2}
 		{6FAA71ED-43B9-44DE-BD4F-4E8775714F44} = {B122DB00-21E0-4BE9-BCD1-1786F3B95814}
 		{83B7103A-3E80-4DCC-A893-9BAF43E8B9B3} = {6FAA71ED-43B9-44DE-BD4F-4E8775714F44}
+		{A9802754-7F8E-4FA3-A844-F4BD14D37A5C} = {6FAA71ED-43B9-44DE-BD4F-4E8775714F44}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD8CDA70-C9EF-4C82-9517-9363D709C383}

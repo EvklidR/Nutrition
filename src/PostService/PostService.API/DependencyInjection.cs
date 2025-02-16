@@ -101,6 +101,17 @@ namespace PostService.API.DependencyInjection
                     };
                 });
 
+            var certPath = "./certs/https-cert.pfx";
+            var certPassword = "myStrongPassword";
+
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ListenAnyIP(7063, listenOptions =>
+                {
+                    listenOptions.UseHttps(certPath, certPassword);
+                });
+            });
+
             return services;
         }
     }

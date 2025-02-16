@@ -1,16 +1,16 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
+USER root
 WORKDIR /app
 EXPOSE 7075
 
+COPY ["src/UserService/UserService.API/certs/https-cert.crt", "/usr/local/share/ca-certificates/nginx.crt"]
+RUN update-ca-certificates  
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
-WORKDIR .
+WORKDIR /src
 COPY ["src/UserService/UserService.API/UserService.API.csproj", "src/UserService/UserService.API/"]
 COPY ["src/Nutrition.ServiceDefaults/Nutrition.ServiceDefaults.csproj", "src/Nutrition.ServiceDefaults/"]
 COPY ["src/UserService/UserService.Application/UserService.Application.csproj", "src/UserService/UserService.Application/"]
@@ -18,7 +18,7 @@ COPY ["src/UserService/UserService.Domain/UserService.Domain.csproj", "src/UserS
 COPY ["src/UserService/UserService.Infrastructure/UserService.Infrastructure.csproj", "src/UserService/UserService.Infrastructure/"]
 RUN dotnet restore "./src/UserService/UserService.API/UserService.API.csproj"
 COPY . .
-WORKDIR "/src/UserService/UserService.API"
+WORKDIR "/src/src/UserService/UserService.API"
 RUN dotnet build "./UserService.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

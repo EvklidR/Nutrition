@@ -9,6 +9,7 @@ using PostService.Infrastructure.gRPC;
 using PostService.Infrastructure.Services.Interfaces;
 using PostService.Infrastructure.Services;
 using PostService.Infrastructure.MongoDB.Configurators;
+using StackExchange.Redis;
 
 namespace PostService.Infrastructure.DependencyInjection
 {
@@ -27,14 +28,15 @@ namespace PostService.Infrastructure.DependencyInjection
 
             services.AddScoped<IImageService>(provider =>
             {
-                var configuration = provider.GetRequiredService<IConfiguration>();
-                var appKey = configuration["DropBox:AppKey"];
-                var appSecret = configuration["DropBox:AppSecret"];
-                var refresh = configuration["DropBox:RefreshToken"];
+                var appKey = configuration["DropBox:AppKey"]!;
+                var appSecret = configuration["DropBox:AppSecret"]!;
+                var refresh = configuration["DropBox:RefreshToken"]!;
                 var cacheService = provider.GetRequiredService<ICacheService>();
 
                 return new ImageService(appKey, appSecret, refresh, cacheService);
             });
+            
+            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(configuration["Redis:Url"]!));
 
             services.AddScoped<ICacheService, RedisCacheService>();
 

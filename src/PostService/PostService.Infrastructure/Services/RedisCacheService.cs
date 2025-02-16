@@ -1,4 +1,5 @@
-﻿using PostService.Infrastructure.Services.Interfaces;
+﻿using Microsoft.Extensions.Configuration;
+using PostService.Infrastructure.Services.Interfaces;
 using StackExchange.Redis;
 using System.Text.Json;
 
@@ -8,9 +9,11 @@ namespace PostService.Infrastructure.Services
     {
         private readonly IDatabase _redisDatabase;
 
-        public RedisCacheService(IConnectionMultiplexer connectionMultiplexer)
+        public RedisCacheService(IConnectionMultiplexer connectionMultiplexer, IConfiguration configuration)
         {
-            _redisDatabase = connectionMultiplexer.GetDatabase();
+            int redisDb = int.Parse(configuration["Redis:Database"] ?? "0");
+
+            _redisDatabase = connectionMultiplexer.GetDatabase(redisDb);
         }
 
         public async Task<Stream?> GetCachedImageAsync(string cacheKey)

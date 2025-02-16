@@ -8,7 +8,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:7075"
+      "applicationUrl": "http://localhost:7012  "
     },
     "https": {
       "commandName": "Project",
@@ -35,7 +35,6 @@
       "environmentVariables": {
         "ASPNETCORE_HTTPS_PORTS": "7075"
       },
-      "applicationUrl": "https://localhost:7075",
       "publishAllPorts": false,
       "useSSL": true
     }

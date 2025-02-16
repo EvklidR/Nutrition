@@ -31,4 +31,8 @@
     <ProjectReference Include="..\UserService.Infrastructure\UserService.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="certs\" />
+  </ItemGroup>
+
 </Project>

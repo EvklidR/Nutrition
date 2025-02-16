@@ -35,9 +35,8 @@ namespace UserService.API.DependencyInjection
             }
 
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console() // Вывод логов в консоль
+                .WriteTo.Console()
                 .CreateLogger();
-
 
             builder.Host.UseSerilog();
 
@@ -107,6 +106,17 @@ namespace UserService.API.DependencyInjection
             .AddRoles<IdentityRole<Guid>>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+
+            var certPath = "./certs/https-cert.pfx";
+            var certPassword = "myStrongPassword";
+
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ListenAnyIP(7075, listenOptions =>
+                {
+                    listenOptions.UseHttps(certPath, certPassword);
+                });
+            });
 
             return services;
         }
