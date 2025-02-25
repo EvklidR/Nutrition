@@ -25,7 +25,8 @@ services:
     ports:
       - "7132:7132"
     depends_on:
-      - mongodb
+      mongodb:
+        condition: service_healthy
 
   foodservice.api:
     image: ${DOCKER_REGISTRY-}foodserviceapi
@@ -43,6 +44,8 @@ services:
     depends_on:
       mssql_db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
 
   postservice.api:
     image: ${DOCKER_REGISTRY-}postserviceapi
@@ -57,8 +60,10 @@ services:
     ports:
       - "7063:7063"
     depends_on:
-      - mongodb
-      - redis
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   mssql_db:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -82,6 +87,11 @@ services:
     restart: always
     ports:
       - "27018:27017"
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh mongodb://localhost:27017 --quiet
+      interval: 5s
+      retries: 5
+      start_period: 2s
     volumes:
       - mongodb_data:/data/db
 
@@ -105,6 +115,27 @@ services:
     restart: always
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      retries: 5
+      start_period: 2s
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+
 
 volumes:
   mssql_data:

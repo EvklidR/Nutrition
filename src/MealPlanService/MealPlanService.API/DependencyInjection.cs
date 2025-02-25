@@ -103,6 +103,18 @@ namespace MealPlanService.API.DependencyInjection
                     };
                 });
 
+
+            var certPath = configuration["CertificatData:Path"];
+            var certPassword = configuration["CertificatData:Password"];
+
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ListenAnyIP(7132, listenOptions =>
+                {
+                    listenOptions.UseHttps(certPath, certPassword);
+                });
+            });
+
             return services;
         }
     }

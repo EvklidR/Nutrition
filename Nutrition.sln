@@ -70,8 +70,8 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "certs", "certs", "{A9802754-7F8E-4FA3-A844-F4BD14D37A5C}"
 	ProjectSection(SolutionItems) = preProject
-		src\PostService\PostService.API\certs\https-cert.crt = src\PostService\PostService.API\certs\https-cert.crt
-		src\PostService\PostService.API\certs\https-cert.key = src\PostService\PostService.API\certs\https-cert.key
+		src\nginx\certs\https-cert.crt = src\nginx\certs\https-cert.crt
+		src\nginx\certs\https-cert.key = src\nginx\certs\https-cert.key
 	EndProjectSection
 EndProject
 Global

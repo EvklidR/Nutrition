@@ -3,12 +3,15 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using FoodService.API.Filters;
+using Serilog;
 
 namespace FoodService.API.DependencyInjection
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddApiServices(this IServiceCollection services,
+            WebApplicationBuilder builder,
+            IConfiguration configuration)
         {
             services.AddScoped<UserIdFilter>();
 
@@ -22,6 +25,8 @@ namespace FoodService.API.DependencyInjection
                            .AllowAnyHeader();
                 });
             });
+
+
 
             services.AddControllers(options =>
             {
@@ -80,6 +85,17 @@ namespace FoodService.API.DependencyInjection
                         Encoding.UTF8.GetBytes(configuration["AuthOptions:Key"])
                     )
                 };
+            });
+
+            var certPath = configuration["CertificatData:Path"];
+            var certPassword = configuration["CertificatData:Password"];
+
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ListenAnyIP(7022, listenOptions =>
+                {
+                    listenOptions.UseHttps(certPath, certPassword);
+                });
             });
 
             return services;

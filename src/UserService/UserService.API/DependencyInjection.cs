@@ -107,8 +107,8 @@ namespace UserService.API.DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-            var certPath = "./certs/https-cert.pfx";
-            var certPassword = "myStrongPassword";
+            var certPath = configuration["CertificatData:Path"];
+            var certPassword = configuration["CertificatData:Password"];
 
             builder.WebHost.ConfigureKestrel(options =>
             {
@@ -117,7 +117,7 @@ namespace UserService.API.DependencyInjection
                     listenOptions.UseHttps(certPath, certPassword);
                 });
             });
-
+            StringBuilder h;
             return services;
         }
     }

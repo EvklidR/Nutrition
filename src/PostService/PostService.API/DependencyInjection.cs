@@ -101,8 +101,8 @@ namespace PostService.API.DependencyInjection
                     };
                 });
 
-            var certPath = "./certs/https-cert.pfx";
-            var certPassword = "myStrongPassword";
+            var certPath = configuration["CertificatData:Path"];
+            var certPassword = configuration["CertificatData:Password"];
 
             builder.WebHost.ConfigureKestrel(options =>
             {
