@@ -3,6 +3,7 @@ using Bogus;
 using FluentAssertions;
 using MealPlanService.BusinessLogic.Exceptions;
 using MealPlanService.Core.Entities;
+using MealPlanService.Infrastructure.RabbitMQService;
 using MealPlanService.Infrastructure.Repositories.Interfaces;
 using MongoDB.Driver;
 using Moq;
@@ -16,6 +17,7 @@ namespace MealPlanServiceTests
         private readonly Mock<IMapper> _mockMapper;
         private readonly Faker<MealPlan> _mealPlanFaker;
         private readonly Faker<ProfileMealPlan> _profileMealPlanFaker;
+        private readonly Mock<IBrokerService> _brokerService;
 
         private readonly MealPlanService.BusinessLogic.Services.MealPlanService _service;
 
@@ -23,12 +25,14 @@ namespace MealPlanServiceTests
         {
             _mockMealPlanRepo = new Mock<IMealPlanRepository>();
             _mockProfileMealPlanRepo = new Mock<IProfileMealPlanRepository>();
+            _brokerService = new Mock<IBrokerService>();
             _mockMapper = new Mock<IMapper>();
 
             _service = new MealPlanService.BusinessLogic.Services.MealPlanService(
                 _mockMealPlanRepo.Object,
                 _mockProfileMealPlanRepo.Object,
-                _mockMapper.Object);
+                _mockMapper.Object,
+                _brokerService.Object);
 
             _mealPlanFaker = new Faker<MealPlan>()
                 .RuleFor(m => m.Id, f => f.Random.AlphaNumeric(1))

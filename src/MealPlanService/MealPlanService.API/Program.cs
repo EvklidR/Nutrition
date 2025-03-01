@@ -10,7 +10,6 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.AddServiceDefaults();
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddApplicationServices();
         builder.Services.AddApiServices(builder, builder.Configuration);
@@ -20,8 +19,6 @@ public class Program
         app.UseCors("AllowSpecificOrigin");
 
         app.MapGrpcService<gRPC.MealPlanService>();
-
-        app.MapDefaultEndpoints();
 
         if (app.Environment.IsDevelopment())
         {

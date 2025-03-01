@@ -1,4 +1,5 @@
 ﻿using UserService.Application.Exceptions;
+using UserService.Application.Interfaces;
 using UserService.Domain.Interfaces.Repositories;
 
 namespace UserService.Application.UseCases.Commands
@@ -6,10 +7,14 @@ namespace UserService.Application.UseCases.Commands
     public class DeleteProfileHandler : ICommandHandler<DeleteProfileCommand>
     {
         private readonly IProfileRepository _profileRepository;
+        private readonly IBrokerService _brokerService;
 
-        public DeleteProfileHandler(IProfileRepository profileRepository)
+        public DeleteProfileHandler(
+            IProfileRepository profileRepository,
+            IBrokerService brokerService)
         {
             _profileRepository = profileRepository;
+            _brokerService = brokerService;
         }
 
         public async Task Handle(DeleteProfileCommand request, CancellationToken cancellationToken)
@@ -29,6 +34,8 @@ namespace UserService.Application.UseCases.Commands
             _profileRepository.Delete(profile);
 
             await _profileRepository.SaveChangesAsync();
+
+            await _brokerService.PublishMessageAsync(profile.Id.ToString(), Enums.QueueName.ProfileDeleted);
         }
     }
 }

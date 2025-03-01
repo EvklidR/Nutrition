@@ -14,7 +14,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/FoodService/FoodService.API/FoodService.API.csproj", "src/FoodService/FoodService.API/"]
-COPY ["src/Nutrition.ServiceDefaults/Nutrition.ServiceDefaults.csproj", "src/Nutrition.ServiceDefaults/"]
 COPY ["src/FoodService/FoodService.Application/FoodService.Application.csproj", "src/FoodService/FoodService.Application/"]
 COPY ["src/FoodService/FoodService.Domain/FoodService.Domain.csproj", "src/FoodService/FoodService.Domain/"]
 COPY ["src/FoodService/FoodService.Infrastructure/FoodService.Infrastructure.csproj", "src/FoodService/FoodService.Infrastructure/"]

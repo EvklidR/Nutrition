@@ -30,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Nutrition.ServiceDefaults\Nutrition.ServiceDefaults.csproj" />
     <ProjectReference Include="..\MealPlanService.BusinessLogic\MealPlanService.BusinessLogic.csproj" />
   </ItemGroup>
 

@@ -6,6 +6,7 @@ using MealPlanService.Infrastructure.Services.Interfaces;
 using MealPlanService.Infrastructure.Repositories.Interfaces;
 using MealPlanService.BusinessLogic.Services;
 using AutoMapper;
+using MealPlanService.Infrastructure.RabbitMQService;
 
 namespace MealPlanServiceTests
 {
@@ -14,12 +15,12 @@ namespace MealPlanServiceTests
         private readonly Mock<IProfileMealPlanRepository> _mockProfileMealPlanRepo;
         private readonly Mock<IMealPlanRepository> _mockMealPlanRepo;
         private readonly Mock<IUserService> _mockUserService;
+        private readonly Mock<IBrokerService> _brokerService;
         private readonly Mock<IMapper> _mockMapper;
         private readonly Faker _faker;
 
         private readonly Mock<MealPlanService.BusinessLogic.Services.MealPlanService> _mockMealPlanService;
         private readonly ProfilePlanService _profilePlanService;
-
 
         public DeleteProfilePlansTests()
         {
@@ -27,6 +28,7 @@ namespace MealPlanServiceTests
             _mockMealPlanRepo = new Mock<IMealPlanRepository>();
             _mockMapper = new Mock<IMapper>();
             _mockUserService = new Mock<IUserService>();
+            _brokerService = new Mock<IBrokerService>();
             _faker = new Faker();
 
             _mockMealPlanService = new Mock<MealPlanService.BusinessLogic.Services.MealPlanService>(
@@ -39,6 +41,7 @@ namespace MealPlanServiceTests
                 _mockMealPlanRepo.Object,
                 _mockMealPlanService.Object,
                 _mockUserService.Object,
+                _brokerService.Object,
                 _mockMapper.Object
             );
         }

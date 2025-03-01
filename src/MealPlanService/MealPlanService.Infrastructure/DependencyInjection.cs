@@ -6,6 +6,9 @@ using MealPlanService.Infrastructure.Options;
 using MealPlanService.Infrastructure.Services;
 using MealPlanService.Infrastructure.Repositories.Interfaces;
 using MealPlanService.Infrastructure.Services.Interfaces;
+using MealPlanService.Infrastructure.RabbitMQService;
+using Microsoft.Extensions.Options;
+using MealPlanService.Infrastructure.RabbitMQService.Settings;
 
 namespace MealPlanService.Infrastructure.DependencyInjection
 {
@@ -20,6 +23,13 @@ namespace MealPlanService.Infrastructure.DependencyInjection
 
             services.AddScoped<IMealPlanRepository, MealPlanRepository>();
             services.AddScoped<IProfileMealPlanRepository, ProfileMealPlanRepository>();
+
+            var rabbitMqSection = configuration.GetSection("RabbitMq");
+            services.Configure<RabbitMqSettings>(rabbitMqSection);
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<RabbitMqSettings>>().Value);
+
+            services.AddSingleton<RabbitMQConsumer>();
+            services.AddSingleton<IBrokerService, RabbitMQProducer>();
 
             return services;
         }

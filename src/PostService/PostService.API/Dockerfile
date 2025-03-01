@@ -14,7 +14,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/PostService/PostService.API/PostService.API.csproj", "src/PostService/PostService.API/"]
-COPY ["src/Nutrition.ServiceDefaults/Nutrition.ServiceDefaults.csproj", "src/Nutrition.ServiceDefaults/"]
 COPY ["src/PostService/PostService.BusinessLogic/PostService.BusinessLogic.csproj", "src/PostService/PostService.BusinessLogic/"]
 COPY ["src/PostService/PostService.Infrastructure/PostService.Infrastructure.csproj", "src/PostService/PostService.Infrastructure/"]
 COPY ["src/PostService/PostService.Core/PostService.Core.csproj", "src/PostService/PostService.Core/"]

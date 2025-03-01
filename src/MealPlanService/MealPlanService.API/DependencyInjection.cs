@@ -1,4 +1,5 @@
-﻿using MealPlanService.API.Filters;
+﻿using MealPlanService.API.BackgroundJobs;
+using MealPlanService.API.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -114,6 +115,8 @@ namespace MealPlanService.API.DependencyInjection
                     listenOptions.UseHttps(certPath, certPassword);
                 });
             });
+
+            services.AddHostedService<DeleteProfileMealPlanService>();
 
             return services;
         }

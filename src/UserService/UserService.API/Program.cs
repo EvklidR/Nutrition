@@ -12,7 +12,6 @@ public class Program
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.AddServiceDefaults();
         builder.Services.AddApiServices(builder, builder.Configuration);
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddApplicationServices();
@@ -24,8 +23,6 @@ public class Program
         app.UseCors("AllowSpecificOrigin");
 
         app.UseHangfireDashboard();
-
-        app.MapDefaultEndpoints();
 
         if (app.Environment.IsDevelopment())
         {

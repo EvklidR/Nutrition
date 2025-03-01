@@ -4,6 +4,8 @@ using MealPlanService.BusinessLogic.Exceptions;
 using MealPlanService.BusinessLogic.Models;
 using MealPlanService.Core.Entities;
 using MealPlanService.Core.Enums;
+using MealPlanService.Infrastructure.Enums;
+using MealPlanService.Infrastructure.RabbitMQService;
 using MealPlanService.Infrastructure.Repositories.Interfaces;
 
 namespace MealPlanService.BusinessLogic.Services
@@ -13,16 +15,18 @@ namespace MealPlanService.BusinessLogic.Services
         private readonly IMealPlanRepository _mealPlanRepository;
         private readonly IProfileMealPlanRepository _profileMealPlanRepository;
         private readonly IMapper _mapper;
+        private readonly IBrokerService _brokerService;
 
         public MealPlanService(
             IMealPlanRepository mealPlanRepository,
             IProfileMealPlanRepository profileMealPlanRepository,
-            IMapper mapper
-)
+            IMapper mapper,
+            IBrokerService brokerService)
         {
             _mealPlanRepository = mealPlanRepository;
             _profileMealPlanRepository = profileMealPlanRepository;
             _mapper = mapper;
+            _brokerService = brokerService;
         }
 
         public async Task<MealPlansResponse> GetMealPlansAsync(MealPlanType? type, int? page, int? size)
@@ -65,7 +69,10 @@ namespace MealPlanService.BusinessLogic.Services
                 await _profileMealPlanRepository.DeleteAsync(profilePlan.Id);
             }
 
-            //TODO: send message for broker
+            foreach (var profile in profilePlans)
+            {
+                await _brokerService.PublishMessageAsync(profile.ProfileId, QueueName.MealPlanRevoked);
+            }
         }
 
         public async Task UpdateMealPlanAsync(MealPlan updatedMealPlan)

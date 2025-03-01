@@ -14,7 +14,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR .
 COPY ["src/MealPlanService/MealPlanService.API/MealPlanService.API.csproj", "src/MealPlanService/MealPlanService.API/"]
-COPY ["src/Nutrition.ServiceDefaults/Nutrition.ServiceDefaults.csproj", "src/Nutrition.ServiceDefaults/"]
 COPY ["src/MealPlanService/MealPlanService.BusinessLogic/MealPlanService.BusinessLogic.csproj", "src/MealPlanService/MealPlanService.BusinessLogic/"]
 COPY ["src/MealPlanService/MealPlanService.Infrastructure/MealPlanService.Infrastructure.csproj", "src/MealPlanService/MealPlanService.Infrastructure/"]
 COPY ["src/MealPlanService/MealPlanService.Core/MealPlanService.Core.csproj", "src/MealPlanService/MealPlanService.Core/"]

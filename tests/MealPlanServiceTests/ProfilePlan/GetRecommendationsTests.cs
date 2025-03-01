@@ -6,6 +6,7 @@ using MealPlanService.Infrastructure.Repositories.Interfaces;
 using FluentAssertions;
 using Bogus;
 using MealPlanService.Infrastructure.Services.Interfaces;
+using MealPlanService.Infrastructure.RabbitMQService;
 
 namespace MealPlanServiceTests
 {
@@ -15,6 +16,7 @@ namespace MealPlanServiceTests
         private readonly Mock<IMealPlanRepository> _mockMealPlanRepo;
         private readonly Mock<MealPlanService.BusinessLogic.Services.MealPlanService> _mockMealPlanService;
         private readonly Mock<IUserService> _mockUserService;
+        private readonly Mock<IBrokerService> _brokerService;
         private readonly Mock<IMapper> _mockMapper;
         private readonly ProfilePlanService _profilePlanService;
         private readonly Faker<Recommendation> _RecommendationsFaker;
@@ -27,6 +29,7 @@ namespace MealPlanServiceTests
             _mockMapper = new Mock<IMapper>();
 
             _mockUserService = new Mock<IUserService>();
+            _brokerService = new Mock<IBrokerService>();
 
             _mockMealPlanService = new Mock<MealPlanService.BusinessLogic.Services.MealPlanService>(
                 _mockMealPlanRepo.Object,
@@ -38,6 +41,7 @@ namespace MealPlanServiceTests
                 _mockMealPlanRepo.Object,
                 _mockMealPlanService.Object,
                 _mockUserService.Object,
+                _brokerService.Object,
                 _mockMapper.Object
             );
 

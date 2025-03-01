@@ -6,6 +6,8 @@ using MealPlanService.Core.Entities;
 using MealPlanService.Core.Enums;
 using MealPlanService.Infrastructure.Repositories.Interfaces;
 using MealPlanService.Infrastructure.Services.Interfaces;
+using MealPlanService.Infrastructure.Enums;
+using MealPlanService.Infrastructure.RabbitMQService;
 
 namespace MealPlanService.BusinessLogic.Services
 {
@@ -13,8 +15,12 @@ namespace MealPlanService.BusinessLogic.Services
     {
         private readonly IProfileMealPlanRepository _usersMealPlanRepository;
         private readonly IMealPlanRepository _mealPlanRepository;
+
         private readonly MealPlanService _mealPlanService;
+
         private readonly IUserService _userService;
+        private readonly IBrokerService _brokerService;
+
         private readonly IMapper _mapper;
 
         public ProfilePlanService(
@@ -22,12 +28,14 @@ namespace MealPlanService.BusinessLogic.Services
             IMealPlanRepository mealPlanRepository,
             MealPlanService mealPlanService,
             IUserService userService,
+            IBrokerService brokerService,
             IMapper mapper)
         {
             _usersMealPlanRepository = usersMealPlanRepository;
             _mealPlanRepository = mealPlanRepository;
             _mealPlanService = mealPlanService;
             _userService = userService;
+            _brokerService = brokerService;
             _mapper = mapper;
         }
 
@@ -60,7 +68,7 @@ namespace MealPlanService.BusinessLogic.Services
                 }
                 else
                 {
-                    //TODO: send message for broker
+                    await _brokerService.PublishMessageAsync(profileMealPlanDTO.ProfileId, QueueName.MealPlanChoosen);
                 }
 
                 var usersMealPlan = _mapper.Map<ProfileMealPlan>(profileMealPlanDTO);
@@ -113,7 +121,7 @@ namespace MealPlanService.BusinessLogic.Services
 
                 await _usersMealPlanRepository.UpdateAsync(userPlan);
 
-                //TODO: send message for broker
+                await _brokerService.PublishMessageAsync(profileId, QueueName.MealPlanRevoked);
             }
             else
             {

@@ -47,19 +47,6 @@ namespace UserService.API.Controllers
 
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        [HttpPatch("choose-meal-plan")]
-        public async Task<IActionResult> ChooseMealPlan(Guid profileId, string mealPlanId)
-        {
-            var userId = (Guid)HttpContext.Items["UserId"]!;
-            var command = new ChooseMealPlanCommand(profileId, userId);
-
-            await _mediator.Send(command);
-
-            return NoContent();
-        }
-
-        [Authorize]
-        [ServiceFilter(typeof(UserIdFilter))]
         [HttpDelete("{profileId}")]
         public async Task<IActionResult> DeleteProfile(Guid profileId)
         {
@@ -95,19 +82,6 @@ namespace UserService.API.Controllers
             var result = await _mediator.Send(query);
 
             return Ok(result);
-        }
-
-        [Authorize]
-        [ServiceFilter(typeof(UserIdFilter))]
-        [HttpPatch("{profileId}/revoke-meal-plan")]
-        public async Task<IActionResult> RevokeMealPlan(Guid profileId)
-        {
-            var userId = (Guid)HttpContext.Items["UserId"]!;
-            var command = new RevokeMealPlanCommand(profileId, userId);
-
-            await _mediator.Send(command);
-
-            return NoContent();
         }
 
         [Authorize]
