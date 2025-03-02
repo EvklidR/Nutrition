@@ -25,7 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Nutrition.ServiceDefaults\Nutrition.ServiceDefaults.csproj" />
     <ProjectReference Include="..\FoodService.Application\FoodService.Application.csproj" />
     <ProjectReference Include="..\FoodService.Infrastructure\FoodService.Infrastructure.csproj" />
   </ItemGroup>

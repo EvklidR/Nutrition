@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Nutrition.ServiceDefaults\Nutrition.ServiceDefaults.csproj" />
     <ProjectReference Include="..\PostService.BusinessLogic\PostService.BusinessLogic.csproj" />
   </ItemGroup>
 
