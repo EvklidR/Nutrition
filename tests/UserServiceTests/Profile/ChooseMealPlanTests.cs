@@ -79,8 +79,8 @@ namespace UserServiceTests
 
             // Assert
             profile.ThereIsMealPlan.Should().Be(true);
-            profileRepositoryMock.Verify(repo => repo.Update(profile), Times.Once);
-            profileRepositoryMock.Verify(repo => repo.SaveChangesAsync(), Times.Once);
+            _profileRepositoryMock.Verify(repo => repo.Update(profile), Times.Once);
+            _profileRepositoryMock.Verify(repo => repo.SaveChangesAsync(), Times.Once);
         }
     }
 }

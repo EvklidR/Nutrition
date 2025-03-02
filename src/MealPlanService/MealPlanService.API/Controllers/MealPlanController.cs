@@ -27,9 +27,9 @@ namespace MealPlanService.API.Controllers
         /// <param name="type">Optional filter for the type of meal plan (e.g., Weight loss, Weight gain).</param>
         /// <param name="page">Page number for pagination (optional).</param>
         /// <param name="size">Number of items per page (optional).</param>
+        [HttpGet("meal_plans")]
         [ProducesResponseType(typeof(MealPlansResponse), StatusCodes.Status200OK)]
         [Authorize]
-        [HttpGet("meal_plans")]
         public async Task<IActionResult> GetMealPlans([FromQuery] MealPlanType? type, [FromQuery] int? page, [FromQuery] int? size)
         {
             MealPlansResponse response = await _mealPlanService.GetMealPlansAsync(type, page, size);
@@ -41,9 +41,9 @@ namespace MealPlanService.API.Controllers
         /// Creates a new meal plan.
         /// </summary>
         /// <param name="mealPlanDto">Details of the meal plan to be created.</param>
+        [HttpPost]
         [ProducesResponseType(typeof(MealPlan), StatusCodes.Status200OK)]
         [Authorize(Roles = "admin")]
-        [HttpPost]
         public async Task<IActionResult> CreateMealPlan([FromBody] CreateMealPlanDTO mealPlanDto)
         {
             var createdMealPlan = await _mealPlanService.CreateMealPlanAsync(mealPlanDto);
@@ -55,9 +55,9 @@ namespace MealPlanService.API.Controllers
         /// Deletes a meal plan by its identifier.
         /// </summary>
         /// <param name="id">The unique identifier of the meal plan to delete.</param>
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [Authorize(Roles = "admin")]
-        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMealPlan(string id)
         {
             await _mealPlanService.DeleteMealPlanAsync(id);
@@ -69,9 +69,9 @@ namespace MealPlanService.API.Controllers
         /// Updates an existing meal plan with new details.
         /// </summary>
         /// <param name="updatedMealPlanDto">The updated meal plan with all properties and necessarily valid Id.</param>
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [Authorize(Roles = "admin")]
-        [HttpPut]
         public async Task<IActionResult> UpdateMealPlan([FromBody] MealPlan updatedMealPlanDto)
         {
             await _mealPlanService.UpdateMealPlanAsync(updatedMealPlanDto);

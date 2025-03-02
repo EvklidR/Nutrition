@@ -9,6 +9,11 @@ using UserService.Infrastructure.Configurations;
 using UserService.Application.Interfaces;
 using UserService.Infrastructure.gRPC;
 using Hangfire;
+using RabbitMQ.Client;
+using UserService.Infrastructure.RabbitMQService;
+using UserService.Infrastructure.BackgroundJobs;
+using Microsoft.Extensions.Options;
+using UserService.Infrastructure.RabbitMQService.Settings;
 
 namespace UserService.Infrastructure.DependencyInjection
 {
@@ -19,7 +24,7 @@ namespace UserService.Infrastructure.DependencyInjection
             services.AddGrpc();
 
             services.AddSingleton<IMealPlanService>(sp =>
-                new MealPlanServiceClient(configuration["GrpcServices:MealPlanServiceUrl"]));
+                new MealPlanService(configuration["GrpcServices:MealPlanServiceUrl"]));
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -39,6 +44,15 @@ namespace UserService.Infrastructure.DependencyInjection
             services.AddScoped<IRefreshTokenTokenRepository, RefreshTokenTokenRepository>();
 
             services.AddScoped<RoleInitializer>();
+
+            var rabbitMqSection = configuration.GetSection("RabbitMq");
+            services.Configure<RabbitMqSettings>(rabbitMqSection);
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<RabbitMqSettings>>().Value);
+
+            services.AddSingleton<RabbitMQConsumer>();
+            services.AddSingleton<IBrokerService, RabbitMQProducer>();
+            services.AddHostedService<RevokeMealPlanService>();
+            services.AddHostedService<ChooseMealPlanService>();
 
             return services;
         }

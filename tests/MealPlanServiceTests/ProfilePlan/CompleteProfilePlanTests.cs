@@ -7,6 +7,7 @@ using MealPlanService.Infrastructure.Repositories.Interfaces;
 using MealPlanService.BusinessLogic.Services;
 using MealPlanService.BusinessLogic.Exceptions;
 using AutoMapper;
+using MealPlanService.Infrastructure.RabbitMQService;
 
 namespace MealPlanServiceTests
 {
@@ -15,6 +16,7 @@ namespace MealPlanServiceTests
         private readonly Mock<IProfileMealPlanRepository> _mockProfileMealPlanRepo;
         private readonly Mock<IMealPlanRepository> _mockMealPlanRepo;
         private readonly Mock<IUserService> _mockUserService;
+        private readonly Mock<IBrokerService> _brokerService;
         private readonly Mock<IMapper> _mockMapper;
         private readonly Faker _faker;
 
@@ -28,18 +30,21 @@ namespace MealPlanServiceTests
             _mockMealPlanRepo = new Mock<IMealPlanRepository>();
             _mockMapper = new Mock<IMapper>();
             _mockUserService = new Mock<IUserService>();
+            _brokerService = new Mock<IBrokerService>();
             _faker = new Faker();
 
             _mockMealPlanService = new Mock<MealPlanService.BusinessLogic.Services.MealPlanService>(
                 _mockMealPlanRepo.Object,
                 _mockProfileMealPlanRepo.Object,
-                _mockMapper.Object);
+                _mockMapper.Object,
+                _brokerService.Object);
 
             _profilePlanService = new ProfilePlanService(
                 _mockProfileMealPlanRepo.Object,
                 _mockMealPlanRepo.Object,
                 _mockMealPlanService.Object,
                 _mockUserService.Object,
+                _brokerService.Object,
                 _mockMapper.Object
             );
         }

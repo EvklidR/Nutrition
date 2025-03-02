@@ -12,7 +12,6 @@ public class Program
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.AddServiceDefaults();
         builder.Services.AddApiServices(builder, builder.Configuration);
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddApplicationServices();
@@ -25,13 +24,12 @@ public class Program
 
         app.UseHangfireDashboard();
 
-        app.MapDefaultEndpoints();
-
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
             app.ApplyMigrations();
+            app.SetHangfireConfiguration();
         }
 
         app.UseMiddleware<ExceptionHandlingMiddleware>();

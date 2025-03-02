@@ -35,7 +35,7 @@ namespace UserService.Application.UseCases.Queries
 
             DailyNeedsResponse response;
 
-            if (profile.ThereIsMealPlan)
+            if (!profile.ThereIsMealPlan)
             {
                 response = CalculateDailyMacros(profile);
             }

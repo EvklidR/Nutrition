@@ -25,7 +25,6 @@ namespace UserService.Infrastructure.gRPC
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "User id is't Guid type"));
             }
-
             return responce;
         }
 
@@ -34,8 +33,8 @@ namespace UserService.Infrastructure.gRPC
             if (Guid.TryParse(request.UserId, out Guid userId) && Guid.TryParse(request.ProfileId, out Guid profileId))
             {
                 return new CheckProfileBelongingResponse()
-                { 
-                    Belong = await _mediator.Send(new CheckProfileBelongingQuery(userId, profileId)) 
+                {
+                    Belong = await _mediator.Send(new CheckProfileBelongingQuery(userId, profileId))
                 };
             }
             else

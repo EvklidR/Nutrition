@@ -5,8 +5,7 @@ namespace FoodService.Infrastructure.MSSQL
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
 
@@ -14,11 +13,12 @@ namespace FoodService.Infrastructure.MSSQL
         public DbSet<Meal> Meals { get; set; }
         public DbSet<Dish> Dishes { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductOfDish> IngredientOfDishes { get; set; }
+        public DbSet<ProductOfDish> ProductsOfDishes { get; set; }
         public DbSet<EatenFood> EatenFoods { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
     }
 }

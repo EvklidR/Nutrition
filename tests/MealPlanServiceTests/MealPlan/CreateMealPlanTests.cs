@@ -4,6 +4,7 @@ using FluentAssertions;
 using MealPlanService.BusinessLogic.DTOs;
 using MealPlanService.Core.Entities;
 using MealPlanService.Core.Enums;
+using MealPlanService.Infrastructure.RabbitMQService;
 using MealPlanService.Infrastructure.Repositories.Interfaces;
 using Moq;
 
@@ -13,6 +14,7 @@ public class CreateMealPlanTests
 {
     private readonly Mock<IMealPlanRepository> _mockMealPlanRepo;
     private readonly Mock<IProfileMealPlanRepository> _mockProfileMealPlanRepo;
+    private readonly Mock<IBrokerService> _brokerService;
     private readonly Mock<IMapper> _mockMapper;
     private readonly Faker<CreateMealPlanDTO> _mealPlanDTOfaker;
     private readonly Faker _faker;
@@ -23,12 +25,14 @@ public class CreateMealPlanTests
     {
         _mockMealPlanRepo = new Mock<IMealPlanRepository>();
         _mockProfileMealPlanRepo = new Mock<IProfileMealPlanRepository>();
+        _brokerService = new Mock<IBrokerService>();
         _mockMapper = new Mock<IMapper>();
 
         _service = new MealPlanService.BusinessLogic.Services.MealPlanService(
             _mockMealPlanRepo.Object,
             _mockProfileMealPlanRepo.Object,
-            _mockMapper.Object);
+            _mockMapper.Object,
+            _brokerService.Object);
 
         _faker = new Faker();
         _mealPlanDTOfaker = new Faker<CreateMealPlanDTO>()

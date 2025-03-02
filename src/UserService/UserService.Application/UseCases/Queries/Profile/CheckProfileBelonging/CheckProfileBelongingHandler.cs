@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using UserService.Application.Exceptions;
 using UserService.Domain.Entities;
 using UserService.Domain.Interfaces.Repositories;
 
@@ -20,7 +19,7 @@ namespace UserService.Application.UseCases.Queries
         {
             var user = await _userManager.FindByIdAsync(request.userId.ToString());
 
-            if (user == null) 
+            if (user == null)
             {
                 return false;
             }

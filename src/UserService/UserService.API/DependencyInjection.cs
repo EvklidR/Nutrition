@@ -34,9 +34,9 @@ namespace UserService.API.DependencyInjection
                 });
             }
 
-            var log = new LoggerConfiguration()
-                     .WriteTo.Http("http://localhost:8080", null) // It will be port of logstash later
-                     .CreateLogger();
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .CreateLogger();
 
             builder.Host.UseSerilog();
 
@@ -107,6 +107,17 @@ namespace UserService.API.DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
+            var certPath = configuration["CertificatData:Path"];
+            var certPassword = configuration["CertificatData:Password"];
+
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ListenAnyIP(7075, listenOptions =>
+                {
+                    listenOptions.UseHttps(certPath, certPassword);
+                });
+            });
+            StringBuilder h;
             return services;
         }
     }

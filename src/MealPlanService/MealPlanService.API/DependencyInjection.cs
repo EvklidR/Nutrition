@@ -1,4 +1,5 @@
-﻿using MealPlanService.API.Filters;
+﻿using MealPlanService.API.BackgroundJobs;
+using MealPlanService.API.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -102,6 +103,20 @@ namespace MealPlanService.API.DependencyInjection
                         )
                     };
                 });
+
+
+            var certPath = configuration["CertificatData:Path"];
+            var certPassword = configuration["CertificatData:Password"];
+
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.ListenAnyIP(7132, listenOptions =>
+                {
+                    listenOptions.UseHttps(certPath, certPassword);
+                });
+            });
+
+            services.AddHostedService<DeleteProfileMealPlanService>();
 
             return services;
         }

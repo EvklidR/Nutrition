@@ -1,0 +1,46 @@
+# Используется для запуска в режиме отладки
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER root
+WORKDIR /app
+EXPOSE 7063
+
+# Используется для сборки проекта
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG BUILD_CONFIGURATION=Release
+WORKDIR /
+
+# Обновление workload перед сборкой
+RUN dotnet workload update
+
+# Устанавливаем сертификаты
+COPY ["src/PostService/PostService.API/certs/https-cert.crt", "/usr/local/share/ca-certificates/https-cert.crt"]
+RUN update-ca-certificates  
+
+WORKDIR /src
+COPY ["src/PostService/PostService.API/PostService.API.csproj", "src/PostService/PostService.API/"]
+COPY ["src/Nutrition.ServiceDefaults/Nutrition.ServiceDefaults.csproj", "src/Nutrition.ServiceDefaults/"]
+COPY ["src/PostService/PostService.BusinessLogic/PostService.BusinessLogic.csproj", "src/PostService/PostService.BusinessLogic/"]
+COPY ["src/PostService/PostService.Infrastructure/PostService.Infrastructure.csproj", "src/PostService/PostService.Infrastructure/"]
+COPY ["src/PostService/PostService.Core/PostService.Core.csproj", "src/PostService/PostService.Core/"]
+
+# Меняем права на файлы (решает проблему "Permission denied")
+RUN chmod -R 777 /src
+
+# Восстанавливаем зависимости
+RUN dotnet restore "./src/PostService/PostService.API/PostService.API.csproj"
+
+# Копируем исходный код и собираем проект
+COPY . .  
+WORKDIR "/src/src/PostService/PostService.API"
+RUN dotnet build "./PostService.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+# Публикуем
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./PostService.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+
+# Финальный образ
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "PostService.API.dll"]
