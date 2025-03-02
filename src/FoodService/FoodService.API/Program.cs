@@ -12,7 +12,6 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.AddServiceDefaults();
         builder.Services.AddApiServices(builder, builder.Configuration);
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddApplicationServices();
@@ -20,8 +19,6 @@ public class Program
         var app = builder.Build();
 
         app.UseCors("AllowSpecificOrigin");
-
-        app.MapDefaultEndpoints();
 
         if (app.Environment.IsDevelopment())
         {
