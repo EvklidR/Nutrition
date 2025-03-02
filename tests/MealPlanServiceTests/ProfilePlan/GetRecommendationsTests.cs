@@ -34,7 +34,8 @@ namespace MealPlanServiceTests
             _mockMealPlanService = new Mock<MealPlanService.BusinessLogic.Services.MealPlanService>(
                 _mockMealPlanRepo.Object,
                 _mockProfileMealPlanRepo.Object,
-                _mockMapper.Object);
+                _mockMapper.Object,
+                _brokerService.Object);
 
             _profilePlanService = new ProfilePlanService(
                 _mockProfileMealPlanRepo.Object,

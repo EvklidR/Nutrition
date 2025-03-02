@@ -70,6 +70,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "certs", "certs", "{A9802754
 		src\nginx\certs\https-cert.key = src\nginx\certs\https-cert.key
 	EndProjectSection
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Nutrition.Client", "src\Nutrition.Client\Nutrition.Client.esproj", "{1B1564C0-EF9C-4A3E-AA53-721FF23A6228}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -160,6 +162,12 @@ Global
 		{FDCFF05D-1AF8-40BA-8E4C-9E26B1FC1F1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDCFF05D-1AF8-40BA-8E4C-9E26B1FC1F1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDCFF05D-1AF8-40BA-8E4C-9E26B1FC1F1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B1564C0-EF9C-4A3E-AA53-721FF23A6228}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B1564C0-EF9C-4A3E-AA53-721FF23A6228}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B1564C0-EF9C-4A3E-AA53-721FF23A6228}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1B1564C0-EF9C-4A3E-AA53-721FF23A6228}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B1564C0-EF9C-4A3E-AA53-721FF23A6228}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B1564C0-EF9C-4A3E-AA53-721FF23A6228}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -192,6 +200,7 @@ Global
 		{6FAA71ED-43B9-44DE-BD4F-4E8775714F44} = {B122DB00-21E0-4BE9-BCD1-1786F3B95814}
 		{83B7103A-3E80-4DCC-A893-9BAF43E8B9B3} = {6FAA71ED-43B9-44DE-BD4F-4E8775714F44}
 		{A9802754-7F8E-4FA3-A844-F4BD14D37A5C} = {6FAA71ED-43B9-44DE-BD4F-4E8775714F44}
+		{1B1564C0-EF9C-4A3E-AA53-721FF23A6228} = {B122DB00-21E0-4BE9-BCD1-1786F3B95814}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD8CDA70-C9EF-4C82-9517-9363D709C383}
