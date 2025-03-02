@@ -49,7 +49,8 @@ namespace UserService.Infrastructure.DependencyInjection
             services.Configure<RabbitMqSettings>(rabbitMqSection);
             services.AddSingleton(sp => sp.GetRequiredService<IOptions<RabbitMqSettings>>().Value);
 
-            services.AddSingleton<RabbitMQConsumer>();
+            services.AddSingleton<RabbitMQRevokeMealPlanConsumer>();
+            services.AddSingleton<RabbitMQChooseMealPlanConsumer>();
             services.AddSingleton<IBrokerService, RabbitMQProducer>();
             services.AddHostedService<RevokeMealPlanService>();
             services.AddHostedService<ChooseMealPlanService>();

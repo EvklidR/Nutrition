@@ -117,7 +117,7 @@ namespace UserService.API.DependencyInjection
                     listenOptions.UseHttps(certPath, certPassword);
                 });
             });
-            StringBuilder h;
+
             return services;
         }
     }

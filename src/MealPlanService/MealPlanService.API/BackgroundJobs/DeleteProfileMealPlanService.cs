@@ -31,7 +31,6 @@ namespace MealPlanService.API.BackgroundJobs
                     var message = Encoding.UTF8.GetString(body);
 
                     await profilePlanService.DeleteProfilePlansAsync(message);
-
                 }
                 catch (Exception ex)
                 {

@@ -11,9 +11,9 @@ namespace UserService.Infrastructure.BackgroundJobs
     public class ChooseMealPlanService : BackgroundService
     {
         private readonly IServiceScopeFactory _factory;
-        private readonly RabbitMQConsumer _consumer;
+        private readonly RabbitMQChooseMealPlanConsumer _consumer;
 
-        public ChooseMealPlanService(IServiceScopeFactory factory, RabbitMQConsumer consumer)
+        public ChooseMealPlanService(IServiceScopeFactory factory, RabbitMQChooseMealPlanConsumer consumer)
         {
             _factory = factory;
             _consumer = consumer;

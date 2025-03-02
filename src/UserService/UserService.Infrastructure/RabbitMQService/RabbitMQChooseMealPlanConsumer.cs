@@ -1,15 +1,15 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Microsoft.Extensions.Options;
-using MealPlanService.Infrastructure.RabbitMQService.Settings;
+using UserService.Infrastructure.RabbitMQService.Settings;
 
-namespace MealPlanService.Infrastructure.RabbitMQService
+namespace UserService.Infrastructure.RabbitMQService
 {
-    public class RabbitMQConsumer : BaseRabbitMQService
+    public class RabbitMQChooseMealPlanConsumer : BaseRabbitMQService
     {
         private readonly AsyncEventingBasicConsumer _consumer;
 
-        public RabbitMQConsumer(IOptions<RabbitMqSettings> options) : base(options)
+        public RabbitMQChooseMealPlanConsumer(IOptions<RabbitMqSettings> options) : base(options)
         {
             _consumer = new AsyncEventingBasicConsumer(_channel);
         }
