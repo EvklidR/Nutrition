@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using UserService.Application.Enums;
 using UserService.Infrastructure.RabbitMQService;
 using System.Text;
 using UserService.Application.UseCases.Commands;
@@ -21,7 +20,7 @@ namespace UserService.Infrastructure.BackgroundJobs
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _consumer.AddListenerAsync(QueueName.MealPlanRevoked.ToString(), async args =>
+            await _consumer.AddListenerAsync(async args =>
             {
                 using var scope = _factory.CreateScope();
 

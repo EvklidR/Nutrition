@@ -1,8 +1,6 @@
-﻿using Polly;
-using Polly.Retry;
+﻿using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using System.Text;
-using Microsoft.Extensions.Options;
 using UserService.Application.Enums;
 using UserService.Application.Interfaces;
 using UserService.Infrastructure.RabbitMQService.Settings;
@@ -12,10 +10,6 @@ namespace UserService.Infrastructure.RabbitMQService
     internal class RabbitMQProducer : BaseRabbitMQService, IBrokerService
     {
         public RabbitMQProducer(IOptions<RabbitMqSettings> options) : base(options) { }
-
-        private static readonly AsyncRetryPolicy _retryPolicy = Policy
-            .Handle<Exception>()
-            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
         public async Task PublishMessageAsync(
             string message,
@@ -33,7 +27,7 @@ namespace UserService.Infrastructure.RabbitMQService
 
             var body = Encoding.UTF8.GetBytes(message);
 
-            await _retryPolicy.ExecuteAsync(async () =>
+            try
             {
                 await _channel.BasicPublishAsync(
                     exchange: exchange,
@@ -41,7 +35,12 @@ namespace UserService.Infrastructure.RabbitMQService
                     mandatory: mandatory,
                     basicProperties: properties,
                     body: body);
-            });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Ошибка при публикации сообщения: {ex.Message}");
+                throw;
+            }
         }
     }
 }

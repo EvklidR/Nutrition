@@ -21,7 +21,7 @@ namespace UserService.Infrastructure.BackgroundJobs
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _consumer.AddListenerAsync(QueueName.MealPlanChoosen.ToString(), async args =>
+            await _consumer.AddListenerAsync(async args =>
             {
                 using var scope = _factory.CreateScope();
 

@@ -31,9 +31,20 @@ namespace MealPlanService.Infrastructure.RabbitMQService
             _channel = _connection.CreateChannelAsync(channelOpts).GetAwaiter().GetResult();
         }
 
-        protected async Task CreateQueueIfNotExistsAsync(string queueName, Dictionary<string, object?>? args = null)
+        protected async Task CreateQueueIfNotExistsAsync(string queueName)
         {
-            await _channel.QueueDeclareAsync(queueName, autoDelete: false, exclusive: false, durable: true, arguments: args);
+            string dlxName = queueName + "-dlx";
+            string dlqName = queueName + "-dlq";
+
+            var args = new Dictionary<string, object?>
+            {
+                { "x-dead-letter-exchange", dlxName }
+            };
+
+            await _channel.QueueDeclareAsync(queueName, durable: true, exclusive: false, autoDelete: false, arguments: args);
+            await _channel.ExchangeDeclareAsync(dlxName, ExchangeType.Direct);
+            await _channel.QueueDeclareAsync(dlqName, durable: true, exclusive: false, autoDelete: false);
+            await _channel.QueueBindAsync(dlqName, dlxName, queueName);
         }
 
         public async ValueTask DisposeAsync()

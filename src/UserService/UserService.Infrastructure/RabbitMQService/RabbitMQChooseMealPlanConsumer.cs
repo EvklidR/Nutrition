@@ -1,36 +1,14 @@
-﻿using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using UserService.Infrastructure.RabbitMQService.Settings;
+using UserService.Application.Enums;
 
 namespace UserService.Infrastructure.RabbitMQService
 {
-    public class RabbitMQChooseMealPlanConsumer : BaseRabbitMQService
+    public class RabbitMQChooseMealPlanConsumer : BaseRabbitMQConsumer
     {
-        private readonly AsyncEventingBasicConsumer _consumer;
-
         public RabbitMQChooseMealPlanConsumer(IOptions<RabbitMqSettings> options) : base(options)
         {
-            _consumer = new AsyncEventingBasicConsumer(_channel);
-        }
-
-        public async Task AddListenerAsync(string queueName, Func<BasicDeliverEventArgs, Task> handler)
-        {
-            await CreateQueueIfNotExistsAsync(queueName);
-
-            _consumer.ReceivedAsync += async (sender, ea) =>
-            {
-                try
-                {
-                    await handler(ea);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"{DateTime.Now} [ERROR] Message processing failed: {ex.Message}");
-                }
-            };
-
-            await _channel.BasicConsumeAsync(queue: queueName, autoAck: true, consumer: _consumer);
+            _queueName = QueueName.MealPlanChoosen.ToString();
         }
     }
 }
