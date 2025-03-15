@@ -23,14 +23,16 @@ namespace MealPlanService.Infrastructure.RabbitMQService
                 try
                 {
                     await handler(ea);
+                    await _channel.BasicAckAsync(ea.DeliveryTag, multiple: false);
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine($"{DateTime.Now} [ERROR] Message processing failed: {ex.Message}");
+                    await _channel.BasicNackAsync(ea.DeliveryTag, multiple: false, requeue: true);
                 }
             };
 
-            await _channel.BasicConsumeAsync(queue: queueName, autoAck: true, consumer: _consumer);
+            await _channel.BasicConsumeAsync(queue: queueName, autoAck: false, consumer: _consumer);
         }
     }
 }
