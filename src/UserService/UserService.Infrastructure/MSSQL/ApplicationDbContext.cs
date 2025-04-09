@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UserService.Domain.Entities;
+using UserService.Infrastructure.MSSQL.Configurations;
 
 namespace UserService.Infrastructure.MSSQL
 {
@@ -18,6 +19,7 @@ namespace UserService.Infrastructure.MSSQL
         {
             base.OnModelCreating(builder);
 
+            builder.ApplyConfiguration(new ProfileConfiguration());
         }
     }
 }

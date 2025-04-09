@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Moq;
 using UserService.Application.Exceptions;
+using UserService.Application.Interfaces;
 using UserService.Application.UseCases.Commands;
 using UserService.Domain.Entities;
 using UserService.Domain.Interfaces.Repositories;
@@ -12,13 +13,15 @@ namespace UserServiceTests
     {
         private readonly Faker _faker;
         private readonly Mock<IProfileRepository> _profileRepositoryMock;
+        private readonly Mock<IBrokerService> _brokerServiceMock;
         private DeleteProfileHandler _handler;
 
         public DeleteProfileTests()
         {
             _faker = new Faker();
             _profileRepositoryMock = new Mock<IProfileRepository>();
-            _handler = new DeleteProfileHandler(_profileRepositoryMock.Object);
+            _brokerServiceMock = new Mock<IBrokerService>();
+            _handler = new DeleteProfileHandler(_profileRepositoryMock.Object, _brokerServiceMock.Object);
         }
 
         [Fact]

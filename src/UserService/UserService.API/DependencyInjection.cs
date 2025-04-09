@@ -29,7 +29,8 @@ namespace UserService.API.DependencyInjection
                     {
                         builder.WithOrigins(allowedOrigins)
                                .AllowAnyMethod()
-                               .AllowAnyHeader();
+                               .AllowAnyHeader()
+                               .AllowCredentials();
                     });
                 });
             }

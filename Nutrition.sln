@@ -12,6 +12,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PostService", "PostService", "{7251ECCF-E351-4BB5-9938-95E9B5F911A2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B122DB00-21E0-4BE9-BCD1-1786F3B95814}"
+	ProjectSection(SolutionItems) = preProject
+		src\nginx\conf\nginx.conf = src\nginx\conf\nginx.conf
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9E9C0D43-F798-45D4-B821-85E0F9470103}"
 EndProject

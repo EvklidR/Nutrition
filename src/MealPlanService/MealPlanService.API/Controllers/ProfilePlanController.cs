@@ -28,8 +28,8 @@ namespace MealPlanService.API.Controllers
         [HttpPost]
         [ServiceFilter(typeof(UserIdFilter))]
         [Authorize]
-        [ProducesResponseType(typeof(MealPlan), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateProfilePlan(ProfileMealPlanDTO profilePlan)
+        [ProducesResponseType(typeof(ProfileMealPlan), StatusCodes.Status200OK)]
+        public async Task<ActionResult<ProfileMealPlan?>> CreateProfilePlan(ProfileMealPlanDTO profilePlan)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
 
@@ -42,11 +42,11 @@ namespace MealPlanService.API.Controllers
         /// Retrieves the meal plan history for a specific profile of the user.
         /// </summary>
         /// <param name="profileId">The profile identifier for which to retrieve meal plans.</param>
-        [HttpGet("get_history")]
+        [HttpGet("history")]
         [ServiceFilter(typeof(UserIdFilter))]
         [Authorize]
-        [ProducesResponseType(typeof(IEnumerable<MealPlan>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllProfilePlans(string profileId)
+        [ProducesResponseType(typeof(IEnumerable<ProfileMealPlan>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<ProfileMealPlan>>> GetAllProfilePlans(string profileId)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
 
@@ -76,10 +76,10 @@ namespace MealPlanService.API.Controllers
         /// Retrieves meal plan recommendations for the specified profile based on active meal plan and current day.
         /// </summary>
         /// <param name="profileId">The profile identifier for which to retrieve recommendations.</param>
-        [HttpGet("get_recommendations")]
+        [HttpGet("recommendations")]
         [Authorize]
         [ProducesResponseType(typeof(IEnumerable<Recommendation>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetRecommendations(string profileId)
+        public async Task<ActionResult<IEnumerable<Recommendation>>> GetRecommendations(string profileId)
         {
             var recommendations = await _userPlanService.GetRecommendations(profileId);
 

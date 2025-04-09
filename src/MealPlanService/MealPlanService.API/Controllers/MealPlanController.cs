@@ -30,7 +30,7 @@ namespace MealPlanService.API.Controllers
         [HttpGet("meal_plans")]
         [ProducesResponseType(typeof(MealPlansResponse), StatusCodes.Status200OK)]
         [Authorize]
-        public async Task<IActionResult> GetMealPlans([FromQuery] MealPlanType? type, [FromQuery] int? page, [FromQuery] int? size)
+        public async Task<ActionResult<MealPlansResponse>> GetMealPlans([FromQuery] MealPlanType? type, [FromQuery] int? page, [FromQuery] int? size)
         {
             MealPlansResponse response = await _mealPlanService.GetMealPlansAsync(type, page, size);
 

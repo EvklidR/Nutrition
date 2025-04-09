@@ -31,7 +31,7 @@ namespace PostService.API.Controllers
         [HttpGet("{postId}")]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(typeof(List<CommentDTO>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetComments(string postId, [FromQuery] int? page = 1, int? size = 10)
+        public async Task<ActionResult<List<CommentDTO>>> GetComments(string postId, [FromQuery] int? page = 1, int? size = 10)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
 
@@ -49,7 +49,7 @@ namespace PostService.API.Controllers
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(typeof(CommentDTO), StatusCodes.Status200OK)]
-        public async Task<IActionResult> AddComment([FromBody] CreateCommentDTO createCommentDTO)
+        public async Task<ActionResult<CommentDTO>> AddComment([FromBody] CreateCommentDTO createCommentDTO)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
             var userName = (string)HttpContext.Items["UserName"]!;

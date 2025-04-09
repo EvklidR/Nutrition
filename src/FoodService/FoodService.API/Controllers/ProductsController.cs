@@ -32,7 +32,7 @@ namespace FoodService.API.Controllers
         [HttpGet]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetProducts([FromQuery] GetFoodRequestParameters parameters)
+        public async Task<ActionResult<ProductsResponse>> GetProducts([FromQuery] GetFoodRequestParameters parameters)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 

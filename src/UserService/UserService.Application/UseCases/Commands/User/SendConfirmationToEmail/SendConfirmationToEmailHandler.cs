@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
-using System.Text.Encodings.Web;
 using System.Text;
 using UserService.Application.Interfaces;
 using UserService.Domain.Entities;
+using UserService.Application.Exceptions;
 
 namespace UserService.Application.UseCases.Commands
 {
@@ -19,15 +19,20 @@ namespace UserService.Application.UseCases.Commands
         }
         public async Task Handle(SendConfirmationToEmailCommand request, CancellationToken cancellationToken)
         {
+            var user = await _userManager.FindByIdAsync(request.userId.ToString());
+
+            if (user == null)
+            {
+                throw new NotFound("User with such id not found");
+            }
+
             var code = request.isChange
-                ? await _userManager.GenerateChangeEmailTokenAsync(request.user, request.email)
-                : await _userManager.GenerateEmailConfirmationTokenAsync(request.user);
+                ? await _userManager.GenerateChangeEmailTokenAsync(user, request.email)
+                : await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
-            var userId = request.user.Id;
-
-            var confirmEmailUrl = $"{request.url}/User/confirmEmail?userId={userId}&code={code}";
+            var confirmEmailUrl = $"{request.url}/User/confirmEmail?userId={request.userId}&code={code}";
 
             if (request.isChange)
             {

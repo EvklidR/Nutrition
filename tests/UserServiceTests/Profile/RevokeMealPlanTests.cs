@@ -28,31 +28,13 @@ namespace UserServiceTests
             _profileRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync((Profile)null);
 
-            var command = new RevokeMealPlanCommand(_faker.Random.Guid(), _faker.Random.Guid());
+            var command = new RevokeMealPlanCommand(_faker.Random.Guid());
 
             // Act
             Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
 
             // Assert
             await act.Should().ThrowAsync<NotFound>().WithMessage("Profile not found");
-        }
-
-        [Fact]
-        public async Task Handler_Should_Throw_Unauthorized_When_UserId_Does_Not_Match_Profile_UserId()
-        {
-            // Arrange
-            var profile = new Profile();
-
-            _profileRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))
-                .ReturnsAsync(profile);
-
-            var command = new RevokeMealPlanCommand(_faker.Random.Guid(), _faker.Random.Guid());
-
-            // Act
-            Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
-
-            // Assert
-            await act.Should().ThrowAsync<Unauthorized>().WithMessage("Owner isn't valid");
         }
 
         [Fact]
@@ -65,7 +47,7 @@ namespace UserServiceTests
             _profileRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))
                 .ReturnsAsync(profile);
 
-            var command = new RevokeMealPlanCommand(profile.Id, userId);
+            var command = new RevokeMealPlanCommand(profile.Id);
 
             // Act
             await _handler.Handle(command, CancellationToken.None);

@@ -31,7 +31,7 @@ namespace PostService.API.Controllers
         [HttpGet]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(typeof(PostsResponseModel), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPosts([FromQuery] List<string>? words = null, int? page = 1, int? size = 10)
+        public async Task<ActionResult<PostsResponseModel>> GetPosts([FromQuery] List<string>? words = null, int? page = 1, int? size = 10)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
 
@@ -50,7 +50,7 @@ namespace PostService.API.Controllers
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(typeof(PostsResponseModel), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetUserPosts(
+        public async Task<ActionResult<PostsResponseModel>> GetUserPosts(
             [FromQuery] int? page = 1,
             [FromQuery] int? size = 10)
         {
@@ -70,7 +70,7 @@ namespace PostService.API.Controllers
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(typeof(PostDTO), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreatePost([FromForm] CreatePostDTO createPostDTO)
+        public async Task<ActionResult<PostDTO>> CreatePost([FromForm] CreatePostDTO createPostDTO)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
             var userName = (string)HttpContext.Items["UserName"]!;
@@ -109,7 +109,7 @@ namespace PostService.API.Controllers
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdatePost([FromBody] UpdatePostDTO updatePostDTO)
+        public async Task<IActionResult> UpdatePost([FromForm] UpdatePostDTO updatePostDTO)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
 
@@ -140,8 +140,8 @@ namespace PostService.API.Controllers
         /// </summary>
         /// <param name="fileName">The path to image.</param>
         [HttpGet("/{fileName}")]
-        [ProducesResponseType(typeof(File), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetFileAsync(string fileName)
+        [ProducesResponseType(typeof(FileStreamResult), StatusCodes.Status200OK)]
+        public async Task<ActionResult<FileStreamResult>> GetFileAsync(string fileName)
         {
             var fileStream = await _postService.GetImageAsync(fileName);
 

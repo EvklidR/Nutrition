@@ -1,0 +1,37 @@
+<div class="login-container">
+  <h2>Войти в аккаунт</h2>
+
+  <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+    <div class="input-group" [ngClass]="{'has-error': usernameInvalid && (usernameModel.touched || formSubmitted)}">
+      <label for="username">Имя пользователя</label>
+      <input type="text"
+             id="username"
+             [(ngModel)]="username"
+             name="username"
+             required
+             #usernameModel="ngModel"
+             placeholder="Введите имя пользователя">
+      <div *ngIf="usernameInvalid && (usernameModel.touched || formSubmitted)" class="error-message">Поле "Имя пользователя" обязательно.</div>
+    </div>
+
+    <div class="input-group" [ngClass]="{'has-error': passwordInvalid && (passwordModel.touched || formSubmitted)}">
+      <label for="password">Пароль</label>
+      <input type="password"
+             id="password"
+             [(ngModel)]="password"
+             name="password"
+             required
+             #passwordModel="ngModel"
+             placeholder="Введите пароль">
+      <div *ngIf="passwordInvalid && (passwordModel.touched || formSubmitted)" class="error-message">Поле "Пароль" обязательно.</div>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <button type="submit">Войти</button>
+  </form>
+
+  <p class="register-link">Нет аккаунта? <a routerLink="/register">Зарегистрироваться</a></p>
+</div>

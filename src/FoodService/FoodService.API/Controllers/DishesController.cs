@@ -33,7 +33,7 @@ namespace FoodService.API.Controllers
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(typeof(FullDishDTO), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetDishById(Guid dishId)
+        public async Task<ActionResult<FullDishDTO>> GetDishById(Guid dishId)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
@@ -50,8 +50,8 @@ namespace FoodService.API.Controllers
         [HttpGet]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        [ProducesResponseType(typeof(IEnumerable<BriefDishDTO>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetDishes([FromQuery] GetFoodRequestParameters parameters)
+        [ProducesResponseType(typeof(DishesResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult<DishesResponse>> GetDishes([FromQuery] GetFoodRequestParameters parameters)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
@@ -69,7 +69,7 @@ namespace FoodService.API.Controllers
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(typeof(FullDishDTO), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateDish([FromForm] CreateDishDTO createDishDTO)
+        public async Task<ActionResult<FullDishDTO>> CreateDish([FromForm] CreateDishDTO createDishDTO)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 

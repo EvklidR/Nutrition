@@ -45,7 +45,7 @@ namespace UserService.Application.UseCases.Commands
                 throw new BadRequest(errorMessage);
             }
 
-            await _mediator.Send(new SendConfirmationToEmailCommand(user, request.url, user.Email));
+            await _mediator.Send(new SendConfirmationToEmailCommand(user.Id, request.url, user.Email));
         }
 
     }

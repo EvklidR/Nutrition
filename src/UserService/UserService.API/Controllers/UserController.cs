@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserService.API.Filters;
+using UserService.Application.Models;
 using UserService.Application.UseCases.Commands;
 
 namespace UserService.API.Controllers
@@ -20,7 +21,7 @@ namespace UserService.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginUserCommand command)
+        public async Task<ActionResult<AuthenticatedResponse>> Login(LoginUserCommand command)
         {
             var response = await _mediator.Send(command);
 
@@ -35,11 +36,11 @@ namespace UserService.API.Controllers
 
             await _mediator.Send(command with { url = origin });
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh(RefreshTokenCommand command)
+        public async Task<ActionResult<AuthenticatedResponse>> Refresh(RefreshTokenCommand command)
         {
             var response = await _mediator.Send(command);
 
@@ -58,15 +59,15 @@ namespace UserService.API.Controllers
             return NoContent();
         }
 
-        [HttpGet("sendConfirmation")]
+        [HttpPost("sendConfirmation")]
         [ServiceFilter(typeof(RequestOriginFilter))]
-        public async Task<IActionResult> ConfirmEmail([FromQuery] SendConfirmationToEmailCommand request)
+        public async Task<IActionResult> ConfirmEmail(SendConfirmationToEmailCommand request)
         {
             var origin = (string)HttpContext.Items["RequestOrigin"]!;
 
             await _mediator.Send(request with { url = origin });
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpGet("confirmEmail")]
@@ -74,7 +75,7 @@ namespace UserService.API.Controllers
         {
             await _mediator.Send(command);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

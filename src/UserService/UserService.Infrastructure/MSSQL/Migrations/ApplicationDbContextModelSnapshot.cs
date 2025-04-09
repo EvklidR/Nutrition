@@ -189,6 +189,8 @@ namespace UserService.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Profiles");
                 });
 
@@ -321,6 +323,15 @@ namespace UserService.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
+                {
+                    b.HasOne("UserService.Domain.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("UserService.Domain.Entities.Profile", b =>
                 {
                     b.HasOne("UserService.Domain.Entities.User", null)
                         .WithMany()

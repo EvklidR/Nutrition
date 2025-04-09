@@ -1,6 +1,4 @@
-﻿using UserService.Domain.Entities;
-
-namespace UserService.Application.UseCases.Commands
+﻿namespace UserService.Application.UseCases.Commands
 {
-    public record SendConfirmationToEmailCommand(User user, string? url, string email, bool isChange = false) : ICommand;
+    public record SendConfirmationToEmailCommand(Guid userId, string? url, string email, bool isChange = false) : ICommand;
 }

@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace PostService.BusinessLogic.DTOs.Post
+﻿namespace PostService.BusinessLogic.DTOs.Post
 {
     public class PostDTO
     {
