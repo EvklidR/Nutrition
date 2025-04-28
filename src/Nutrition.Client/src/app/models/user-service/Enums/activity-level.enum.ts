@@ -1,7 +1,7 @@
 export enum ActivityLevel {
-  Sedentary = 'Sedentary',
-  Low = 'Low',
-  Medium = 'Medium',
-  High = 'High',
-  VeryHigh = 'VeryHigh'
+  Sedentary = 0,
+  Low = 1,
+  Medium = 2,
+  High = 3,
+  VeryHigh = 4
 }

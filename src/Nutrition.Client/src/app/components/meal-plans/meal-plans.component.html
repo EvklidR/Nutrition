@@ -1,0 +1,53 @@
+<div class="current-plan-info">
+
+  <div *ngIf="choosenMealPlan; else noPlan">
+    <h2>Текущий план: <span>{{ choosenMealPlan!.mealPlanName }}</span></h2>
+
+    <p>{{ choosenMealPlan!.mealPlanDescription }}</p>
+    <button class="cansel-button"
+            (click)="canselPlan()">
+      Отменить
+    </button>
+  </div>
+  <ng-template #noPlan>
+    <p>Текущий план не выбран</p>
+  </ng-template>
+</div>
+
+<div class="add-meal-plan">
+  <button (click)="navigateToAddingPlan()">Создать план питания</button>
+</div>
+
+
+<div *ngFor="let category of mealPlanCategories" class="category-container">
+  <div class="category-header">
+    <h2>{{ getCategoryName(category) }}</h2>
+  </div>
+
+  <div class="meal-plan-navigation">
+    <button class="nav-arrow"
+            (click)="prevPage(category)"
+            [disabled]="currentPageByCategory[category] === 1">
+            &#x25C0;
+    </button>
+
+    <div class="meal-plan-row">
+      <div class="meal-plan-card"
+           *ngFor="let plan of mealPlansByCategory[category].mealPlans || []"
+           (click)="toggleDescription(plan.id)">
+        <div class="meal-plan-overlay" [class.expanded]="expandedPlanId === plan.id">
+          <h3 class="meal-plan-title">{{ plan.name }}</h3>
+          <p class="meal-plan-description">{{ plan.description }}</p>
+          <button *ngIf="expandedPlanId === plan.id" class="select-button" (click)="selectPlan(plan, $event)">
+            Выбрать
+          </button>
+        </div>
+      </div>
+    </div>
+    <button class="nav-arrow"
+            (click)="nextPage(category)"
+            [disabled]="isLastPage(category)">
+      &#x25B6;
+    </button>
+  </div>
+</div>

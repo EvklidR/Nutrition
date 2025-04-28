@@ -1,0 +1,53 @@
+<div class="ingredient-list">
+  <div class="header-buttons">
+    <button class="switch-button active">Продукты</button>
+    <button class="switch-button dishes-btn" (click)="navigateToDishes()">Блюда</button>
+  </div>
+
+  <input type="text" class="filter-input" placeholder="Поиск продуктов..." [(ngModel)]="params.name" (ngModelChange)="loadProducts()" />
+
+  <div class="controls">
+    <div class="sorting">
+      <label>Сортировка:</label>
+      <select [(ngModel)]="params.sortingCriteria" (change)="loadProducts()">
+        <option [ngValue]="null">Без сортировки</option>
+        <option [ngValue]="0">Калории</option>
+        <option [ngValue]="1">Белки</option>
+        <option [ngValue]="2">Жиры</option>
+        <option [ngValue]="3">Углеводы</option>
+      </select>
+
+      <label>
+        <input type="checkbox" [(ngModel)]="params.sortAsc" (change)="loadProducts()"> По возрастанию
+      </label>
+    </div>
+
+    <div class="pagination">
+      <label>Страница:</label>
+      <button (click)="changePage(-1)" [disabled]="params.page === 1">←</button>
+      <span>{{ params.page || 1 }} / {{ totalPages() }}</span>
+      <button (click)="changePage(1)" [disabled]="!hasNextPage">→</button>
+    </div>
+  </div>
+
+  <button class="add-button" (click)="openAddProductModal()">Добавить продукт</button>
+
+  <div *ngIf="isLoading" class="loading">Загрузка...</div>
+
+  <div *ngIf="!isLoading && products.length === 0" class="no-data">
+    <p>У вас пока нет ингредиентов.</p>
+  </div>
+
+  <div class="ingredients-container" *ngIf="!isLoading && products.length > 0">
+    <div class="ingredient-card" *ngFor="let product of products">
+      <div class="ingredient-header">
+        <h3>{{ product.name }}</h3>
+        <button class="delete-button" (click)="deleteProduct(product.id)">🗑️</button>
+      </div>
+      <p>Калории: {{ product.calories | number:'1.1-1' }} ккал</p>
+      <p>Белки: {{ product.proteins | number:'1.1-1' }} г</p>
+      <p>Жиры: {{ product.fats | number:'1.1-1' }} г</p>
+      <p>Углеводы: {{ product.carbohydrates | number:'1.1-1' }} г</p>
+    </div>
+  </div>
+</div>

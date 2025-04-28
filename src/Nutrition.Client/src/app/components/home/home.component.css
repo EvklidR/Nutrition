@@ -1,0 +1,223 @@
+.home-container {
+  padding: 20px;
+  min-width: 725px;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 30px 0 60px;
+  justify-content: space-around;
+}
+
+.calories-circle-container {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.calories-circle {
+  transform: rotate(-90deg);
+}
+
+.circle-background {
+  fill: none;
+  stroke: #E7FFCA;
+  stroke-width: 13;
+}
+
+.circle-progress {
+  fill: none;
+  stroke: #3D8E31;
+  stroke-width: 13;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.3s ease;
+}
+
+.calories-circle-info {
+  position: absolute;
+  text-align: center;
+}
+
+  .calories-circle-info h2 {
+    font-size: 41px;
+    margin: 0;
+    color: #333;
+  }
+
+  .calories-circle-info p {
+    font-size: 16px;
+    color: #666;
+  }
+
+.water-info {
+  flex: 1;
+  font-size: 18px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+  .water-info > p {
+    margin: 0;
+  }
+
+.water-info-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.change-water-goal,
+.drink-water {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.change-water-goal {
+  background-color: #C7FF82;
+}
+
+.drink-water {
+  background-color: #8BDE33;
+}
+
+.add-meal {
+  display: flex;
+  margin-top: 20px;
+}
+
+  .add-meal button {
+    padding: 10px 20px;
+    background-color: #D3D347;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border: none;
+  }
+
+    .add-meal button:hover {
+      background-color: #E0E080;
+    }
+
+
+.day-result ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+  .day-result ul li {
+    border-radius: 5px;
+    min-width: 200px;
+    height: 150px;
+    flex: 1;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #E7FFCA;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+  }
+
+.meal-container {
+  text-align: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+.delete-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 18px;
+  color: #d9534f;
+  cursor: pointer;
+}
+
+  .delete-btn:hover {
+    color: #b52b24;
+  }
+
+.meal-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.meal-nutrients p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+
+.nutrient-info {
+  flex: 1;
+  font-size: 16px;
+  color: #333;
+  text-align: center;
+  padding-left: 20px;
+}
+
+.nutrient {
+  margin: 20px;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+  .nutrient p {
+    margin: 0;
+  }
+
+.nutrient-bar {
+  width: 50%;
+  height: 10px;
+  background-color: #E7FFCA;
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+  margin: 5px 0;
+}
+
+.nutrient-bar-fill {
+  height: 100%;
+  background-color: #8BDE33;
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+
+.gradient-bar {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, rgba(61, 61, 61, 0) 0%, #3D3D3D 50%, rgba(61, 61, 61, 0) 100%);
+}
+.delete-meal-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: black;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+  .delete-meal-btn:hover {
+    color: #ff4c4c;
+  }

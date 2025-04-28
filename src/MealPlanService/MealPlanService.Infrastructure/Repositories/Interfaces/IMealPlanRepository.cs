@@ -7,5 +7,6 @@ namespace MealPlanService.Infrastructure.Repositories.Interfaces
     public interface IMealPlanRepository : IBaseRepository<MealPlan>
     {
         Task<(List<MealPlanDTO>?, long)> GetAllAsync(MealPlanType? type, int? page, int? size);
+        Task<List<MealPlanDTO>> GetManyByIdsAsync(List<string> ids);
     }
 }

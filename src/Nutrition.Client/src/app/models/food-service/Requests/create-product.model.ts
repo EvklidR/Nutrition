@@ -1,5 +1,5 @@
 export interface CreateProductModel {
-  userId: string,
+  userId: string | null,
   name: string,
   proteins: number,
   fats: number,

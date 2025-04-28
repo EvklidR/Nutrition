@@ -1,6 +1,6 @@
 export enum CalculationType {
   Fixed,
-  Persent,
+  Percent,
   PerKg,
-  Bydefault
+  ByDefault
 }

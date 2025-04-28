@@ -1,0 +1,81 @@
+<div class="home-container">
+  <div class="header">
+
+    <div class="water-info">
+      <div class="water-info-buttons">
+        <button class="change-water-goal" (click)="adjustWaterGoal('increase')">Увеличить норму</button>
+        <button class="change-water-goal" (click)="adjustWaterGoal('decrease')">Уменьшить норму</button>
+      </div>
+      <p>Выпито стаканов воды:</p>
+      <p>{{ dayResult?.glassesOfWater }} / {{ profile?.desiredGlassesOfWater }}</p>
+      <button class="drink-water" (click)="drinkWater()">Стакан выпит</button>
+    </div>
+
+
+
+    <div class="calories-circle-container">
+      <svg class="calories-circle" width="250" height="250" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+        <circle class="circle-background" cx="80" cy="80" r="70"></circle>
+        <circle class="circle-progress" cx="80" cy="80" r="70"
+                [style.stroke-dasharray]="getDashArray(totalNutrients.calories, dailyNeeads.calories)">
+        </circle>
+      </svg>
+      <div class="calories-circle-info">
+        <h2>{{ dailyNeeads.calories !== 0 ? (totalNutrients.calories * 100 / dailyNeeads.calories | number:'1.0-0') : '0' }}%</h2>
+        <p>{{ totalNutrients.calories }}/{{ dailyNeeads.calories }} ккал</p>
+      </div>
+    </div>
+
+
+    <div class="nutrient-info">
+      <div class="nutrient">
+        <p>Белки</p>
+        <div class="nutrient-bar">
+          <div class="nutrient-bar-fill" [style.width]="getPercentage(totalNutrients.proteins, dailyNeeads.proteins) + '%'"></div>
+        </div>
+        <p>{{ totalNutrients.proteins | number:'1.1-1' }}/{{ dailyNeeads.proteins | number:'1.1-1'}} ({{ dailyNeeads.proteins !== 0 ? (totalNutrients.proteins * 100 / dailyNeeads.proteins | number:'1.1-1') : '0' }}%)</p>
+      </div>
+      <div class="nutrient">
+        <p>Жиры</p>
+        <div class="nutrient-bar">
+          <div class="nutrient-bar-fill" [style.width]="getPercentage(totalNutrients.fats, dailyNeeads.fats) + '%'"></div>
+        </div>
+        <p>{{ totalNutrients.fats | number:'1.1-1' }}/{{ dailyNeeads.fats | number:'1.1-1' }} ({{ dailyNeeads.fats !== 0 ? (totalNutrients.fats * 100 / dailyNeeads.fats | number:'1.1-1') : '0' }}%)</p>
+      </div>
+      <div class="nutrient">
+        <p>Углеводы</p>
+        <div class="nutrient-bar">
+          <div class="nutrient-bar-fill" [style.width]="getPercentage(totalNutrients.carbohydrates, dailyNeeads.carbohydrates) + '%'"></div>
+        </div>
+        <p>{{ totalNutrients.carbohydrates | number:'1.1-1' }}/{{ dailyNeeads.carbohydrates | number:'1.1-1' }} ({{ dailyNeeads.carbohydrates !== 0 ? (totalNutrients.carbohydrates * 100 / dailyNeeads.carbohydrates | number:'1.1-1') : '0' }}%)</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="gradient-bar"></div>
+
+
+  <div class="add-meal">
+    <button (click)="openCreationMealModal()">Добавить прием пищи</button>
+  </div>
+
+  <div *ngIf="dayResult" class="day-result">
+    <ul *ngIf="dayResult.meals.length > 0">
+      <li *ngFor="let meal of dayResult.meals">
+        <div class="meal-container" (click)="openMealDetails(meal)">
+          <button class="delete-meal-btn" (click)="removeMeal(meal.id, $event)">
+            <fa-icon [icon]="faTrash"></fa-icon>
+          </button>
+          <div class="meal-name">{{ meal.name }}</div>
+          <div class="meal-nutrients">
+            <p>Калории: {{ meal.totalCalories | number:'1.0-0' }}</p>
+            <p>Белки: {{ meal.totalProteins | number:'1.0-0' }}</p>
+            <p>Жиры: {{ meal.totalFats | number:'1.0-0' }}</p>
+            <p>Углеводы: {{ meal.totalCarbohydrates | number:'1.0-0' }}</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <p *ngIf="dayResult.meals.length === 0">Нет добавленных приемов пищи.</p>
+  </div>
+</div>

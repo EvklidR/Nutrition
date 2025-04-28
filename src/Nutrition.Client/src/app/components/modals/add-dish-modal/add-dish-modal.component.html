@@ -1,0 +1,73 @@
+<div class="modal-backdrop">
+  <div class="modal-content">
+    <h2>Добавить новое блюдо</h2>
+    <div class="main-wrapper">
+      <div class="info-wrapper">
+        <div class="form-group">
+          <div class="image-upload-box"
+               (click)="fileInput.click()"
+               [style.backgroundImage]="imageUrl ? 'url(' + imageUrl + ')' : ''">
+            <input #fileInput type="file" (change)="onImageChange($event)" style="display: none;" accept="image/*" />
+            <span *ngIf="!imageUrl" class="plus-sign">+</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="dishName">Название блюда</label>
+          <input id="dishName" type="text" [(ngModel)]="name" />
+        </div>
+
+        <div class="form-group">
+          <label for="dishDescription">Описание</label>
+          <textarea id="dishDescription" [(ngModel)]="description"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="dishPortions">Количество порций</label>
+          <input id="dishPortions" type="number" [(ngModel)]="amountOfPortions" />
+        </div>
+      </div>
+
+      <div class="ingredients-wrapper">
+        <div class="form-group">
+          <label for="ingredientSelect">Добавить ингредиент</label>
+          <select id="ingredientSelect" [(ngModel)]="selectedProductId">
+            <option [ngValue]="null">Выберите ингредиент</option>
+            <option *ngFor="let ingredient of allProducts" [ngValue]="ingredient.id">
+              {{ ingredient.name }}
+            </option>
+          </select>
+          <button class="add-button" (click)="addProduct()">Добавить</button>
+        </div>
+
+        <div *ngIf="selectedProducts.length > 0" class="ingredients-table">
+          <h3>Выбранные ингредиенты</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Название</th>
+                <th>Масса (г)</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let ingredient of selectedProducts">
+                <td>{{ getProductName(ingredient.productId) }}</td>
+                <td>
+                  <input type="number" [(ngModel)]="ingredient.weight" />
+                </td>
+                <td>
+                  <button class="delete-button" (click)="removeProduct(ingredient.productId)">&#10006;</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button (click)="saveDish()" [disabled]="isSaving">Сохранить</button>
+      <button (click)="close()">Отмена</button>
+    </div>
+  </div>
+</div>

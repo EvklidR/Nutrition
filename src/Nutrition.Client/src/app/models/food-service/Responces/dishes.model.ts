@@ -1,6 +1,6 @@
 import { BriefDishModel } from "./brief-dish.model";
 
 export interface DishesResponseModel {
-  dishes: BriefDishModel[] | null;
+  dishes: BriefDishModel[];
   totalCount: number;
 }

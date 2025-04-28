@@ -5,6 +5,7 @@ import { FullDishModel } from '../../models/food-service/Responces/full-dish.mod
 import { DishesResponseModel } from '../../models/food-service/Responces/dishes.model';
 import { CreateDishModel } from '../../models/food-service/Requests/create-dish.model';
 import { UpdateDishModel } from '../../models/food-service/Requests/update-dish.model';
+import { GetFoodRequestParameters } from '../../models/food-service/Requests/get-food-request-parameters.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,23 +19,45 @@ export class DishService {
     return this.http.get<FullDishModel>(`${this.baseUrl}/${dishId}`);
   }
 
-  getDishes(parameters: any): Observable<DishesResponseModel> {
+  getDishes(parameters: GetFoodRequestParameters): Observable<DishesResponseModel> {
     let params = new HttpParams();
 
-    if (parameters.page != null) {
-      params = params.set('page', parameters.page);
-    }
-
-    if (parameters.size != null) {
-      params = params.set('size', parameters.size);
+    for (const key in parameters) {
+      const value = (parameters as any)[key];
+      if (value !== null && value !== undefined) {
+        params = params.set(key, value.toString());
+      }
     }
 
     return this.http.get<DishesResponseModel>(this.baseUrl, { params });
   }
 
   createDish(createDishDTO: CreateDishModel): Observable<FullDishModel> {
-    return this.http.post<FullDishModel>(this.baseUrl, createDishDTO);
+    const formData = new FormData();
+
+    if (createDishDTO.userId) {
+      formData.append('userId', createDishDTO.userId);
+    }
+
+    formData.append('name', createDishDTO.name);
+    formData.append('amountOfPortions', createDishDTO.amountOfPortions.toString());
+
+    if (createDishDTO.description) {
+      formData.append('description', createDishDTO.description);
+    }
+
+    if (createDishDTO.image) {
+      formData.append('image', createDishDTO.image);
+    }
+
+    createDishDTO.ingredients.forEach((ingredient, index) => {
+      formData.append(`ingredients[${index}].productId`, ingredient.productId);
+      formData.append(`ingredients[${index}].weight`, ingredient.weight.toString());
+    });
+
+    return this.http.post<FullDishModel>(this.baseUrl, formData);
   }
+
 
   updateDish(updateDishDTO: UpdateDishModel): Observable<void> {
     return this.http.put<void>(this.baseUrl, updateDishDTO);

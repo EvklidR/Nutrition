@@ -1,0 +1,58 @@
+<div class="modal-content">
+
+  <label class="meal-name">{{ meal.name }}</label>
+
+  <div class="products-wrapper">
+
+    <div class="modal-section">
+      <h3 class="section-header">Продукты</h3>
+      <div class="item-list" *ngIf="meal.products.length > 0; else noProducts">
+        <div class="list-header">
+          <span class="header-name">Наименование</span>
+          <span class="header-quantity">Граммы</span>
+          <span class="header-quantity">Ккал</span>
+          <span class="header-quantity">Белки</span>
+          <span class="header-quantity">Жиры</span>
+          <span class="header-quantity">Углеводы</span>
+        </div>
+        <div *ngFor="let product of meal.products" class="item">
+          <span class="name">{{ product.name }}</span>
+          <span class="quantity">{{ product.weight }} г</span>
+          <span class="quantity">{{ product.totalProductCalories | number:'1.0-1' }} ккал</span>
+          <span class="quantity">{{ product.totalProductProteins | number:'1.0-1' }} г</span>
+          <span class="quantity">{{ product.totalProductFats | number:'1.0-1' }} г</span>
+          <span class="quantity">{{ product.totalProductCarbohydrates | number:'1.0-1' }} г</span>
+        </div>
+      </div>
+      <ng-template #noProducts>
+        <div class="no-items">Нет продуктов</div>
+      </ng-template>
+    </div>
+
+    <div class="modal-section">
+      <h3 class="section-header">Блюда</h3>
+      <div class="item-list" *ngIf="meal.dishes.length > 0; else noDishes">
+        <div class="list-header">
+          <span class="header-name">Наименование</span>
+          <span class="header-quantity">Граммы</span>
+          <span class="header-quantity">Ккал</span>
+          <span class="header-quantity">Белки</span>
+          <span class="header-quantity">Жиры</span>
+          <span class="header-quantity">Углеводы</span>
+        </div>
+        <div *ngFor="let dish of meal.dishes" class="item">
+          <span class="name">{{ dish.name }}</span>
+          <span class="quantity">{{ dish.weight }} г</span>
+          <span class="quantity">{{ dish.totalProductCalories | number:'1.0-1' }} ккал</span>
+          <span class="quantity">{{ dish.totalProductProteins | number:'1.0-1' }} г</span>
+          <span class="quantity">{{ dish.totalProductFats | number:'1.0-1' }} г</span>
+          <span class="quantity">{{ dish.totalProductCarbohydrates | number:'1.0-1' }} г</span>
+        </div>
+      </div>
+      <ng-template #noDishes>
+        <div class="no-items">Нет блюд</div>
+      </ng-template>
+    </div>
+
+  </div>
+</div>

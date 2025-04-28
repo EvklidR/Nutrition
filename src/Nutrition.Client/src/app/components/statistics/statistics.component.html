@@ -1,0 +1,45 @@
+<div class="page-container">
+
+  <div class="header-buttons">
+    <button class="switch-button">Данные тела</button>
+    <button class="switch-button food-btn" (click)="navigateToFoodStatistics()">Данные о пище</button>
+  </div>
+
+  <div class="chart-wrapper">
+    <div *ngIf="weightData.length > 0">
+      <ngx-charts-line-chart [view]="[700, 400]"
+                             [scheme]="colorScheme"
+                             [results]="chartData"
+                             [xAxis]="true"
+                             [yAxis]="true"
+                             [autoScale]="false"
+                             [curve]="curveType"
+                             [legend]="true"
+                             [showXAxisLabel]="true"
+                             [showYAxisLabel]="true"
+                             [xAxisLabel]="'Дата'"
+                             [yAxisLabel]="'Значения'"
+                             [yScaleMin]="yScaleMin"
+                             [yScaleMax]="yScaleMax">
+      </ngx-charts-line-chart>
+    </div>
+
+    <div class="select-period">
+      <label for="weekPeriod">Выберите период (недели):</label>
+      <select id="weekPeriod" [(ngModel)]="weeksAgo" (change)="updatePeriod()">
+        <option *ngFor="let period of availablePeriods" [value]="period">{{ period }} недели</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="results">
+    <div class="result">
+      <span class="label">Среднее значение тела:</span>
+      <span class="value">{{ averageWeight | number:'1.1-1' }} кг</span>
+    </div>
+    <div class="result">
+      <span class="label">Итоговый результат:</span>
+      <span class="value">{{ weightDifference | number:'1.1-1' }} кг</span>
+    </div>
+  </div>
+</div>

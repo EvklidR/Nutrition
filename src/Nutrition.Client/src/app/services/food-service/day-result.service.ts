@@ -10,7 +10,7 @@ import { UpdateDayResultModel } from '../../models/food-service/Requests/update-
   providedIn: 'root'
 })
 export class DayResultService {
-  private readonly baseUrl = 'https://localhost/food_service/day_results';
+  private readonly baseUrl = 'https://localhost/food_service/DayResults';
 
   constructor(private http: HttpClient) { }
 
@@ -21,7 +21,7 @@ export class DayResultService {
   deleteDayResult(dayResultId: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${dayResultId}`);
   }
-
+    
   getOrCreateDayResult(profileId: string): Observable<DayResultModel> {
     return this.http.get<DayResultModel>(`${this.baseUrl}/by-profile/${profileId}`);
   }
@@ -31,10 +31,6 @@ export class DayResultService {
   }
 
   getDayResultsByPeriod(profileId: string, startDate: string, endDate: string): Observable<DayResultModel[]> {
-    let params = new HttpParams()
-      .set('startDate', startDate)
-      .set('endDate', endDate);
-
-    return this.http.get<DayResultModel[]>(`${this.baseUrl}/by-period/${profileId}`, { params });
+    return this.http.get<DayResultModel[]>(`${this.baseUrl}/by-period/${profileId}`, { params: { startDate, endDate } });
   }
 }

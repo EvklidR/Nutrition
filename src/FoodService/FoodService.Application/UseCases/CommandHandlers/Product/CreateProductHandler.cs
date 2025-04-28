@@ -25,7 +25,7 @@ namespace FoodService.Application.UseCases.CommandHandlers.Product
             CancellationToken cancellationToken)
         {
             var doesUserExist = await _userService.CheckUserByIdAsync(
-                request.CreateProductDTO.UserId);
+                (Guid)request.CreateProductDTO.UserId!);
 
             if (!doesUserExist)
             {

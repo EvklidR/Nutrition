@@ -1,4 +1,6 @@
+import { PostModel } from "./post.model";
+
 export interface PostsModel {
-  posts: PostsModel[];
+  posts: PostModel[];
   totalCount: number;
 }

@@ -1,0 +1,167 @@
+.modal-content {
+  background-color: #E7FFCA;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow: auto;
+  flex: 1;
+}
+
+.meal-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 5px;
+}
+
+  .meal-name input {
+    margin: 0 15px;
+    height: 20px;
+    border-radius: 5px;
+  }
+
+
+.modal-section {
+  flex: 1;
+  margin: 30px;
+}
+
+.item-list {
+  margin-bottom: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+  .item span {
+    flex: 1;
+  }
+
+  .item input {
+    width: 80px;
+    margin: 0 10px;
+    height: 20px;
+    border-radius: 5px;
+  }
+
+.dropdown {
+  margin-top: 10px;
+  background-color: #FFFFFF;
+  border: 1px solid #CCCCCC;
+  border-radius: 5px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+  .dropdown ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .dropdown li {
+    padding: 10px;
+    cursor: pointer;
+  }
+
+    .dropdown li:hover {
+      background-color: #F0F0F0;
+    }
+
+.modal-footer {
+  text-align: center;
+}
+
+
+.products-wrapper {
+  display: flex;
+  flex: 1;
+  background-color: snow;
+  border-radius: 10px;
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.add-meal-btn {
+  background-color: #D3D347;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid #909090;
+}
+
+.add-btn {
+  background-color: transparent;
+  border: 2px solid #28a745;
+  color: #28a745;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 0;
+}
+
+  .add-btn:hover {
+    background-color: #28a745;
+    color: white;
+  }
+
+.delete-btn {
+  background-color: transparent;
+  border: none;
+  color: black;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+  .delete-btn:hover {
+    color: #d9534f;
+  }
+
+.no-items {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 10px;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid black;
+}
+
+.header-name {
+  flex: 1;
+  text-align: left;
+}
+
+
+.header-quantity {
+  width: 80px;
+  text-align: center;
+}
+
+
+.section-header {
+  margin-top: 0;
+  font-size: 20px;
+}

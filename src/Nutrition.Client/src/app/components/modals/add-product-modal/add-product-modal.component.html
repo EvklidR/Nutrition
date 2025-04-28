@@ -1,0 +1,42 @@
+<div class="modal-content">
+  <h2>Добавить новый продукт</h2>
+
+  <div class="ingredient-search">
+    <label for="ingredient-search">Найти продукт:</label>
+    <div class="search-wrapper">
+      <input id="ingredient-search"
+              [(ngModel)]="productSearchTerm"
+              (input)="onSearchChange()"
+              type="text"
+              placeholder="Введите название ингредиента" />
+      <ul *ngIf="productsFromApi.length > 0" class="dropdown">
+        <li *ngFor="let product of productsFromApi" (click)="selectProduct(product)">
+          {{ product.name }}
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <hr class="separator" />
+
+  <div class="form-group">
+    <label for="name">Название:</label>
+    <input id="name" [(ngModel)]="name" type="text" placeholder="Название нового продукта" />
+  </div>
+  <div class="form-group">
+    <label for="proteins">Белки:</label>
+    <input id="proteins" [(ngModel)]="proteins" type="number" />
+  </div>
+  <div class="form-group">
+    <label for="fats">Жиры:</label>
+    <input id="fats" [(ngModel)]="fats" type="number" />
+  </div>
+  <div class="form-group">
+    <label for="carbohydrates">Углеводы:</label>
+    <input id="carbohydrates" [(ngModel)]="carbohydrates" type="number" />
+  </div>
+
+  <div class="modal-actions">
+    <button (click)="saveProduct()" [disabled]="isSaving">Сохранить</button>
+  </div>
+</div>

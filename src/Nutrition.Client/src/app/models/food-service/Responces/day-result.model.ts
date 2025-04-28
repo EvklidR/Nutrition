@@ -4,5 +4,6 @@ export interface DayResultModel {
   id: string;
   glassesOfWater: number;
   date: Date;
+  weight: number;
   meals: BriefMealModel[];
 }

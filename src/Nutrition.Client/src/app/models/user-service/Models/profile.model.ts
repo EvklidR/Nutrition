@@ -1,4 +1,6 @@
-export interface Profile {
+import { ActivityLevel } from "../Enums/activity-level.enum";
+
+export interface ProfileModel {
   id: string;
   userId: string;
   name: string;
@@ -6,7 +8,7 @@ export interface Profile {
   weight: number;
   birthday: Date;
   gender: string;
-  activityLevel: string;
+  activityLevel: ActivityLevel;
   desiredGlassesOfWater: number;
   thereIsMealPlan: boolean;
 }

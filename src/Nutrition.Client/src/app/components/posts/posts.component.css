@@ -1,0 +1,157 @@
+.posts-list {
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.switch-button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 200px;
+  transition: background-color 0.3s;
+  margin: 30px 30px 10px;
+  color: green;
+  background-color: transparent;
+  border: 2px solid #388E3C;
+}
+
+  .switch-button:hover {
+    background-color: green;
+    color: white;
+  }
+
+  .switch-button.active {
+    background-color: #388E3C;
+    color: white;
+  }
+
+    .switch-button.active:hover {
+      background-color: green;
+    }
+
+.filter-input {
+  display: block;
+  margin: 0 auto 20px;
+  padding: 10px;
+  font-size: 16px;
+  width: 300px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.loading, .no-data {
+  font-size: 18px;
+  text-align: center;
+  color: #555;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.pagination button {
+  margin: 0 10px;
+  padding: 5px 10px;
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+  .pagination button:hover:not([disabled]) {
+    background-color: #388E3C;
+  }
+
+  .pagination button:disabled {
+    background-color: #ccc;
+    cursor: default;
+  }
+
+.posts-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.post-card {
+  position: relative;
+  flex: 1 1 calc(300px - 20px);
+  min-width: 300px;
+  height: 250px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+  .post-card h3 {
+    margin: 10px;
+    font-size: 20px;
+    text-align: center;
+  }
+
+.post-text {
+  flex: 4;
+  overflow: hidden;
+  position: relative;
+  max-height: 140px;
+  padding: 0 20px 10px;
+}
+
+  .post-text::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
+  }
+
+.post-footer {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  flex: 1;
+}
+
+.icon-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.like .liked {
+  color: #d3d347;
+}
+
+.add-button {
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #d3d347;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+  .add-button:hover {
+    background-color: #c1c12f;
+  }

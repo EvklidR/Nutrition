@@ -1,0 +1,257 @@
+.meal-plan-card {
+  position: relative;
+  flex: 1;
+  background-color: #E7FFCA;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  text-align: center;
+  height: 250px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.category-header {
+    text-align: center;
+}
+
+.meal-plan-navigation {
+  display: flex;
+  align-items: center;
+}
+
+.meal-plan-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px;
+  text-align: center;
+  border-radius: 0 0 8px 8px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+  transition: height 0.3s ease;
+}
+
+  .meal-plan-overlay.expanded {
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+.meal-plan-title {
+  margin: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.meal-plan-description {
+  margin: 5px 0 0 0;
+  font-size: 14px;
+  color: #ccc;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 40px; 
+  transition: max-height 0.3s ease;
+}
+
+.meal-plan-overlay.expanded .meal-plan-description {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.meal-plan-overlay.expanded .meal-plan-description {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+  .meal-plan-overlay.expanded .meal-plan-description::-webkit-scrollbar {
+    display: none;
+  }
+
+
+.meal-plan-overlay.expanded::-webkit-scrollbar {
+  width: 8px;
+}
+
+.meal-plan-overlay.expanded::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.meal-plan-overlay.expanded::-webkit-scrollbar-thumb {
+  background: #32cd32;
+  border-radius: 4px;
+}
+
+  .meal-plan-overlay.expanded::-webkit-scrollbar-thumb:hover {
+    background: #28a828;
+  }
+
+.nav-arrow {
+  width: 50px;
+  height: 50px;
+  margin: 10px;
+  background-color: #32CD32;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 24px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  top: 50%;
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+  .nav-arrow:hover {
+    background-color: #2aa52a;
+  }
+
+  .nav-arrow:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+.meal-plan-row {
+  display: flex;
+  gap: 20px;
+  margin: 10px;
+  overflow-x: hidden;
+  flex: 1;
+}
+
+.select-button {
+  background-color: #32CD32;
+}
+
+.select-button, .cansel-button {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  max-width: 150px;
+  margin-top: 5px;
+}
+
+  .select-button:hover {
+    background-color: #2aa52a;
+  }
+
+  .cansel-button:hover {
+    background-color: #282828;
+    color: white;
+  }
+
+.category-container::before {
+  content: '';
+  position: absolute;
+  top: -30px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(to right, rgba(61, 61, 61, 0) 0%, #3D3D3D 50%, rgba(61, 61, 61, 0) 100%);
+}
+.category-container {
+  position: relative;
+  margin-bottom: 50px;
+}
+.current-plan-info {
+  background-color: #e7ffca;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0 0px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-height: 300px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  margin: 20px 20px 0px;
+}
+
+  .current-plan-info h2 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .current-plan-info span {
+    font-size: 18px;
+    color: #32cd32;
+    margin: 5px 0;
+  }
+
+  .current-plan-info p {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
+  }
+
+.header-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 50px;
+}
+
+.switch-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  width: 200px;
+  margin: 50px 30px 10px;
+}
+
+  .switch-button:hover {
+    background-color: #45a049;
+  }
+
+.second-btn {
+  color: green;
+  background-color: transparent;
+  border: 2px solid green;
+}
+
+  .second-btn:hover {
+    color: white;
+  }
+
+.add-meal-plan {
+  display: flex;
+  margin-top: 20px;
+  margin: 0 0px 60px 0px;
+  padding-top: 20px;
+  justify-content: center;
+}
+
+  .add-meal-plan button {
+    padding: 10px 20px;
+    background-color: #D3D347;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border: none;
+  }
+
+    .add-meal-plan button:hover {
+      background-color: #E0E080;
+    }

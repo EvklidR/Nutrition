@@ -46,7 +46,7 @@ namespace MealPlanService.API.Controllers
         [ServiceFilter(typeof(UserIdFilter))]
         [Authorize]
         [ProducesResponseType(typeof(IEnumerable<ProfileMealPlan>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<ProfileMealPlan>>> GetAllProfilePlans(string profileId)
+        public async Task<ActionResult<IEnumerable<ProfileMealPlanWithDetailsDto>>> GetAllProfilePlans(string profileId)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
 

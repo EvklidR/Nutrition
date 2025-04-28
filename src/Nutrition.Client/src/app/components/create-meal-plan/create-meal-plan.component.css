@@ -1,0 +1,129 @@
+.create-meal-plan {
+  max-width: 600px;
+  margin: 40px auto;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.image-upload-box {
+  width: 200px;
+  height: 200px;
+  background-color: #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  cursor: pointer;
+  background-size: cover;
+  background-position: center;
+  margin: auto;
+}
+
+.plus-sign {
+  font-size: 50px;
+  color: white;
+}
+
+.image-upload-box:hover {
+  opacity: 0.8;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #D3D347;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+  button:hover {
+    background-color: #E0E080;
+  }
+
+.nutrient-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+  .nutrient-wrapper label, .nutrient-wrapper div {
+      flex: 1;
+  }
+
+  .nutrient-wrapper select {
+      flex: 2;
+  }
+
+.day {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  padding: 20px;
+  position: relative;
+}
+
+.form-group label {
+  font-size: 18px;
+}
+
+.day-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.delete-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 18px;
+  color: #d9534f;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  right: 0;
+  margin: 5px 10px;
+  padding: 5px 10px;
+}
+
+  .delete-btn:hover {
+    color: #b52b24;
+    background-color: #c0c0c0;
+  }
+
+.add-day-btn {
+  border-radius: 10px;
+  border-color: #3D8E31;
+  background-color: #E7FFCA;
+  color: #3D8E31;
+  font-size: 25px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+  .add-day-btn:hover {
+    background-color: #3D8E31;
+    color: white;
+  }
+
+.add-plan-btn {
+  margin: 10px auto;
+  display: block;
+}

@@ -1,0 +1,69 @@
+.create-profile {
+  max-width: 400px;
+  margin: 50px auto;
+  text-align: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input, select {
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 14px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 10px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+  button[type="submit"] {
+    background-color: #2ecc71;
+    color: white;
+  }
+
+    button[type="submit"]:hover {
+      background-color: #27ae60;
+    }
+
+  button[type="button"] {
+    background-color: #e74c3c;
+    color: white;
+  }
+
+    button[type="button"]:hover {
+      background-color: #c0392b;
+    }
+
+.messages {
+  margin-bottom: 15px;
+}
+
+.error-message {
+  color: red;
+}
+
+.success-message {
+  color: green;
+}

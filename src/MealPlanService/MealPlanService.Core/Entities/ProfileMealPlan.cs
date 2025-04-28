@@ -1,5 +1,4 @@
-﻿using MealPlanService.Core.Enums;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace MealPlanService.Core.Entities

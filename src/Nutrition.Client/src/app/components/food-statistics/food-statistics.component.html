@@ -1,0 +1,69 @@
+<div class="page-container">
+
+  <div class="header-buttons">
+    <button class="switch-button body-btn" (click)="navigateToBodyStatistics()">Данные тела</button>
+    <button class="switch-button">Данные о пище</button>
+  </div>
+
+
+  <div class="chart-wrapper">
+
+    <div class="chart-header">
+      <div class="choosing-buttons">
+        <button class="choose-button" [class.active]="viewMode === 'calories'" (click)="switchViewMode('calories')">Калории</button>
+        <button class="choose-button" [class.active]="viewMode === 'macros'" (click)="switchViewMode('macros')">БЖУ</button>
+      </div>
+      <div class="select-period">
+        <label for="weekPeriod">Выберите период (недели):</label>
+        <select id="weekPeriod" [(ngModel)]="weeksAgo" (change)="updatePeriod()">
+          <option *ngFor="let period of availablePeriods" [value]="period">{{ period }} недели</option>
+        </select>
+      </div>
+    </div>
+
+    <div *ngIf="chartData.length > 0">
+      <ngx-charts-line-chart [view]="[700, 400]"
+                             [scheme]="colorScheme"
+                             [results]="chartData"
+                             [xAxis]="true"
+                             [yAxis]="true"
+                             [autoScale]="false"
+                             [legend]="true"
+                             [showXAxisLabel]="true"
+                             [showYAxisLabel]="true"
+                             [xAxisLabel]="'Дата'"
+                             [yAxisLabel]="viewMode === 'calories' ? 'Калории (ккал)' : 'Граммы'"
+                             [yScaleMin]="yScaleMin">
+      </ngx-charts-line-chart>
+    </div>
+
+
+  </div>
+
+  <div class="table-wrapper">
+    <h3>Топ-15 продуктов за период</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Продукт</th>
+          <th>Вес (г)</th>
+          <th>Калории (ккал)</th>
+          <th>Белки (г)</th>
+          <th>Жиры (г)</th>
+          <th>Углеводы (г)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let food of topFoods">
+          <td>{{ food.name }}</td>
+          <td>{{ food.weight | number:'1.0-0' }}</td>
+          <td>{{ food.calories | number:'1.0-0' }}</td>
+          <td>{{ food.proteins | number:'1.0-1' }}</td>
+          <td>{{ food.fats | number:'1.0-1' }}</td>
+          <td>{{ food.carbs | number:'1.0-1' }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

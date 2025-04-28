@@ -15,11 +15,7 @@ export class MealService {
   constructor(private http: HttpClient) { }
 
   getMealById(mealId: string, dayId: string): Observable<FullMealModel> {
-    const params = new HttpParams()
-      .set('mealId', mealId)
-      .set('dayId', dayId);
-
-    return this.http.get<FullMealModel>(this.baseUrl, { params });
+    return this.http.get<FullMealModel>(this.baseUrl, { params: { mealId, dayId } });
   }
 
   createMeal(createMealDTO: CreateMealModel): Observable<FullMealModel> {
@@ -31,10 +27,6 @@ export class MealService {
   }
 
   deleteMeal(mealId: string, dayId: string): Observable<void> {
-    const params = new HttpParams()
-      .set('mealId', mealId)
-      .set('dayId', dayId);
-
-    return this.http.delete<void>(this.baseUrl, { params });
+    return this.http.delete<void>(this.baseUrl, { params: { mealId, dayId } });
   }
 }

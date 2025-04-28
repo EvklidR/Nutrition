@@ -1,6 +1,6 @@
 export interface DailyNeedsResponse {
   calories: number;
-  protein: number;
+  proteins: number;
   fats: number;
   carbohydrates: number;
 }

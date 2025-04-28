@@ -1,24 +1,25 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+
 import { CreateProfileMealPlanModel } from '../../models/meal-plan-service/Requests/create-profile-meal-plan.model';
-import { ProfileMealPlanModel } from '../../models/meal-plan-service/Responces/profile-meal-plan.model';
+import { ProfileMealPlanWithDetailsModel } from '../../models/meal-plan-service/Responces/profile-meal-plan-with-details.model';
 import { RecommendationModel } from '../../models/meal-plan-service/Responces/recommendation.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProfilePlanService {
-  private readonly baseUrl: string = 'https://localhost/meal_plan_service/profileplan';
+  private readonly baseUrl: string = 'https://localhost/meal_plan_service/ProfilePlan';
 
   constructor(private http: HttpClient) { }
 
-  createProfilePlan(profilePlan: CreateProfileMealPlanModel): Observable<ProfileMealPlanModel> {
-    return this.http.post<ProfileMealPlanModel>(`${this.baseUrl}`, profilePlan);
+  createProfilePlan(profilePlan: CreateProfileMealPlanModel): Observable<ProfileMealPlanWithDetailsModel> {
+    return this.http.post<ProfileMealPlanWithDetailsModel>(`${this.baseUrl}`, profilePlan);
   }
 
-  getProfilePlanHistory(profileId: string): Observable<ProfileMealPlanModel[]> {
-    return this.http.get<ProfileMealPlanModel[]>(`${this.baseUrl}/history`, {
+  getProfilePlanHistory(profileId: string): Observable<ProfileMealPlanWithDetailsModel[]> {
+    return this.http.get<ProfileMealPlanWithDetailsModel[]>(`${this.baseUrl}/history`, {
       params: { profileId }
     });
   }

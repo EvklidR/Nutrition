@@ -1,0 +1,30 @@
+<div class="post-details" *ngIf="post">
+  <h1 class="post-title">{{ post.title }}</h1>
+
+  <div class="post-text">
+    {{ post.text }}
+  </div>
+
+  <div class="post-footer">
+    <div class="icon-group like" (click)="likePost()">
+      <fa-icon [icon]="post.isLiked ? solidHeart : regularHeart" [ngClass]="{ liked: post.isLiked }"></fa-icon>
+      <span>{{ post.amountOfLikes }}</span>
+    </div>
+    <div class="icon-group">
+      <fa-icon [icon]="faComment"></fa-icon>
+      <span>{{ post.amountOfComments }}</span>
+    </div>
+  </div>
+
+  <div class="add-comment">
+    <input [formControl]="commentControl" placeholder="Написать комментарий..." />
+    <button (click)="sendComment()">Отправить</button>
+  </div>
+
+  <div class="comments-list">
+    <div class="comment" *ngFor="let comment of comments">
+      {{ comment.text }}
+    </div>
+    <button *ngIf="hasMoreComments" (click)="loadComments()" class="load-more">Загрузить ещё</button>
+  </div>
+</div>

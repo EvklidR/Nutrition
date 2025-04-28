@@ -1,13 +1,13 @@
 ﻿using FoodService.Application.DTOs.Meal;
 
-namespace FoodService.Application.DTOs.DayResult
-{
-    public class DayResultDTO
-    {
-        public Guid Id { get; set; }
-        public int GlassesOfWater { get; set; }
-        public DateOnly Date { get; set; } 
+namespace FoodService.Application.DTOs.DayResult;
 
-        public List<BriefMealDTO> Meals { get; set; } = [];
-    }
+public class DayResultDTO
+{
+    public Guid Id { get; set; }
+    public int GlassesOfWater { get; set; }
+    public DateOnly Date { get; set; } 
+    public double? Weight { get; set; }
+
+    public List<BriefMealDTO> Meals { get; set; } = [];
 }

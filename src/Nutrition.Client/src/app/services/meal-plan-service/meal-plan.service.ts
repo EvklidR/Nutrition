@@ -11,7 +11,7 @@ import { MealPlanType } from '../../models/meal-plan-service/Enums/meal-plan-typ
   providedIn: 'root'
 })
 export class MealPlanService {
-  private readonly baseUrl: string = 'https://localhost/meal_plan_service/mealplan';
+  private readonly baseUrl: string = 'https://localhost/meal_plan_service/MealPlan';
 
   constructor(private http: HttpClient) { }
 

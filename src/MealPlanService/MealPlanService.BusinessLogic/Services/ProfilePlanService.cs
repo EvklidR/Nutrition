@@ -83,16 +83,44 @@ namespace MealPlanService.BusinessLogic.Services
             }
         }
 
-        public async Task<List<ProfileMealPlan>?> GetProfilePlansAsync(string userId, string profileId)
+        public async Task<List<ProfileMealPlanWithDetailsDto>> GetProfilePlansAsync(string userId, string profileId)
         {
-            if (await _userService.CheckProfileBelonging(userId, profileId))
-            {
-                return await _usersMealPlanRepository.GetAllAsync(profileId);
-            }
-            else
+            if (!await _userService.CheckProfileBelonging(userId, profileId))
             {
                 throw new BadRequest("You don't have access to this profile");
             }
+
+            var profilePlans = await _usersMealPlanRepository.GetAllAsync(profileId);
+
+            if (profilePlans == null || !profilePlans.Any())
+            {
+                return new List<ProfileMealPlanWithDetailsDto>();
+            }
+
+            var mealPlanIds = profilePlans.Select(p => p.MealPlanId).Distinct().ToList();
+
+            var mealPlans = await _mealPlanRepository.GetManyByIdsAsync(mealPlanIds);
+
+            var mealPlanMap = mealPlans.ToDictionary(mp => mp.Id);
+
+            var result = profilePlans.Select(p =>
+            {
+                var plan = mealPlanMap.GetValueOrDefault(p.MealPlanId);
+
+                return new ProfileMealPlanWithDetailsDto
+                {
+                    Id = p.Id,
+                    ProfileId = p.ProfileId,
+                    MealPlanId = p.MealPlanId,
+                    IsActive = p.IsActive,
+                    StartDate = p.StartDate,
+                    EndDate = p.EndDate,
+                    MealPlanName = plan?.Name ?? string.Empty,
+                    MealPlanDescription = plan?.Description ?? string.Empty
+                };
+            }).ToList();
+
+            return result;
         }
 
         public async Task DeleteProfilePlansAsync(string profileId)

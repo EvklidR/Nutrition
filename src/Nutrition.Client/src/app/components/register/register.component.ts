@@ -13,7 +13,6 @@ import { NgForm, NgModel, FormsModule } from '@angular/forms'
     NgClass,
     FormsModule
   ],
-  providers: [UserService],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css']
 })

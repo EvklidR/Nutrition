@@ -12,7 +12,6 @@ import { NgForm, NgModel, FormsModule } from "@angular/forms"
     NgClass,
     FormsModule
   ],
-  providers: [UserService],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -42,7 +41,7 @@ export class LoginComponent {
 
     this.userService.login({ email: this.username, password: this.password }).subscribe({
       next: () => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/home']);
       },
       error: () => {
         this.errorMessage = 'Неверное имя пользователя или пароль!';

@@ -2,7 +2,7 @@ import { Gender } from "../Enums/gender.enum"
 import { ActivityLevel } from "../Enums/activity-level.enum"
 
 export interface CreateProfileModel {
-  userId: string;
+  userId: string | null;
   name: string;
   height: number;
   weight: number;

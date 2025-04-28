@@ -1,0 +1,58 @@
+<div class="create-meal-plan">
+  <h1>Создание плана питания</h1>
+
+  <form (ngSubmit)="onSubmit()" #mealPlanForm="ngForm">
+    <div class="form-group">
+      <label for="name">Название плана</label>
+      <input type="text" id="name" [(ngModel)]="createMealPlan.name" name="name" required />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Описание</label>
+      <textarea id="description" [(ngModel)]="createMealPlan.description" name="description" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="type">Тип плана</label>
+      <select id="type" [(ngModel)]="createMealPlan.type" name="type" required>
+        <option [ngValue]="mealPlanType.WeightLoss">Потеря веса</option>
+        <option [ngValue]="mealPlanType.WeightGain">Набор веса</option>
+        <option [ngValue]="mealPlanType.MuscleGain">Набор мышечной массы</option>
+        <option [ngValue]="mealPlanType.Maintenance">Поддержание</option>
+      </select>
+    </div>
+
+    <div formArrayName="days" *ngFor="let day of createMealPlan.days; let i = index">
+      <div class="form-group day">
+        <div class="day-title">
+          День {{ day.dayNumber }}
+        </div>
+        <div>
+          <label>Процент калорийности</label>
+          <input type="number" [(ngModel)]="day.caloriePercentage" name="caloriePercentage-{{ i }}" required />
+        </div>
+        <div formArrayName="nutrientsOfDay" *ngFor="let nutrient of day.nutrientsOfDay; let j = index">
+          <div class="nutrient-wrapper">
+            <label>{{ nutrientTypes[j] }}</label>
+            <select [(ngModel)]="nutrient.calculationType" name="calculationType-{{ i }}-{{ j }}">
+              <option [ngValue]="calculationTypes.Percent">Процент (от нормы каллорий, в долях единиц)</option>
+              <option [ngValue]="calculationTypes.Fixed">Фиксированное значение (грамм)</option>
+              <option [ngValue]="calculationTypes.PerKg">На килограмм массы (множитель на вес)</option>
+              <option [ngValue]="calculationTypes.ByDefault">Оставшееся</option>
+            </select>
+            <div *ngIf="nutrient.calculationType != calculationTypes.ByDefault">
+              <input type="number" [(ngModel)]="nutrient.value" name="nutrient-{{ i }}-{{ j }}" required />
+            </div>
+            <div *ngIf="nutrient.calculationType == calculationTypes.ByDefault">
+              <input type="number" disabled [(ngModel)]="nutrient.value" name="nutrient-{{ i }}-{{ j }}" />
+            </div>
+          </div>
+        </div>
+        <button type="button" class="delete-btn" (click)="deleteDay(i)" *ngIf="createMealPlan.days.length > 1">&#10006;</button>
+      </div>
+    </div>
+
+    <button type="button" class="add-day-btn" (click)="addDay()">+</button>
+    <button type="submit" class="add-plan-btn" [disabled]="!mealPlanForm.form.valid">Создать план</button>
+  </form>
+</div>

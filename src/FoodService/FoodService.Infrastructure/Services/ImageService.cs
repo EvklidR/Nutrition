@@ -22,7 +22,7 @@ namespace FoodService.Infrastructure.Services
 
             if (isFileValid) 
             {
-                var extention = file.FileName.Split('.').Last();
+                var extention = file!.FileName.Split('.').Last();
 
                 var dropboxPath = $"/Dishes/{Guid.NewGuid()}.{extention}";
 
@@ -72,7 +72,7 @@ namespace FoodService.Infrastructure.Services
 
                 if (response.isFound)
                 {
-                    return new MemoryStream(response.data);
+                    return new MemoryStream(response.data!);
                 }
 
                 var downloadResponse = await _dropboxClient.Files.DownloadAsync(dropboxPath);

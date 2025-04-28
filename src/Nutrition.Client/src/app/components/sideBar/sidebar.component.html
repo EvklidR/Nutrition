@@ -1,0 +1,44 @@
+<div class="layout-container">
+  <!-- Сайдбар -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h2>Nutrition Balance</h2>
+
+      <div class="current-user" (click)="toggleProfileList($event)">
+        <p class="user-name">
+          {{ (currentUser$ | async)?.name || 'Пользователь не выбран' }}
+        </p>
+        <div class="profile-list" *ngIf="showProfileList">
+          <ul>
+            <li *ngFor="let profile of (profiles$ | async)" (click)="selectProfile(profile, $event)">
+              {{ profile.name }}
+            </li>
+            <li (click)="createProfile()">+ Создать новый профиль</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-links">
+      <ul>
+        <li><button routerLink="/home">Сегодня</button></li>
+        <li><button routerLink="/products">Еда</button></li>
+        <li><button routerLink="/posts">Посты</button></li>
+        <li><button routerLink="/statistics">Статистика</button></li>
+        <li><button routerLink="/profile-info">Данные тела</button></li>
+        <li><button routerLink="/meal-plans">План питания</button></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-footer">
+      <button (click)="logout()">
+        Выйти <i class="fa fa-sign-out-alt"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Контент -->
+  <div class="content-area">
+    <router-outlet></router-outlet>
+  </div>
+</div>

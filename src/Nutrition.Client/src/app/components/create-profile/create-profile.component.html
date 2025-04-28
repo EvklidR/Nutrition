@@ -1,0 +1,51 @@
+<div class="create-profile">
+  <h2>Создание нового профиля</h2>
+
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <form (ngSubmit)="onSubmit()">
+    <div>
+      <label for="profileName">Имя профиля:</label>
+      <input type="text" id="profileName" [(ngModel)]="profileName" name="profileName" required>
+    </div>
+
+    <div>
+      <label for="weight">Вес:</label>
+      <input type="number" id="weight" [(ngModel)]="weight" name="weight" required>
+    </div>
+
+    <div>
+      <label for="height">Рост:</label>
+      <input type="number" id="height" [(ngModel)]="height" name="height" required>
+    </div>
+
+    <div>
+      <label for="birthday">Дата рождения:</label>
+      <input type="date" id="birthday" [(ngModel)]="birthday" name="birthday" required>
+    </div>
+
+    <div>
+      <label for="gender">Пол:</label>
+      <select id="gender" [(ngModel)]="gender" name="gender">
+        <option [value]="genderEnum.Male">Мужской</option>
+        <option [value]="genderEnum.Female">Женский</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="activityLevel">Уровень активности:</label>
+      <select id="activityLevel" [(ngModel)]="activityLevel" name="activityLevel">
+        <option [value]="activityLevelEnum.Sedentary">Сидячий</option>
+        <option [value]="activityLevelEnum.Low">Низкий</option>
+        <option [value]="activityLevelEnum.Medium">Средний</option>
+        <option [value]="activityLevelEnum.High">Высокий</option>
+        <option [value]="activityLevelEnum.VeryHigh">Очень высокий</option>
+      </select>
+    </div>
+
+    <div>
+      <button type="submit">Создать профиль</button>
+      <button type="button" (click)="cancel()">Отмена</button>
+    </div>
+  </form>
+</div>

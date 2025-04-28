@@ -44,5 +44,26 @@ namespace MealPlanService.Infrastructure.Repositories
             return (mealPlans, totalCount);
         }
 
+        public async Task<List<MealPlanDTO>> GetManyByIdsAsync(List<string> ids)
+        {
+            if (ids == null || !ids.Any())
+            {
+                return new List<MealPlanDTO>();
+            }
+
+            var filter = Builders<MealPlan>.Filter.In(mp => mp.Id, ids);
+
+            return await _collection
+                .Find(filter)
+                .Project(mp => new MealPlanDTO
+                {
+                    Id = mp.Id,
+                    Name = mp.Name,
+                    Description = mp.Description,
+                    Type = mp.Type
+                })
+                .ToListAsync();
+        }
+
     }
 }
