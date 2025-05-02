@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace UserService.API.Filters
 {
@@ -8,8 +6,13 @@ namespace UserService.API.Filters
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var scheme = context.HttpContext.Request.Scheme;
-            var host = context.HttpContext.Request.Host;
+            var request = context.HttpContext.Request;
+
+            var forwardedProto = request.Headers["X-Forwarded-Proto"].FirstOrDefault();
+            var forwardedHost = request.Headers["X-Forwarded-Host"].FirstOrDefault();
+
+            var scheme = forwardedProto ?? request.Scheme;
+            var host = forwardedHost ?? request.Host.ToString();
 
             var requestOrigin = $"{scheme}://{host}";
 

@@ -34,7 +34,7 @@ namespace PostService.Infrastructure.Repositories
                 return null;
             }
 
-            var comments = post.Comments.GetPaginated(page, size);
+            var comments = post.Comments.OrderByDescending(comment => comment.CreationDate).GetPaginated(page, size);
 
             return comments;
         }

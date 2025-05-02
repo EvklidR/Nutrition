@@ -1,51 +1,69 @@
 <div class="create-profile">
   <h2>Создание нового профиля</h2>
 
-  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
-
-  <form (ngSubmit)="onSubmit()">
+  <form #profileForm="ngForm" (ngSubmit)="onSubmit(profileForm)">
     <div>
       <label for="profileName">Имя профиля:</label>
-      <input type="text" id="profileName" [(ngModel)]="profileName" name="profileName" required>
+      <input type="text" id="profileName" [(ngModel)]="profileName" name="profileName" required #profileNameRef="ngModel">
+      <div class="error" *ngIf="profileNameRef.invalid && (profileNameRef.touched || profileForm.submitted)">
+        Имя профиля обязательно
+      </div>
     </div>
 
     <div>
       <label for="weight">Вес:</label>
-      <input type="number" id="weight" [(ngModel)]="weight" name="weight" required>
+      <input type="number" id="weight" [(ngModel)]="weight" name="weight" required min="1" #weightRef="ngModel">
+      <div class="error" *ngIf="weightRef.invalid && (weightRef.touched || profileForm.submitted)">
+        Укажите корректный вес
+      </div>
     </div>
 
     <div>
       <label for="height">Рост:</label>
-      <input type="number" id="height" [(ngModel)]="height" name="height" required>
+      <input type="number" id="height" [(ngModel)]="height" name="height" required min="1" #heightRef="ngModel">
+      <div class="error" *ngIf="heightRef.invalid && (heightRef.touched || profileForm.submitted)">
+        Укажите корректный рост
+      </div>
     </div>
 
     <div>
       <label for="birthday">Дата рождения:</label>
-      <input type="date" id="birthday" [(ngModel)]="birthday" name="birthday" required>
+      <input type="date" id="birthday" [(ngModel)]="birthday" name="birthday" required #birthdayRef="ngModel">
+      <div class="error" *ngIf="birthdayRef.invalid && (birthdayRef.touched || profileForm.submitted)">
+        Дата рождения обязательна
+      </div>
     </div>
 
     <div>
       <label for="gender">Пол:</label>
-      <select id="gender" [(ngModel)]="gender" name="gender">
+      <select id="gender" [(ngModel)]="gender" name="gender" required #genderRef="ngModel">
         <option [value]="genderEnum.Male">Мужской</option>
         <option [value]="genderEnum.Female">Женский</option>
       </select>
+      <div class="error" *ngIf="genderRef.invalid && (genderRef.touched || profileForm.submitted)">
+        Выберите пол
+      </div>
     </div>
 
     <div>
       <label for="activityLevel">Уровень активности:</label>
-      <select id="activityLevel" [(ngModel)]="activityLevel" name="activityLevel">
+      <select id="activityLevel" [(ngModel)]="activityLevel" name="activityLevel" required #activityRef="ngModel">
         <option [value]="activityLevelEnum.Sedentary">Сидячий</option>
         <option [value]="activityLevelEnum.Low">Низкий</option>
         <option [value]="activityLevelEnum.Medium">Средний</option>
         <option [value]="activityLevelEnum.High">Высокий</option>
         <option [value]="activityLevelEnum.VeryHigh">Очень высокий</option>
       </select>
+      <div class="error" *ngIf="activityRef.invalid && (activityRef.touched || profileForm.submitted)">
+        Выберите уровень активности
+      </div>
     </div>
 
-    <div>
-      <button type="submit">Создать профиль</button>
+    <div class="button-group">
+      <button type="submit" [class.deactive-button]="profileForm.invalid">Создать профиль</button>
       <button type="button" (click)="cancel()">Отмена</button>
     </div>
   </form>
+
+
 </div>

@@ -48,7 +48,9 @@
          [class.bg-img]="dishImages[dish.id] != null">
       <div class="dish-header">
         <h3>{{ dish.name }}</h3>
-        <button class="delete-button" (click)="deleteDish(dish.id); $event.stopPropagation()">🗑️</button>
+        <div class="actions">
+          <fa-icon [icon]="faTrash" (click)="openDeleteConfirmation(dish.id, $event)" class="delete-icon"></fa-icon>
+        </div>
       </div>
       <p>Калории: {{ dish.calories | number:'1.1-1' }} ккал</p>
       <p>Белки: {{ dish.proteins | number:'1.1-1' }} г</p>

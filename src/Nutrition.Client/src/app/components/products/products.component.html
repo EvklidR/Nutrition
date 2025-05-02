@@ -42,7 +42,10 @@
     <div class="ingredient-card" *ngFor="let product of products">
       <div class="ingredient-header">
         <h3>{{ product.name }}</h3>
-        <button class="delete-button" (click)="deleteProduct(product.id)">🗑️</button>
+        <div class="actions">
+          <fa-icon [icon]="faEdit" (click)="openEditProductModal(product)" class="edit-icon"></fa-icon>
+          <fa-icon [icon]="faTrash" (click)="openDeleteConfirmation(product.id)" class="delete-icon"></fa-icon>
+        </div>
       </div>
       <p>Калории: {{ product.calories | number:'1.1-1' }} ккал</p>
       <p>Белки: {{ product.proteins | number:'1.1-1' }} г</p>

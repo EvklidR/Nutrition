@@ -1,6 +1,6 @@
 .create-profile {
   max-width: 400px;
-  margin: 50px auto;
+  margin: 40px auto;
   text-align: center;
   background-color: white;
   padding: 20px;
@@ -13,13 +13,19 @@ form {
   flex-direction: column;
 }
 
+  form > div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    text-align: left;
+  }
+
 label {
   margin-bottom: 5px;
   font-weight: bold;
 }
 
 input, select {
-  margin-bottom: 15px;
   padding: 10px;
   font-size: 14px;
   width: 100%;
@@ -28,9 +34,22 @@ input, select {
   box-sizing: border-box;
 }
 
+.error {
+  color: red;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  flex-direction: row !important;
+}
+
 button {
-  padding: 10px;
-  margin: 5px;
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -39,31 +58,23 @@ button {
 }
 
   button[type="submit"] {
-    background-color: #2ecc71;
+    background-color: #35792a;
     color: white;
   }
 
     button[type="submit"]:hover {
-      background-color: #27ae60;
+      background-color: #246819;
     }
 
   button[type="button"] {
-    background-color: #e74c3c;
-    color: white;
+    background-color: #ddd;
+    border: 1px solid #aaa;
   }
 
     button[type="button"]:hover {
-      background-color: #c0392b;
+      background-color: #aaa;
     }
 
-.messages {
-  margin-bottom: 15px;
-}
-
-.error-message {
-  color: red;
-}
-
-.success-message {
-  color: green;
+.deactive-button {
+  background-color: rgba(53, 121, 42, 0.7) !important;
 }

@@ -63,9 +63,9 @@
     <ul *ngIf="dayResult.meals.length > 0">
       <li *ngFor="let meal of dayResult.meals">
         <div class="meal-container" (click)="openMealDetails(meal)">
-          <button class="delete-meal-btn" (click)="removeMeal(meal.id, $event)">
-            <fa-icon [icon]="faTrash"></fa-icon>
-          </button>
+          <div class="actions">
+            <fa-icon [icon]="faTrash" (click)="openDeleteConfirmation(meal.id, $event)" class="delete-icon"></fa-icon>
+          </div>
           <div class="meal-name">{{ meal.name }}</div>
           <div class="meal-nutrients">
             <p>Калории: {{ meal.totalCalories | number:'1.0-0' }}</p>

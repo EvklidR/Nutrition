@@ -18,6 +18,7 @@ import { UpdateProfileModel } from '../../models/user-service/Requests/update-pr
 import { UpdateDayResultModel } from '../../models/food-service/Requests/update-day-result.model';
 import { CreateMealComponent } from '../modals/create-meal-modal/create-meal.component';
 import { BriefMealModel } from '../../models/food-service/Responces/brief-meal.model';
+import { ConfirmDialogComponent } from '../modals/confirm-dialog-modal/confirm-dialog.component';
 
 
 @Component({
@@ -174,8 +175,7 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  removeMeal(mealId: string, event: Event): void {
-    event.stopPropagation();
+  deleteMeal(mealId: string): void {
     if (this.dayResult) {
       this.mealService.deleteMeal(mealId, this.dayResult.id).subscribe({
         next: () => {
@@ -246,6 +246,23 @@ export class HomeComponent implements OnInit {
       error: (err) => {
         console.error('Error adding glass of water:', err);
       },
+    });
+  }
+
+  openDeleteConfirmation(mealId: string, event: Event): void {
+    event.stopPropagation()
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Удаление приема пищи',
+        message: 'Вы уверены, что хотите удалить этот прием пищи?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteMeal(mealId);
+      }
     });
   }
 }

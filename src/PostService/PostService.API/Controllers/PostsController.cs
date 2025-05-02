@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using PostService.API.Filters;
 using PostService.BusinessLogic.DTOs.Post;
 using PostService.BusinessLogic.Models;
-using PostService.Infrastructure.Services.Interfaces;
 
 namespace PostService.API.Controllers
 {
@@ -36,6 +35,23 @@ namespace PostService.API.Controllers
             var userId = (string)HttpContext.Items["UserId"]!;
 
             var response = await _postService.GetPostsAsync(words, page, size, userId);
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Retrieves a post based on post id.
+        /// </summary>
+        /// <param name="postId">Post id.</param>
+        /// <returns>A list of posts and the total count.</returns>
+        [HttpGet("{postId}")]
+        [ServiceFilter(typeof(UserIdFilter))]
+        [ProducesResponseType(typeof(PostDTO), StatusCodes.Status200OK)]
+        public async Task<ActionResult<PostDTO>> GetPost(string postId)
+        {
+            var userId = (string)HttpContext.Items["UserId"]!;
+
+            var response = await _postService.GetPostAsync(postId, userId);
 
             return Ok(response);
         }

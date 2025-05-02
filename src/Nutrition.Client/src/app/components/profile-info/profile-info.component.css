@@ -90,3 +90,47 @@ select {
     .update-button button:hover {
       background-color: #c1c12f;
     }
+
+.profile-container {
+  max-width: 700px;
+  margin: auto;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+.header {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 30px;
+}
+
+.card {
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+  .card h2 {
+    margin-bottom: 15px;
+  }
+
+.edit-section, .delete-section {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.delete-button {
+  background-color: #e74c3c;
+  color: white;
+  padding: 12px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+  .delete-button:hover {
+    background-color: #c0392b;
+  }

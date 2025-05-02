@@ -100,7 +100,7 @@ namespace PostService.API.Controllers
         /// Likes a comment by its ID.
         /// </summary>
         /// <param name="commentId">The ID of the comment to like.</param>
-        [HttpPost("{postId}/like")]
+        [HttpPost("{commentId}/like")]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

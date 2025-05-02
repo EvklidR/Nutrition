@@ -8,4 +8,5 @@ export interface PostModel {
   amountOfLikes: number;
   amountOfComments: number;
   isLiked: boolean;
+  isOwner: boolean;
 }

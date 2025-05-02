@@ -7,4 +7,8 @@
     <!-- Folder where production build objects will be placed -->
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist\Nutrition.Client\browser\</BuildOutputFolder>
   </PropertyGroup>
+  <ItemGroup>
+    <None Remove="src\app\components\modals\NewFolder\**" />
+    <TypeScriptConfiguration Remove="src\app\components\modals\NewFolder\**" />
+  </ItemGroup>
 </Project>

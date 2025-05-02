@@ -9,6 +9,10 @@ import { FormsModule } from '@angular/forms';
 import { UpdateProfileModel } from '../../models/user-service/Requests/update-profile.model';
 import { DayResultService } from '../../services/food-service/day-result.service';
 import { UpdateDayResultModel } from '../../models/food-service/Requests/update-day-result.model';
+import { Gender } from '../../models/user-service/Enums/gender.enum';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../modals/confirm-dialog-modal/confirm-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-profile-info',
@@ -41,7 +45,9 @@ export class ProfileInfoComponent implements OnInit {
   constructor(
     private router: Router,
     private profileService: ProfileService,
-    private dayResultService: DayResultService
+    private dayResultService: DayResultService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -76,7 +82,7 @@ export class ProfileInfoComponent implements OnInit {
 
       this.profileService.updateProfile(updatedProfile).subscribe((updatedProfile) => {
         console.log("Обновлено");
-
+        this.sendPopUpNotification("Информация успешно обновлена!")
         const dayResult = this.dayResultService.getOrCreateDayResult(this.profile!.id).subscribe({
           next: (currentDayResult) => {
             const updateDayResult: UpdateDayResultModel = {
@@ -107,5 +113,45 @@ export class ProfileInfoComponent implements OnInit {
       case ActivityLevel.VeryHigh: return 'Очень высокий';
       default: return '';
     }
+  }
+
+  getGenderString(value: Gender): string {
+    switch (value) {
+      case Gender.Male: return 'Мужской';
+      case Gender.Female: return 'Женский';
+      default: return '';
+    }
+  }
+
+  deleteProfile(): void {
+    this.profileService.deleteProfile(this.profile!.id).subscribe({
+      next: () => {
+        this.profileService.clearCurrentProfile()
+        this.router.navigate(["/profile-selection"])
+      }
+    })
+  }
+
+  openDeleteConfirmation(): void {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Удаление профиля',
+        message: 'Вы уверены, что хотите удалить этот профиль? Все его данные будут стерты'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteProfile();
+      }
+    });
+  }
+
+  sendPopUpNotification(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000
+    });
+    return
   }
 }

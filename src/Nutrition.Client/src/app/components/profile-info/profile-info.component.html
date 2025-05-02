@@ -1,38 +1,67 @@
-<div class="profile-info">
-  <h1 class="bmi-header">Текущий ИМТ: <span>{{ bmi | number:'1.1-1' }}</span></h1>
+<div class="profile-container" *ngIf="profile">
+  <h1 class="header">Информация о пользователе</h1>
 
-  <div class="row">
-    <div class="info-block">
-      <div class="label">Вес (кг)</div>
-      <div class="value-box">
-        <input [(ngModel)]="currentWeight" (ngModelChange)="calculateBMI()" type="number">
-        <button class="arrow-button" (click)="currentWeight = currentWeight + 1; calculateBMI()">▲</button>
-        <button class="arrow-button" (click)="currentWeight = currentWeight - 1; calculateBMI()">▼</button>
+  <div class="card">
+    <h2>Основная информация</h2>
+    <p><strong>Имя:</strong> {{ profile.name }}</p>
+    <p><strong>Дата рождения:</strong> {{ profile.birthday | date:'dd.MM.yyyy' }}</p>
+    <p><strong>Пол:</strong> {{ getGenderString(profile.gender) }}</p>
+  </div>
+
+  <div class="card">
+    <h2>Физические параметры</h2>
+    <p><strong>Рост:</strong> {{ currentHeight }} см</p>
+    <p><strong>Вес:</strong> {{ currentWeight }} кг</p>
+    <p><strong>ИМТ:</strong> {{ bmi | number:'1.1-1' }}</p>
+  </div>
+
+  <div class="card">
+    <h2>Уровень активности и вода</h2>
+    <p><strong>Активность:</strong> {{ getActivityLevelString(activityLevel) }}</p>
+    <p><strong>Цель по воде:</strong> {{ profile.desiredGlassesOfWater }} стак.</p>
+    <p><strong>Есть план питания:</strong> {{ profile.thereIsMealPlan ? 'Да' : 'Нет' }}</p>
+  </div>
+
+  <div class="card">
+    <h2>Редактировать параметры</h2>
+
+    <div class="row">
+      <div class="info-block">
+        <div class="label">Вес (кг)</div>
+        <div class="value-box">
+          <input [(ngModel)]="currentWeight" (ngModelChange)="calculateBMI()" type="number">
+          <button class="arrow-button" (click)="currentWeight = currentWeight + 1; calculateBMI()">▲</button>
+          <button class="arrow-button" (click)="currentWeight = currentWeight - 1; calculateBMI()">▼</button>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <div class="label">Рост (см)</div>
+        <div class="value-box">
+          <input [(ngModel)]="currentHeight" (ngModelChange)="calculateBMI()" type="number">
+          <button class="arrow-button" (click)="currentHeight = currentHeight + 1; calculateBMI()">▲</button>
+          <button class="arrow-button" (click)="currentHeight = currentHeight - 1; calculateBMI()">▼</button>
+        </div>
       </div>
     </div>
 
-    <div class="info-block">
-      <div class="label">Рост (см)</div>
+    <div class="activity-block">
+      <div class="label">Уровень активности</div>
       <div class="value-box">
-        <input [(ngModel)]="currentHeight" (ngModelChange)="calculateBMI()" type="number">
-        <button class="arrow-button" (click)="currentHeight = currentHeight + 1; calculateBMI()">▲</button>
-        <button class="arrow-button" (click)="currentHeight = currentHeight - 1; calculateBMI()">▼</button>
+        <select [(ngModel)]="activityLevel">
+          <option *ngFor="let option of activityLevelOptions" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
       </div>
     </div>
-  </div>
 
-  <div class="activity-block">
-    <div class="label">Уровень активности</div>
-    <div class="value-box">
-      <select [(ngModel)]="activityLevel">
-        <option *ngFor="let option of activityLevelOptions" [value]="option.value">
-          {{ option.label }}
-        </option>
-      </select>
+    <div class="update-button">
+      <button (click)="updateProfile()">Сохранить изменения</button>
     </div>
   </div>
 
-  <div class="update-button">
-    <button (click)="updateProfile()">Обновить информацию</button>
+  <div class="delete-section">
+    <button class="delete-button" (click)="openDeleteConfirmation()">Удалить профиль</button>
   </div>
 </div>

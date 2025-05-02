@@ -50,6 +50,25 @@ namespace PostService.BusinessLogic.Services
             };
         }
 
+        public async Task<PostDTO> GetPostAsync(
+            string postId,
+            string userId)
+        {
+            var response = await _postRepository.GetByIdAsync(postId);
+
+            if (response == null)
+            {
+                throw new NotFound("Post not found");
+            }
+
+            var postDTO = _mapper.Map<PostDTO>(response, opts =>
+            {
+                opts.Items["CurrentUserId"] = userId;
+            });
+
+            return postDTO;
+        }
+
         public async Task<PostsResponseModel> GetUserPostsAsync(int? page, int? size, string userId)
         {
             var response = await _postRepository.GetByUserIdAsync(userId, page, size);

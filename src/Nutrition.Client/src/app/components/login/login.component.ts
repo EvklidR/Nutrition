@@ -21,7 +21,9 @@ export class LoginComponent {
   errorMessage: string = '';
   formSubmitted: boolean = false;
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(
+    private userService: UserService,
+    private router: Router) { }
 
   get usernameInvalid(): boolean {
     return !this.username;
@@ -47,5 +49,9 @@ export class LoginComponent {
         this.errorMessage = 'Неверное имя пользователя или пароль!';
       }
     });
+  }
+
+  navigateToRegistration(): void {
+    this.router.navigate(["/register"])
   }
 }

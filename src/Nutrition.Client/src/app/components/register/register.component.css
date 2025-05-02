@@ -83,6 +83,7 @@ button {
   margin-top: 15px;
   font-size: 14px;
   color: #555;
+  cursor: pointer;
 }
 
   .login-link a {

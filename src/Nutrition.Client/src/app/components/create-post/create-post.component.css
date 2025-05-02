@@ -1,0 +1,112 @@
+.create-post {
+  max-width: 800px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  font-size: 18px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #aaa;
+}
+
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f1f1f1;
+  padding: 10px;
+  border-radius: 5px 5px 0 0;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.editor-toolbar {
+  display: flex;
+  gap: 8px;
+}
+
+  .editor-toolbar button {
+    padding: 5px 10px;
+    font-size: 15px;
+    border: none;
+    background: #e0e0e0;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+
+    .editor-toolbar button:hover {
+      background: #d0d0d0;
+    }
+
+.editor-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+  .editor-tabs button {
+    padding: 5px 11px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-weight: bold;
+    cursor: pointer;
+    color: #555;
+  }
+
+    .editor-tabs button.active {
+      border-color: #35792A;
+      color: #35792A;
+    }
+
+.editor-content {
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  background: #fff;
+}
+
+textarea {
+  width: 100%;
+  padding: 16px;
+  font-size: 14px;
+  resize: vertical;
+  border: none;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.markdown-preview {
+  padding: 16px;
+  font-size: 16px;
+  background: #f9f9f9;
+  overflow-x: auto;
+}
+
+.submit-button {
+  align-self: flex-end;
+  background-color: #35792A;
+  color: white;
+  padding: 10px 19px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+  .submit-button:hover {
+    background-color: #2e6c24;
+  }
+
+.work-area {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

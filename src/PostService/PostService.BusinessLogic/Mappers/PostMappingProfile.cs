@@ -19,7 +19,9 @@ namespace PostService.BusinessLogic.Mappers
                 .ForMember(dest => dest.AmountOfComments, opt => opt.MapFrom(src => src.Comments.Count))
                 .ForMember(dest => dest.AmountOfLikes, opt => opt.MapFrom(src => src.UserLikeIds.Count))
                 .ForMember(dest => dest.IsLiked, opt => opt.MapFrom((src, dest, destMember, context) =>
-                    src.UserLikeIds.Contains(context.Items["CurrentUserId"].ToString())));
+                    src.UserLikeIds.Contains(context.Items["CurrentUserId"].ToString())))
+                .ForMember(dest => dest.IsOwner, opt => opt.MapFrom((src, dest, destMember, context) =>
+                    src.OwnerId == context.Items["CurrentUserId"].ToString()));
         }
     }
 }

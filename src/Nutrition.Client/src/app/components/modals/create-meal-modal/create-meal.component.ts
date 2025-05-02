@@ -128,11 +128,8 @@ export class CreateMealComponent implements OnInit {
     }
 
     if (!this.mealToCreate.name || this.mealToCreate.name.trim() === '') {
-      this.snackBar.open('Meal name cannot be empty!', 'Close', {
-        duration: 3000,
-        verticalPosition: 'bottom',
-        horizontalPosition: 'center',
-        panelClass: ['snackbar-error']
+      this.snackBar.open('Название не может быть пустым!', 'Close', {
+        duration: 3000
       });
       return;
     }
@@ -148,9 +145,9 @@ export class CreateMealComponent implements OnInit {
 
     this.mealService.createMeal(this.mealToCreate).subscribe({
       next: (meal) => {
-      console.log("meal was created", meal)
+        console.log("meal was created", meal)
         this.dialogRef.close();
-    },
+      },
       error: (error) => {
         console.error("Error while creating meal:", error)
       }

@@ -30,14 +30,26 @@ namespace FoodService.Application.UseCases.CommandHandlers.Dish
                 throw new Forbidden("You dont have access to this dish");
             }
 
+            try
+            {
+                _unitOfWork.DishRepository.Delete(dish);
+                await _unitOfWork.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                if (e.InnerException.Message.StartsWith("The DELETE statement conflicted with the REFERENCE constraint")) {
+                    throw new BadRequest("This dish is used in some meals");
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
             if (dish.ImageUrl != null)
             {
                 await _imageService.DeleteImageAsync(dish.ImageUrl);
             }
-
-            _unitOfWork.DishRepository.Delete(dish);
-
-            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

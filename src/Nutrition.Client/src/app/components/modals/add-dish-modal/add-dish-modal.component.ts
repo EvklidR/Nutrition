@@ -9,6 +9,7 @@ import { CreateDishModel } from '../../../models/food-service/Requests/create-di
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -41,6 +42,7 @@ export class AddDishModalComponent {
     private dishService: DishService,
     private productService: ProductService,
     private dialogRef: MatDialogRef<AddDishModalComponent>,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -97,8 +99,8 @@ export class AddDishModalComponent {
   }
 
   saveDish(): void {
-    if (!this.name || !this.amountOfPortions) {
-      alert('Пожалуйста, заполните все обязательные поля.');
+    if (!this.name || !this.amountOfPortions || this.selectedProducts.length == 0) {
+      this.sendPopUpNotification("Заполните все обязательные поля!")
       return;
     }
 
@@ -128,5 +130,11 @@ export class AddDishModalComponent {
   close(): void {
     this.dialogRef.close();
   }
-}
 
+  sendPopUpNotification(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000
+    });
+    return
+  }
+}

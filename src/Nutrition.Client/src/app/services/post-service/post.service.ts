@@ -25,6 +25,10 @@ export class PostService {
     return this.http.get<PostsModel>(`${this.baseUrl}${params}`);
   }
 
+  getPost(postId: string): Observable<PostModel> {
+    return this.http.get<PostModel>(`${this.baseUrl}/${postId}`);
+  }
+
   getUserPosts(page: number = 1, size: number = 10): Observable<PostsModel> {
     return this.http.get<PostsModel>(`${this.baseUrl}/by_user?page=${page}&size=${size}`);
   }
@@ -33,8 +37,6 @@ export class PostService {
     const formData = new FormData();
     formData.append('title', postData.title);
     formData.append('text', postData.text);
-    formData.append('ownerEmail', postData.ownerEmail);
-    formData.append('ownerId', postData.ownerId);
 
     postData.keyWords.forEach((word) => {
       formData.append('keyWords', word);
@@ -66,7 +68,7 @@ export class PostService {
       formData.append('newFiles', file);
     });
 
-    return this.http.put<void>(`${this.baseUrl}`, postData);
+    return this.http.put<void>(`${this.baseUrl}`, formData);
   }
 
   likePost(postId: string): Observable<void> {
