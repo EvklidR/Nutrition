@@ -3,6 +3,7 @@ export interface CommentModel {
   ownerEmail: string;
   date: Date;
   text: string;
-  AmountOfLikes: number;
+  amountOfLikes: number;
   isLiked: boolean;
+  isOwner: boolean;
 }

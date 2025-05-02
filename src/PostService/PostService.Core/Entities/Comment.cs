@@ -1,7 +1,4 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson;
-
-namespace PostService.Core.Entities
+﻿namespace PostService.Core.Entities
 {
     public class Comment
     {

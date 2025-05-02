@@ -74,9 +74,8 @@
 }
 
   .ingredient-card h3 {
-    margin: 0 0 10px;
+    margin: 0;
     font-size: 20px;
-    text-align: center;
   }
 
   .ingredient-card p {
@@ -172,4 +171,28 @@
 
 select, input[type="checkbox"] {
   padding: 5px;
+}
+
+.edit-icon {
+  color: #555;
+  cursor: pointer;
+}
+
+  .edit-icon:hover {
+    color: #35792A;
+  }
+
+.delete-icon {
+  color: #444;
+  cursor: pointer;
+}
+
+  .delete-icon:hover {
+    color: #d9534f;
+  }
+
+.actions {
+  font-size: 14px;
+  display: flex;
+  gap: 5px
 }

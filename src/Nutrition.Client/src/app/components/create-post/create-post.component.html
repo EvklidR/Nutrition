@@ -1,0 +1,38 @@
+<div class="create-post">
+  <h2>{{ postToEdit ? 'Редактирование поста' : 'Создание поста' }}</h2>
+
+  <input type="text" [formControl]="titleControl" placeholder="Заголовок" />
+
+  <div class="work-area">
+    <div class="editor-header">
+      <div class="editor-toolbar">
+        <button (click)="formatText('bold')"><strong>B</strong></button>
+        <button (click)="formatText('italic')"><em>I</em></button>
+        <button (click)="formatText('strikethrough')"><s>S</s></button>
+        <button (click)="formatText('heading1')">H1</button>
+        <button (click)="formatText('heading2')">H2</button>
+        <button (click)="formatText('heading3')">H3</button>
+      </div>
+
+      <div class="editor-tabs">
+        <button [class.active]="!previewMode" (click)="togglePreview()">Редактировать</button>
+        <button [class.active]="previewMode" (click)="togglePreview()">Предпросмотр</button>
+      </div>
+    </div>
+
+    <div class="editor-content">
+      <textarea *ngIf="!previewMode"
+                #contentArea
+                [formControl]="contentControl"
+                rows="15"
+                placeholder="Введите текст в Markdown...">
+    </textarea>
+
+      <div *ngIf="previewMode" class="markdown-preview">
+        <markdown [data]="contentControl.value"></markdown>
+      </div>
+    </div>
+  </div>
+
+  <button class="submit-button" (click)="submitPost()">Опубликовать</button>
+</div>

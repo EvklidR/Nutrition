@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using PostService.BusinessLogic.DTOs.Comment;
-using PostService.BusinessLogic.DTOs.Post;
 using PostService.Core.Entities;
 
 namespace PostService.BusinessLogic.Mappers
@@ -18,8 +17,10 @@ namespace PostService.BusinessLogic.Mappers
 
             CreateMap<Comment, CommentDTO>()
                 .ForMember(dest => dest.AmountOfLikes, opt => opt.MapFrom(src => src.UserLikeIds.Count))
+                .ForMember(dest => dest.IsOwner, opt => opt.MapFrom((src, dest, destMember, context) =>
+                    src.OwnerId == context.Items["CurrentUserId"].ToString()))
                 .ForMember(dest => dest.IsLiked, opt => opt.MapFrom((src, dest, destMember, context) =>
-                    src.UserLikeIds.Contains(context.Items["CurrentUserId"].ToString())));
+                    src.UserLikeIds.Contains(context.Items["CurrentUserId"].ToString()!)));
         }
     }
 }

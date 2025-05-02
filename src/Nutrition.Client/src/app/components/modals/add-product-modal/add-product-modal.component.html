@@ -1,14 +1,14 @@
 <div class="modal-content">
-  <h2>Добавить новый продукт</h2>
+  <h2>{{ isEditMode ? 'Редактировать продукт' : 'Добавить новый продукт' }}</h2>
 
   <div class="ingredient-search">
     <label for="ingredient-search">Найти продукт:</label>
     <div class="search-wrapper">
       <input id="ingredient-search"
-              [(ngModel)]="productSearchTerm"
-              (input)="onSearchChange()"
-              type="text"
-              placeholder="Введите название ингредиента" />
+             [(ngModel)]="productSearchTerm"
+             (input)="onSearchChange()"
+             type="text"
+             placeholder="Введите название ингредиента" />
       <ul *ngIf="productsFromApi.length > 0" class="dropdown">
         <li *ngFor="let product of productsFromApi" (click)="selectProduct(product)">
           {{ product.name }}

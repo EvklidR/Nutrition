@@ -14,7 +14,7 @@
   </ng-template>
 </div>
 
-<div class="add-meal-plan">
+<div *ngIf="userRole == 'admin'" class="add-meal-plan">
   <button (click)="navigateToAddingPlan()">Создать план питания</button>
 </div>
 

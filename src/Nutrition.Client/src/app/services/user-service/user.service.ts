@@ -41,8 +41,7 @@ export class UserService {
   }
 
   register(command: RegisterUserModel): Observable<void> {
-    const payload = { CreateUserDto: command };
-    return this.http.post(`${this.baseUrl}/register`, payload).pipe(
+    return this.http.post(`${this.baseUrl}/register`, command).pipe(
       map((response: any) => {
         if (response?.accessToken && response?.refreshToken) {
           this.setAccessToken(response.accessToken);

@@ -1,8 +1,23 @@
 <div class="post-details" *ngIf="post">
-  <h1 class="post-title">{{ post.title }}</h1>
+
+  <div class="post-header">
+    <h1 class="post-title">{{ post.title }}</h1>
+    <div class="post-actions" *ngIf="post.isOwner">
+      <button class="menu-button" (click)="togglePostMenu()">⋮</button>
+      <ul class="dropdown-menu" *ngIf="showPostMenu">
+        <li (click)="editPost()">Редактировать</li>
+        <li (click)="openDeleteConfirmation()">Удалить</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="post-meta">
+    <span class="author">{{ post.ownerEmail }}</span> |
+    <span class="date">{{ post.creationDate | date: 'dd.MM.yyyy HH:mm' }}</span>
+  </div>
 
   <div class="post-text">
-    {{ post.text }}
+    <markdown [data]="post.text"></markdown>
   </div>
 
   <div class="post-footer">
@@ -17,14 +32,45 @@
   </div>
 
   <div class="add-comment">
-    <input [formControl]="commentControl" placeholder="Написать комментарий..." />
-    <button (click)="sendComment()">Отправить</button>
+    <textarea [formControl]="commentControl"
+              placeholder="Написать комментарий..."
+              (keydown)="onKeyDown($event)"></textarea>
+    <fa-icon [icon]="faPaperPlane" (click)="sendComment()" class="send-icon"></fa-icon>
   </div>
 
   <div class="comments-list">
     <div class="comment" *ngFor="let comment of comments">
-      {{ comment.text }}
+      <div class="comment-header">
+        <div class="author-info">
+          <span class="author">{{ comment.ownerEmail }}</span> |
+          <span class="date">{{ comment.date | date: 'dd.MM.yyyy HH:mm' }}</span>
+        </div>
+        <div class="actions" *ngIf="comment.isOwner">
+          <fa-icon [icon]="faEdit" (click)="editComment(comment)" class="edit-icon"></fa-icon>
+          <fa-icon [icon]="faTrash" (click)="deleteComment(comment.id)" class="delete-icon"></fa-icon>
+        </div>
+      </div>
+
+      <div class="comment-text">
+        <div *ngIf="editingCommentId !== comment.id; else editMode" [innerHTML]="comment.text | lineBreaks"></div>
+
+        <ng-template #editMode>
+          <textarea [formControl]="editCommentControl" rows="3"></textarea>
+          <div class="edit-actions">
+            <button (click)="saveComment(comment)">Сохранить</button>
+            <button (click)="cancelEdit()">Отмена</button>
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="comment-footer">
+        <div class="icon-group like" (click)="likeComment(comment)">
+          <fa-icon [icon]="comment.isLiked ? solidHeart : regularHeart" [ngClass]="{ liked: comment.isLiked }"></fa-icon>
+          <span>{{ comment.amountOfLikes }}</span>
+        </div>
+      </div>
     </div>
+
     <button *ngIf="hasMoreComments" (click)="loadComments()" class="load-more">Загрузить ещё</button>
   </div>
 </div>

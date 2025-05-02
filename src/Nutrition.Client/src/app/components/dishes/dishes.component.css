@@ -190,3 +190,7 @@
 select, input[type="checkbox"] {
   padding: 5px;
 }
+
+.delete-icon:hover {
+  color: #d9534f;
+}

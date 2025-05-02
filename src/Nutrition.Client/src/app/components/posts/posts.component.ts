@@ -8,11 +8,20 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faComment, faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { Router } from '@angular/router';
+import { MarkdownModule, provideMarkdown } from 'ngx-markdown';
 
 @Component({
   selector: 'app-posts',
   standalone: true,
-  imports: [CommonModule, FormsModule, FontAwesomeModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    FontAwesomeModule,
+    MarkdownModule
+  ],
+  providers: [
+    provideMarkdown()
+  ],
   templateUrl: './posts.component.html',
   styleUrls: ['./posts.component.css']
 })
@@ -102,7 +111,8 @@ export class PostsComponent implements OnInit {
     return Math.ceil(this.totalCount / (this.pageSize || 1));
   }
 
-  likePost(post: PostModel): void {
+  likePost(post: PostModel, event: Event): void {
+    event.stopPropagation()
     this.postService.likePost(post.id).subscribe({
       next: () => {
         post.isLiked = !post.isLiked;
@@ -119,6 +129,6 @@ export class PostsComponent implements OnInit {
   }
 
   navigateToPost(postId: string): void {
-    this.router.navigate(['/post', postId]);
+    this.router.navigate(['/post-details', postId]);
   }
 }

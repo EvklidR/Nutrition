@@ -15,6 +15,9 @@ import { AddDishModalComponent } from '../modals/add-dish-modal/add-dish-modal.c
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { ConfirmDialogComponent } from '../modals/confirm-dialog-modal/confirm-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-dishes',
@@ -44,12 +47,15 @@ export class DishesComponent implements OnInit {
 
   isLoading: boolean = true;
 
+  faTrash = faTrash;
+
   constructor(
     private router: Router,
     private userService: UserService,
     private dishService: DishService,
     private profileService: ProfileService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -111,6 +117,12 @@ export class DishesComponent implements OnInit {
       error: (error) => {
         console.error('Ошибка удаления блюда:', error);
         this.isLoading = false;
+        if (error.error[0] == "This dish is used in some meals") {
+          this.sendPopUpNotification("Это блюдо есть в приемах пищи")
+        }
+        else {
+          this.sendPopUpNotification("Не удалось удалить продукт")
+        }
       }
     });
   }
@@ -130,10 +142,9 @@ export class DishesComponent implements OnInit {
 
   openAddDishModal() {
     const dialogRef = this.dialog.open(AddDishModalComponent, {
-      width: '600px',
-      maxWidth: '600px',
-      minWidth: '500px',
-      height: '500px'
+      width: '800px',
+      maxWidth: '800px',
+      minWidth: '500px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -150,5 +161,29 @@ export class DishesComponent implements OnInit {
 
   totalPages(): number {
     return Math.ceil(this.totalCount / (this.params.pageSize || 10));
+  }
+
+  openDeleteConfirmation(dishId: string, event: Event): void {
+    event.stopPropagation()
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Удаление блюда',
+        message: 'Вы уверены, что хотите удалить это блюдо?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteDish(dishId);
+      }
+    });
+  }
+
+  sendPopUpNotification(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000
+    });
+    return
   }
 }

@@ -8,5 +8,6 @@
         public string Text { get; set; }
         public int AmountOfLikes { get; set; }
         public bool IsLiked { get; set; }
+        public bool IsOwner { get; set; }
     }
 }

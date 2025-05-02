@@ -19,22 +19,6 @@
     </div>
 
     <div class="input-group">
-      <label for="login">Имя пользователя</label>
-      <input type="text"
-             id="login"
-             name="login"
-             [(ngModel)]="login"
-             #loginCtrl="ngModel"
-             required
-             minlength="3"
-             placeholder="Введите имя пользователя">
-      <div *ngIf="loginCtrl.invalid && loginCtrl.touched" class="error-message">
-        <div *ngIf="loginCtrl.errors?.['required']">Поле "Имя пользователя" обязательно.</div>
-        <div *ngIf="loginCtrl.errors?.['minlength']">Имя пользователя должно содержать не менее 3 символов.</div>
-      </div>
-    </div>
-
-    <div class="input-group">
       <label for="password">Пароль</label>
       <input type="password"
              id="password"
@@ -74,5 +58,5 @@
     <button type="submit" [disabled]="registerForm.invalid">Зарегистрироваться</button>
   </form>
 
-  <p class="login-link">Уже есть аккаунт? <a routerLink="/login">Войти</a></p>
+  <p class="login-link">Уже есть аккаунт? <a (click)="navigateToLogin()">Войти</a></p>
 </div>

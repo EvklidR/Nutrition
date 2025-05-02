@@ -1,0 +1,25 @@
+.mat-dialog-title {
+  text-align: center;
+}
+
+mat-dialog-content {
+  text-align: center;
+}
+
+mat-dialog-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 20px;
+}
+
+.cancel-button {
+  color: #77a370 !important;
+}
+
+  .cancel-button:hover {
+    background-color: rgba(2, 5, 2, 0.3);
+  }

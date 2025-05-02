@@ -21,6 +21,7 @@ import { StatisticsComponent } from "./components/statistics/statistics.componen
 import { FoodStatisticsComponent } from "./components/food-statistics/food-statistics.component";
 import { PostsComponent } from "./components/posts/posts.component";
 import { PostDetailsComponent } from "./components/post-details/post-details.component";
+import { CreatePostComponent } from "./components/create-post/create-post.component";
 
 const appRoutes: Routes = [
   { path: "login", component: LoginComponent },
@@ -41,7 +42,9 @@ const appRoutes: Routes = [
       { path: 'statistics', component: StatisticsComponent, canActivate: [ProfileGuard] },
       { path: 'food-statistics', component: FoodStatisticsComponent, canActivate: [ProfileGuard] },
       { path: 'posts', component: PostsComponent },
-      { path: 'post-details', component: PostDetailsComponent },
+      { path: 'post-details/:id', component: PostDetailsComponent },
+      { path: 'create-post', component: CreatePostComponent },
+      { path: 'edit-post/:id', component: CreatePostComponent }
     ]
   },];
 

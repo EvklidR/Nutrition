@@ -11,5 +11,6 @@
         public int AmountOfLikes { get; set; }
         public int AmountOfComments { get; set; }
         public bool IsLiked { get; set; }
+        public bool IsOwner { get; set; }
     }
 }

@@ -13,6 +13,7 @@ import { ProfileMealPlanWithDetailsModel } from '../../models/meal-plan-service/
 import { MealPlanResponseModel } from '../../models/meal-plan-service/Responces/meal-plan-response.model';
 import { CreateProfileMealPlanModel } from '../../models/meal-plan-service/Requests/create-profile-meal-plan.model';
 import { CommonModule } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-meal-plans',
@@ -46,7 +47,8 @@ export class MealPlansComponent implements OnInit {
     private userService: UserService,
     private mealPlanService: MealPlanService,
     private profileService: ProfileService,
-    private profileMealPlanService: ProfilePlanService
+    private profileMealPlanService: ProfilePlanService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -161,6 +163,7 @@ export class MealPlansComponent implements OnInit {
         console.log("Новая подписка успешна")
         this.loadChoosenMealPlan(this.profile!.id)
         this.profile!.thereIsMealPlan = true;
+        this.sendPopUpNotification("План питания успешно выбран!")
       }
     )
   }
@@ -188,6 +191,14 @@ export class MealPlansComponent implements OnInit {
   canselPlan() {
     this.profileMealPlanService.completeProfilePlan(this.profile!.id).subscribe(() => {
       this.loadChoosenMealPlan(this.profile!.id)
+      this.sendPopUpNotification("План питания успешно отменен!")
     })
+  }
+
+  sendPopUpNotification(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000
+    });
+    return
   }
 }
