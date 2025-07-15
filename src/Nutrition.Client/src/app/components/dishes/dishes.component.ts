@@ -132,6 +132,7 @@ export class DishesComponent implements OnInit {
       width: '600px',
       maxWidth: '600px',
       minWidth: '500px',
+      panelClass: 'no-scroll-dialog',
       data: { dishId: dishId }
     });
 

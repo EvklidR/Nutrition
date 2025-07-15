@@ -194,3 +194,8 @@ select, input[type="checkbox"] {
 .delete-icon:hover {
   color: #d9534f;
 }
+
+::ng-deep .no-scroll-dialog .mat-mdc-dialog-surface {
+  overflow-y: clip !important;
+}
+

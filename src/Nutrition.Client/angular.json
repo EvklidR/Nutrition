@@ -73,6 +73,7 @@
               "buildTarget": "Nutrition.Client:build:production"
             },
             "development": {
+              "port": 4201,
               "buildTarget": "Nutrition.Client:build:development"
             }
           },

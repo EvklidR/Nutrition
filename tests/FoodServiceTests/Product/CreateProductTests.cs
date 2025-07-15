@@ -58,7 +58,7 @@ namespace FoodServiceTests.Product
                 + createProductDto.Carbohydrates * 4;
 
             _userServiceMock
-                .Setup(u => u.CheckUserByIdAsync(createProductDto.UserId))
+                .Setup(u => u.CheckUserByIdAsync((Guid)createProductDto.UserId))
                 .ReturnsAsync(true);
 
             _unitOfWorkMock
@@ -92,7 +92,7 @@ namespace FoodServiceTests.Product
             var command = new CreateProductCommand(createProductDto);
 
             _userServiceMock
-                .Setup(u => u.CheckUserByIdAsync(createProductDto.UserId))
+                .Setup(u => u.CheckUserByIdAsync((Guid)createProductDto.UserId))
                 .ReturnsAsync(false);
 
             // Act

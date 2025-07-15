@@ -43,7 +43,7 @@ namespace UserServiceTests
             var encodedCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationCode));
             var expectedUrl = $"{url}/User/confirmEmail?userId={user.Id}&code={encodedCode}";
 
-            var command = new SendConfirmationToEmailCommand(user, url, email);
+            var command = new SendConfirmationToEmailCommand(user.Id, url, email);
 
             // Act
             await _handler.Handle(command, CancellationToken.None);
@@ -71,7 +71,7 @@ namespace UserServiceTests
             var encodedCode = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(confirmationCode));
             var expectedUrl = $"{url}/User/confirmEmail?userId={user.Id}&code={encodedCode}&changedEmail={email}";
 
-            var command = new SendConfirmationToEmailCommand(user, url, email, isChange: true);
+            var command = new SendConfirmationToEmailCommand(user.Id, url, email, isChange: true);
 
             // Act
             await _handler.Handle(command, CancellationToken.None);
