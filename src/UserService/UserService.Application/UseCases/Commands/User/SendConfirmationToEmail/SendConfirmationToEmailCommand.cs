@@ -1,4 +1,3 @@
-﻿namespace UserService.Application.UseCases.Commands
-{
-    public record SendConfirmationToEmailCommand(Guid userId, string? url, string email, bool isChange = false) : ICommand;
-}
+﻿namespace UserService.Application.UseCases.Commands;
+
+public record SendConfirmationToEmailCommand(Guid UserId, string? Url, string Email, bool IsChange = false) : ICommand;

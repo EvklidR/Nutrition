@@ -28,7 +28,7 @@ public class RefreshTokenTokenRepository : IRefreshTokenTokenRepository
         await _context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<RefreshToken>?> GetAllByUserAsync(Guid userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<RefreshToken>> GetAllByUserAsync(Guid userId, CancellationToken cancellationToken)
     {
         return await _context.RefreshTokens
             .Where(p => p.UserId == userId)

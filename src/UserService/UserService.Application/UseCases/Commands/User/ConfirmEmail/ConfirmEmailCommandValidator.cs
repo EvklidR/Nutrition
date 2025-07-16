@@ -6,12 +6,13 @@ namespace UserService.Application.UseCases.Commands
     {
         public ConfirmEmailCommandValidator() 
         {
-            RuleFor(command => command.code)
-                .NotEmpty().WithMessage("Confirmation code must not be empty");
+            RuleFor(command => command.Code)
+                .NotEmpty()
+                    .WithMessage("Confirmation code must not be empty");
 
-            RuleFor(command => command.changedEmail)
-                .EmailAddress().When(command => command.changedEmail != null)
-                .WithMessage("Changed email must be a valid email address");
+            RuleFor(command => command.ChangedEmail)
+                .EmailAddress().When(command => command.ChangedEmail != null)
+                    .WithMessage("Changed email must be a valid email address");
         }
     }
 }

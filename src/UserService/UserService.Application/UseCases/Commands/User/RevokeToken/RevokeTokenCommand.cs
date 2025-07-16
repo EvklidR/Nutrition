@@ -1,4 +1,3 @@
-﻿namespace UserService.Application.UseCases.Commands
-{
-    public record RevokeTokenCommand(Guid? userId, string refreshToken) : ICommand;
-}
+﻿namespace UserService.Application.UseCases.Commands;
+
+public record RevokeTokenCommand(Guid? UserId, string RefreshToken) : ICommand;

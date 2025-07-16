@@ -1,6 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserService.API.Filters;
@@ -14,37 +12,35 @@ namespace UserService.API.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly ILogger<UserController> _logger;
 
     public UserController(IMediator mediator, ILogger<UserController> logger)
     {
         _mediator = mediator;
-        _logger = logger;
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<AuthenticatedResponse>> Login(LoginUserCommand command)
+    public async Task<ActionResult<AuthenticatedResponse>> Login(LoginUserCommand command, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(command);
+        var response = await _mediator.Send(command, cancellationToken);
 
         return Ok(response);
     }
 
     [HttpPost("register")]
     [ServiceFilter(typeof(RequestOriginFilter))]
-    public async Task<IActionResult> Register(RegisterUserCommand command)
+    public async Task<IActionResult> Register(RegisterUserCommand command, CancellationToken cancellationToken)
     {
         var origin = (string)HttpContext.Items["RequestOrigin"]!;
 
-        await _mediator.Send(command with { url = origin });
+        await _mediator.Send(command with { Url = origin }, cancellationToken);
 
         return NoContent();
     }
 
     [HttpPost("refresh")]
-    public async Task<ActionResult<AuthenticatedResponse>> Refresh(RefreshTokenCommand command)
+    public async Task<ActionResult<AuthenticatedResponse>> Refresh(RefreshTokenCommand command, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(command);
+        var response = await _mediator.Send(command, cancellationToken);
 
         return Ok(response);
     }
@@ -52,49 +48,31 @@ public class UserController : ControllerBase
     [HttpPost("revoke")]
     [Authorize]
     [ServiceFilter(typeof(UserIdFilter))]
-    public async Task<IActionResult> Revoke(RevokeTokenCommand command)
+    public async Task<IActionResult> Revoke(RevokeTokenCommand command, CancellationToken cancellationToken)
     {
         var userId = (Guid)HttpContext.Items["UserId"]!;
 
-        await _mediator.Send(command with { userId = userId });
+        await _mediator.Send(command with { UserId = userId }, cancellationToken);
 
         return NoContent();
     }
 
     [HttpPost("sendConfirmation")]
     [ServiceFilter(typeof(RequestOriginFilter))]
-    public async Task<IActionResult> ConfirmEmail(SendConfirmationToEmailCommand request)
+    public async Task<IActionResult> ConfirmEmail(SendConfirmationToEmailCommand request, CancellationToken cancellationToken)
     {
         var origin = (string)HttpContext.Items["RequestOrigin"]!;
 
-        await _mediator.Send(request with { url = origin });
+        await _mediator.Send(request with { Url = origin }, cancellationToken);
 
         return NoContent();
     }
 
     [HttpGet("confirmEmail")]
-    public async Task<IActionResult> ConfirmEmail([FromQuery] ConfirmEmailCommand command) 
+    public async Task<IActionResult> ConfirmEmail([FromQuery] ConfirmEmailCommand command, CancellationToken cancellationToken) 
     {
-        await _mediator.Send(command);
+        await _mediator.Send(command, cancellationToken);
 
         return NoContent();
-    }
-
-    [HttpGet("login-external")]
-    [AllowAnonymous]
-    public IActionResult ExternalLogin([FromQuery] string returnUrl)
-    {
-        var scheme = OpenIdConnectDefaults.AuthenticationScheme;
-        var properties = new AuthenticationProperties
-        {
-            RedirectUri = Url.Action("ExternalLoginCallback"),
-            Items =
-        {
-            [nameof(returnUrl)] = returnUrl,
-            [nameof(scheme)] = scheme
-        }
-        };
-
-        return Challenge(properties, scheme);
     }
 }

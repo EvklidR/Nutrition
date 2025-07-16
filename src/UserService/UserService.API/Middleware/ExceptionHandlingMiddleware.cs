@@ -1,6 +1,6 @@
-﻿using UserService.Application.Exceptions;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System.Net;
+using UserService.Contracts.Exceptions;
 
 namespace UserService.API.Middleware;
 

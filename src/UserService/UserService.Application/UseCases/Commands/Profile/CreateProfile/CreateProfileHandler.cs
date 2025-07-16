@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using UserService.Application.DTOs.Responces.Profile;
-using UserService.Application.Exceptions;
 using UserService.Contracts.DataAccess.Repositories;
+using UserService.Contracts.Exceptions;
 using UserService.Domain.Enums;
-using Profile = UserService.Domain.Entities.Profile;
 
 namespace UserService.Application.UseCases.Commands;
 
-public class CreateProfileHandler : ICommandHandler<CreateProfileCommand, ProfileResponseDto>
+public class CreateProfileHandler : ICommandHandler<CreateProfileCommand, ProfileResponse>
 {
     private readonly IProfileRepository _profileRepository;
     private readonly IUserRepository _userRepository;
@@ -20,13 +19,13 @@ public class CreateProfileHandler : ICommandHandler<CreateProfileCommand, Profil
         _mapper = mapper;
     }
 
-    public async Task<ProfileResponseDto> Handle(CreateProfileCommand command, CancellationToken cancellationToken)
+    public async Task<ProfileResponse> Handle(CreateProfileCommand command, CancellationToken cancellationToken)
     {
-        var profile = _mapper.Map<Profile>(command.ProfileDto);
+        var profile = _mapper.Map<Domain.Entities.Profile>(command.ProfileDto);
 
-        var userExists = await _userRepository.CheckIfExistsAsync(command.UserId, cancellationToken);
+        var isUserExists = await _userRepository.CheckIfExistsAsync(command.UserId, cancellationToken);
 
-        if (!userExists)
+        if (!isUserExists)
         {
             throw new Unauthorized("User does not exist");
         }
@@ -50,6 +49,6 @@ public class CreateProfileHandler : ICommandHandler<CreateProfileCommand, Profil
 
         await _profileRepository.AddAsync(profile, cancellationToken);
 
-        return _mapper.Map<ProfileResponseDto>(profile);
+        return _mapper.Map<ProfileResponse>(profile);
     }
 }

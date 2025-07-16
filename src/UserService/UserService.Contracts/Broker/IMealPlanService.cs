@@ -1,4 +1,4 @@
-﻿namespace UserService.Application.Interfaces;
+﻿namespace UserService.Contracts.Broker;
 
 public interface IMealPlanService
 {

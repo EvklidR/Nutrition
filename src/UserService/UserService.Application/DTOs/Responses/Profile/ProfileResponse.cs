@@ -2,7 +2,7 @@
 
 namespace UserService.Application.DTOs.Responces.Profile;
 
-public class ProfileResponseDto
+public class ProfileResponse
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = null!;

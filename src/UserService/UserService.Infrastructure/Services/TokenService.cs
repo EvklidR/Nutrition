@@ -1,15 +1,15 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using UserService.Application.Interfaces;
 using System.Text;
 using Microsoft.Extensions.Configuration;
-using UserService.Application.Exceptions;
 using UserService.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Hangfire;
 using System.Security.Cryptography;
 using UserService.Contracts.DataAccess.Repositories;
+using UserService.Contracts.Services;
+using UserService.Contracts.Exceptions;
 
 namespace UserService.Infrastructure.Services;
 

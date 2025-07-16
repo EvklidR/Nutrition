@@ -3,4 +3,4 @@ using UserService.Application.DTOs.Responces.Profile;
 
 namespace UserService.Application.UseCases.Commands;
 
-public record CreateProfileCommand(CreateProfileDTO ProfileDto, Guid UserId) : ICommand<ProfileResponseDto>;
+public record CreateProfileCommand(CreateProfileDTO ProfileDto, Guid UserId) : ICommand<ProfileResponse>;

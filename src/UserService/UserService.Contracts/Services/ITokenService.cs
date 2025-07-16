@@ -1,7 +1,7 @@
 ﻿using UserService.Domain.Entities;
 using System.Security.Claims;
 
-namespace UserService.Application.Interfaces;
+namespace UserService.Contracts.Services;
 
 public interface ITokenService
 {

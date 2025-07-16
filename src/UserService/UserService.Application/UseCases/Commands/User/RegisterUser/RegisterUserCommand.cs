@@ -1,4 +1,3 @@
-﻿namespace UserService.Application.UseCases.Commands
-{
-    public record RegisterUserCommand(string email, string password, string? url) : ICommand;
-}
+﻿namespace UserService.Application.UseCases.Commands;
+
+public record RegisterUserCommand(string Email, string Password, string? Url) : ICommand;

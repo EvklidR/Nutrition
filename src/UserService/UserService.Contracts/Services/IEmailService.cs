@@ -1,10 +1,7 @@
-﻿using System.Globalization;
+﻿namespace UserService.Contracts.Services;
 
-namespace UserService.Application.Interfaces
+public interface IEmailService
 {
-    public interface IEmailService
-    {
-        Task SendEmailAsync(string email, string subject, string body);
-        Task SendConfirmationEmailAsync(string email, string link);
-    }
+    Task SendEmailAsync(string email, string subject, string body);
+    Task SendConfirmationEmailAsync(string email, string link);
 }

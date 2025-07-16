@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using UserService.Infrastructure.RabbitMQService.Settings;
-using UserService.Application.Enums;
+using UserService.Contracts.Broker.Enums;
 
 namespace UserService.Infrastructure.RabbitMQService;
 

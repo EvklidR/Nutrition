@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 
-namespace UserService.Application.UseCases.Commands
+namespace UserService.Application.UseCases.Commands;
+
+public class RevokeTokenCommandValidator : AbstractValidator<RevokeTokenCommand>
 {
-    public class RevokeTokenCommandValidator : AbstractValidator<RevokeTokenCommand>
+    public RevokeTokenCommandValidator()
     {
-        public RevokeTokenCommandValidator()
-        {
-            RuleFor(x => x.userId)
-                .NotEmpty().WithMessage("Id must be provided");
-        }
+        RuleFor(x => x.UserId)
+            .NotEmpty().WithMessage("Id must be provided");
     }
 }

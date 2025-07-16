@@ -1,4 +1,4 @@
-﻿namespace UserService.Application.Enums;
+﻿namespace UserService.Contracts.Broker.Enums;
 
 public enum QueueName
 {

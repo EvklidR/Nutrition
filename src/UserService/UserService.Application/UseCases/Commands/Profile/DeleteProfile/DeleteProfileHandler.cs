@@ -1,7 +1,7 @@
-﻿using UserService.Application.Enums;
-using UserService.Application.Exceptions;
-using UserService.Application.Interfaces;
+﻿using UserService.Contracts.Broker;
+using UserService.Contracts.Broker.Enums;
 using UserService.Contracts.DataAccess.Repositories;
+using UserService.Contracts.Exceptions;
 
 namespace UserService.Application.UseCases.Commands;
 
@@ -34,6 +34,6 @@ public class DeleteProfileHandler : ICommandHandler<DeleteProfileCommand>
 
         await _profileRepository.DeleteAsync(profile, cancellationToken);
 
-        await _brokerService.PublishMessageAsync(profile.Id.ToString(), QueueName.ProfileDeleted, cancellationToken);
+        await _brokerService.PublishMessageAsync(profile.Id.ToString(), QueueName.ProfileDeleted, cancellationToken: cancellationToken);
     }
 }

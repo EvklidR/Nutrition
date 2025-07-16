@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using System.Text;
-using UserService.Application.Interfaces;
+using UserService.Contracts.Services;
 using UserService.Domain.Entities;
 
 namespace UserService.Infrastructure.Configurations

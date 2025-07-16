@@ -1,7 +1,7 @@
 ﻿using UserService.Application.DTOs.Responses.Profile;
-using UserService.Application.Exceptions;
-using UserService.Application.Interfaces;
+using UserService.Contracts.Broker;
 using UserService.Contracts.DataAccess.Repositories;
+using UserService.Contracts.Exceptions;
 using UserService.Domain.Enums;
 
 namespace UserService.Application.UseCases.Queries
@@ -34,7 +34,6 @@ namespace UserService.Application.UseCases.Queries
             }
 
             var response = new DailyNeedsResponse();
-            response.DesiredGlassesOfWater = profile.DesiredGlassesOfWater;
 
             if (!profile.ThereIsMealPlan)
             {
@@ -47,8 +46,16 @@ namespace UserService.Application.UseCases.Queries
                     profile.Weight,
                     CalculateDailyCalories(profile));
 
-                response = 
+                response = new DailyNeedsResponse
+                {
+                    Calories = resp.Calories,
+                    Proteins = resp.Proteins,
+                    Fats = resp.Fats,
+                    Carbohydrates = resp.Carbohydrates,
+                };
             }
+            
+            response.DesiredGlassesOfWater = profile.DesiredGlassesOfWater;
 
             return response;
         }
@@ -82,12 +89,14 @@ namespace UserService.Application.UseCases.Queries
         {
             var calories = CalculateDailyCalories(profile);
 
-            DailyNeedsResponse result = new DailyNeedsResponse(
-                calories: Math.Round(calories, 2),
-                proteins: Math.Round(0.3 * calories / 4, 2),
-                fats: Math.Round(0.3 * calories / 9, 2),
-                carbohydrates: Math.Round(0.4 * calories / 4, 2)
-            );
+            DailyNeedsResponse result = new DailyNeedsResponse
+            {
+                Calories = Math.Round(calories, 2),
+                Proteins = Math.Round(0.3 * calories / 4, 2),
+                Fats = Math.Round(0.3 * calories / 9, 2),
+                Carbohydrates = Math.Round(0.4 * calories / 4, 2)
+            };
+
             return result;
         }
 

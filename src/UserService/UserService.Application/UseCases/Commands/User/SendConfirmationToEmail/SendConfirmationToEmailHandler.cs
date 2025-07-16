@@ -1,45 +1,44 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
-using UserService.Application.Interfaces;
+using UserService.Contracts.Exceptions;
+using UserService.Contracts.Services;
 using UserService.Domain.Entities;
-using UserService.Application.Exceptions;
 
-namespace UserService.Application.UseCases.Commands
+namespace UserService.Application.UseCases.Commands;
+
+public class SendConfirmationToEmailHandler : ICommandHandler<SendConfirmationToEmailCommand>
 {
-    public class SendConfirmationToEmailHandler : ICommandHandler<SendConfirmationToEmailCommand>
+    private readonly UserManager<User> _userManager;
+    private readonly IEmailService _emailService;
+
+    public SendConfirmationToEmailHandler(UserManager<User> userManager, IEmailService emailService)
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IEmailService _emailService;
+        _emailService = emailService;
+        _userManager = userManager;
+    }
+    public async Task Handle(SendConfirmationToEmailCommand request, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.FindByIdAsync(request.UserId.ToString());
 
-        public SendConfirmationToEmailHandler(UserManager<User> userManager, IEmailService emailService)
+        if (user == null)
         {
-            _emailService = emailService;
-            _userManager = userManager;
+            throw new NotFound("User with such id not found");
         }
-        public async Task Handle(SendConfirmationToEmailCommand request, CancellationToken cancellationToken)
+
+        var code = request.IsChange
+            ? await _userManager.GenerateChangeEmailTokenAsync(user, request.Email)
+            : await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+        var confirmEmailUrl = $"{request.Url}/User/confirmEmail?userId={request.UserId}&code={code}";
+
+        if (request.IsChange)
         {
-            var user = await _userManager.FindByIdAsync(request.userId.ToString());
-
-            if (user == null)
-            {
-                throw new NotFound("User with such id not found");
-            }
-
-            var code = request.isChange
-                ? await _userManager.GenerateChangeEmailTokenAsync(user, request.email)
-                : await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-            var confirmEmailUrl = $"{request.url}/User/confirmEmail?userId={request.userId}&code={code}";
-
-            if (request.isChange)
-            {
-                confirmEmailUrl += $"&changedEmail={request.email}";
-            }
-
-            await _emailService.SendConfirmationEmailAsync(request.email, $"<a href='{confirmEmailUrl}'>Confirm</a>");
+            confirmEmailUrl += $"&changedEmail={request.Email}";
         }
+
+        await _emailService.SendConfirmationEmailAsync(request.Email, $"<a href='{confirmEmailUrl}'>Confirm</a>");
     }
 }

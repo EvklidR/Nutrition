@@ -3,7 +3,7 @@ using UserService.Infrastructure.RabbitMQService;
 using System.Text;
 using UserService.Infrastructure.MSSQL;
 using Microsoft.EntityFrameworkCore;
-using UserService.Application.Exceptions;
+using UserService.Contracts.Exceptions;
 
 namespace UserService.Infrastructure.BackgroundJobs;
 

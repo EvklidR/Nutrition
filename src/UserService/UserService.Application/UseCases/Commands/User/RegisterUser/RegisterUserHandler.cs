@@ -1,52 +1,52 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
-using UserService.Application.Exceptions;
-using UserService.Application.Interfaces;
+using UserService.Contracts.Exceptions;
+using UserService.Contracts.Services;
 using UserService.Domain.Entities;
 
-namespace UserService.Application.UseCases.Commands
+namespace UserService.Application.UseCases.Commands;
+
+public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
 {
-    public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
+    private readonly UserManager<User> _userManager;
+    private readonly IMediator _mediator;
+    private readonly ITokenService _tokenService;
+
+    public RegisterUserHandler(UserManager<User> userManager, IMediator mediator, ITokenService tokenService)
     {
-        private readonly UserManager<User> _userManager;
-        private readonly IMediator _mediator;
-        private readonly ITokenService _tokenService;
+        _userManager = userManager;
+        _mediator = mediator;
+        _tokenService = tokenService;
+    }
 
-        public RegisterUserHandler(UserManager<User> userManager, IMediator mediator, ITokenService tokenService)
+    public async Task Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+    {
+        var email = request.Email;
+
+        var user = new User
         {
-            _userManager = userManager;
-            _mediator = mediator;
-            _tokenService = tokenService;
+            Email = email,
+            UserName = email
+        };
+
+        var result = await _userManager.CreateAsync(user, request.Password);
+
+        if (!result.Succeeded)
+        {
+            var errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
+
+            throw new BadRequest(errorMessage);
         }
 
-        public async Task Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+        var roleResult = await _userManager.AddToRoleAsync(user, "user");
+
+        if (!roleResult.Succeeded)
         {
-            var email = request.email;
+            var errorMessage = string.Join(", ", roleResult.Errors.Select(e => e.Description));
 
-            var user = new User
-            {
-                Email = email,
-                UserName = email
-            };
-
-            var result = await _userManager.CreateAsync(user, request.password);
-
-            if (!result.Succeeded)
-            {
-                var errorMessage = string.Join(", ", result.Errors.Select(e => e.Description));
-                throw new BadRequest(errorMessage);
-            }
-
-            var roleResult = await _userManager.AddToRoleAsync(user, "user");
-
-            if (!roleResult.Succeeded)
-            {
-                var errorMessage = string.Join(", ", roleResult.Errors.Select(e => e.Description));
-                throw new BadRequest(errorMessage);
-            }
-
-            await _mediator.Send(new SendConfirmationToEmailCommand(user.Id, request.url, user.Email));
+            throw new BadRequest(errorMessage);
         }
 
+        await _mediator.Send(new SendConfirmationToEmailCommand(user.Id, request.Url, user.Email));
     }
 }

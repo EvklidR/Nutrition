@@ -1,8 +1,8 @@
 ﻿using System.Net.Mail;
 using System.Net;
 using Microsoft.Extensions.Configuration;
-using UserService.Application.Exceptions;
-using UserService.Application.Interfaces;
+using UserService.Contracts.Services;
+using UserService.Contracts.Exceptions;
 
 namespace UserService.Infrastructure.Services;
 

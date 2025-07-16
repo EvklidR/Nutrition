@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
-using UserService.Application.Interfaces;
-using UserService.Application.Exceptions;
+using UserService.Contracts.Broker;
+using UserService.Contracts.Exceptions;
 using UserService.Grpc;
 
 namespace UserService.Infrastructure.gRPC

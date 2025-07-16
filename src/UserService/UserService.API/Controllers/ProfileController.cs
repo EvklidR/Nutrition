@@ -7,7 +7,6 @@ using UserService.Application.DTOs.Responces.Profile;
 using UserService.Application.DTOs.Responses.Profile;
 using UserService.Application.UseCases.Commands;
 using UserService.Application.UseCases.Queries;
-using UserService.Domain.Entities;
 
 namespace UserService.API.Controllers;
 
@@ -24,13 +23,13 @@ public class ProfileController : ControllerBase
 
     [HttpPost]
     [ServiceFilter(typeof(UserIdFilter))]
-    public async Task<ActionResult<ProfileResponseDto>> CreateProfile([FromBody] CreateProfileDTO profileDto)
+    public async Task<ActionResult<ProfileResponse>> CreateProfile([FromBody] CreateProfileDTO profileDto, CancellationToken cancellationToken)
     {
         Guid userId = (Guid)HttpContext.Items["UserId"]!;
 
         var command = new CreateProfileCommand(profileDto, userId);
 
-        var result = await _mediator.Send(command);
+        var result = await _mediator.Send(command, cancellationToken);
 
         return Ok(result);
     }
@@ -38,12 +37,12 @@ public class ProfileController : ControllerBase
     [Authorize]
     [ServiceFilter(typeof(UserIdFilter))]
     [HttpGet("{profileId}/daily-needs")]
-    public async Task<ActionResult<DailyNeedsResponse>> CalculateDailyNeeds(Guid profileId)
+    public async Task<ActionResult<DailyNeedsResponse>> CalculateDailyNeeds(Guid profileId, CancellationToken cancellationToken)
     {
         var userId = (Guid)HttpContext.Items["UserId"]!;
         var query = new CalculateDailyNutrientsQuery(profileId, userId);
 
-        var result = await _mediator.Send(query);
+        var result = await _mediator.Send(query, cancellationToken);
 
         return Ok(result);
     }
@@ -51,12 +50,12 @@ public class ProfileController : ControllerBase
     [Authorize]
     [ServiceFilter(typeof(UserIdFilter))]
     [HttpDelete("{profileId}")]
-    public async Task<IActionResult> DeleteProfile(Guid profileId)
+    public async Task<IActionResult> DeleteProfile(Guid profileId, CancellationToken cancellationToken)
     {
         var userId = (Guid)HttpContext.Items["UserId"]!;
         var command = new DeleteProfileCommand(profileId, userId);
 
-        await _mediator.Send(command);
+        await _mediator.Send(command, cancellationToken);
 
         return NoContent();
     }
@@ -64,12 +63,12 @@ public class ProfileController : ControllerBase
     [Authorize]
     [ServiceFilter(typeof(UserIdFilter))]
     [HttpGet("by-user")]
-    public async Task<ActionResult<IEnumerable<Profile>?>> GetUserProfiles()
+    public async Task<ActionResult<IEnumerable<ShortProfileResponse>>> GetUserProfiles(CancellationToken cancellationToken)
     {
         var userId = (Guid)HttpContext.Items["UserId"]!;
         var query = new GetUserProfilesQuery(userId);
 
-        var result = await _mediator.Send(query);
+        var result = await _mediator.Send(query, cancellationToken);
 
         return Ok(result);
     }
@@ -77,12 +76,12 @@ public class ProfileController : ControllerBase
     [Authorize]
     [ServiceFilter(typeof(UserIdFilter))]
     [HttpGet("by-id/{profileId}")]
-    public async Task<ActionResult<Profile>> GetUserById(Guid profileId)
+    public async Task<ActionResult<ProfileResponse>> GetProfileById(Guid profileId, CancellationToken cancellationToken)
     {
         var userId = (Guid)HttpContext.Items["UserId"]!;
         var query = new GetProfileByIdQuery(profileId, userId);
 
-        var result = await _mediator.Send(query);
+        var result = await _mediator.Send(query, cancellationToken);
 
         return Ok(result);
     }
@@ -90,13 +89,13 @@ public class ProfileController : ControllerBase
     [Authorize]
     [ServiceFilter(typeof(UserIdFilter))]
     [HttpPut]
-    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDTO profileDto)
+    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDTO profileDto, CancellationToken cancellationToken)
     {
         var userId = (Guid)HttpContext.Items["UserId"]!;
 
         var command = new UpdateProfileCommand(profileDto, userId);
 
-        await _mediator.Send(command);
+        await _mediator.Send(command, cancellationToken);
 
         return NoContent();
     }

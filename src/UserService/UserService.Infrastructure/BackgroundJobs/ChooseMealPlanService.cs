@@ -3,7 +3,7 @@ using Microsoft.Extensions.Hosting;
 using UserService.Infrastructure.RabbitMQService;
 using UserService.Infrastructure.MSSQL;
 using Microsoft.EntityFrameworkCore;
-using UserService.Application.Exceptions;
+using UserService.Contracts.Exceptions;
 
 namespace UserService.Infrastructure.BackgroundJobs;
 

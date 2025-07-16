@@ -1,25 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
-using UserService.Application.Exceptions;
+using UserService.Contracts.Exceptions;
 
-namespace UserService.API.Filters
+namespace UserService.API.Filters;
+
+public class UserIdFilter : ActionFilterAttribute
 {
-    public class UserIdFilter : ActionFilterAttribute
+    public override void OnActionExecuting(ActionExecutingContext context)
     {
-        public override void OnActionExecuting(ActionExecutingContext context)
+        var user = context.HttpContext.User;
+        var userIdClaim = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value.ToString();
+
+        if (userIdClaim != null && Guid.TryParse(userIdClaim, out var userId))
         {
-            var user = context.HttpContext.User;
-            var userIdClaim = user.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier).Value.ToString();
-
-            if (userIdClaim != null && Guid.TryParse(userIdClaim, out var userId))
-            {
-                context.HttpContext.Items["UserId"] = userId;
-            }
-            else
-            {
-                throw new Unauthorized("Token doesn't have correct id");
-            }
-
+            context.HttpContext.Items["UserId"] = userId;
         }
+        else
+        {
+            throw new Unauthorized("Token doesn't have correct id");
+        }
+
     }
 }

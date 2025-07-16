@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using System.Text;
-using UserService.Application.Enums;
-using UserService.Application.Interfaces;
+using UserService.Contracts.Broker;
+using UserService.Contracts.Broker.Enums;
 using UserService.Infrastructure.RabbitMQService.Settings;
 
 namespace UserService.Infrastructure.RabbitMQService;

@@ -1,6 +1,6 @@
-﻿using UserService.Application.Enums;
+﻿using UserService.Contracts.Broker.Enums;
 
-namespace UserService.Application.Interfaces;
+namespace UserService.Contracts.Broker;
 
 public interface IBrokerService
 {

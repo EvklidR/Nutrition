@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
-using UserService.Application.Exceptions;
+using UserService.Contracts.Exceptions;
 
 namespace UserService.Application.Behaviors;
 

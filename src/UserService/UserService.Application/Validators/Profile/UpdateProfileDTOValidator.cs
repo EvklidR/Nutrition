@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using UserService.Application.DTOs.Requests.ProfileDTOs;
+using UserService.Application.DTOs.Requests.Profile;
 
 namespace UserService.Application.Validators
 {
@@ -12,20 +12,13 @@ namespace UserService.Application.Validators
                 .When(x => !string.IsNullOrEmpty(x.Name));
 
             RuleFor(x => x.Weight)
-                .GreaterThan(0).WithMessage("Weight must be greater than 0.")
-                .When(x => x.Weight.HasValue);
+                .GreaterThan(0).WithMessage("Weight must be greater than 0.");
 
             RuleFor(x => x.Height)
-                .GreaterThan(0).WithMessage("Height must be greater than 0.")
-                .When(x => x.Height.HasValue);
+                .GreaterThan(0).WithMessage("Height must be greater than 0.");
 
             RuleFor(x => x.ActivityLevel)
-                .IsInEnum().WithMessage("Activity level is invalid.")
-                .When(x => x.ActivityLevel.HasValue);
-
-            RuleFor(x => x.DesiredGlassesOfWater)
-                .GreaterThanOrEqualTo(0).WithMessage("Desired glasses of water must be non-negative.")
-                .When(x => x.DesiredGlassesOfWater.HasValue);
+                .IsInEnum().WithMessage("Activity level is invalid.");
         }
     }
 }

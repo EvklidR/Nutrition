@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using UserService.Application.DTOs.Responces.Profile;
-using UserService.Application.Exceptions;
 using UserService.Contracts.DataAccess.Repositories;
+using UserService.Contracts.Exceptions;
 
 namespace UserService.Application.UseCases.Queries;
 
-public class GetProfileByIdHandler : IQueryHandler<GetProfileByIdQuery, ProfileResponseDto>
+public class GetProfileByIdHandler : IQueryHandler<GetProfileByIdQuery, ProfileResponse>
 {
     private readonly IProfileRepository _profileRepository;
     private readonly IMapper _mapper;
@@ -16,7 +16,7 @@ public class GetProfileByIdHandler : IQueryHandler<GetProfileByIdQuery, ProfileR
         _mapper = mapper;
     }
 
-    public async Task<ProfileResponseDto> Handle(GetProfileByIdQuery request, CancellationToken cancellationToken)
+    public async Task<ProfileResponse> Handle(GetProfileByIdQuery request, CancellationToken cancellationToken)
     {
         var profile = await _profileRepository.GetByIdAsync(request.profileId, cancellationToken);
 
@@ -30,6 +30,6 @@ public class GetProfileByIdHandler : IQueryHandler<GetProfileByIdQuery, ProfileR
             throw new Unauthorized("Owner isn't valid");
         }
 
-        return _mapper.Map<ProfileResponseDto>(profile);
+        return _mapper.Map<ProfileResponse>(profile);
     }
 }

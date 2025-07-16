@@ -5,7 +5,7 @@ using UserService.Infrastructure.MSSQL;
 using UserService.Infrastructure.Repositories;
 using UserService.Infrastructure.Services;
 using UserService.Infrastructure.Configurations;
-using UserService.Application.Interfaces;
+using UserService.Contracts.Services;
 using UserService.Infrastructure.gRPC;
 using Hangfire;
 using RabbitMQ.Client;
@@ -14,6 +14,7 @@ using UserService.Infrastructure.BackgroundJobs;
 using Microsoft.Extensions.Options;
 using UserService.Infrastructure.RabbitMQService.Settings;
 using UserService.Contracts.DataAccess.Repositories;
+using UserService.Contracts.Broker;
 
 namespace UserService.Infrastructure.DependencyInjection
 {
