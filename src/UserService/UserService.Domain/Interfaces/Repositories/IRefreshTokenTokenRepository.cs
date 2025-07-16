@@ -4,9 +4,8 @@ namespace UserService.Domain.Interfaces.Repositories
 {
     public interface IRefreshTokenTokenRepository
     {
-        Task<IEnumerable<RefreshToken>?> GetAllByUserAsync(Guid userId);
-        void Add(RefreshToken entity);
-        void Delete(RefreshToken entity);
-        Task SaveChangesAsync();
+        Task<IEnumerable<RefreshToken>?> GetAllByUserAsync(Guid userId, CancellationToken cancellationToken);
+        Task AddAsync(RefreshToken entity, CancellationToken cancellationToken);
+        Task DeleteAsync(RefreshToken entity, CancellationToken cancellationToken);
     }
 }

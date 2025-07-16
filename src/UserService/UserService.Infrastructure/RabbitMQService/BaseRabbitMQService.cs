@@ -31,7 +31,7 @@ namespace UserService.Infrastructure.RabbitMQService
             _channel = _connection.CreateChannelAsync(channelOpts).GetAwaiter().GetResult();
         }
 
-        protected async Task CreateQueueIfNotExistsAsync(string queueName)
+        protected async Task CreateQueueIfNotExistsAsync(string queueName, CancellationToken cancellationToken)
         {
             string dlqName = queueName + "-dlq";
 
@@ -41,7 +41,13 @@ namespace UserService.Infrastructure.RabbitMQService
                 { "x-dead-letter-routing-key", dlqName }
             };
 
-            await _channel.QueueDeclareAsync(queueName, durable: true, exclusive: false, autoDelete: false, arguments: mainQueueArgs);
+            await _channel.QueueDeclareAsync(
+                queueName, 
+                durable: true, 
+                exclusive: false, 
+                autoDelete: false, 
+                arguments: mainQueueArgs, 
+                cancellationToken: cancellationToken);
 
             var dlqArgs = new Dictionary<string, object?>
             {
@@ -50,7 +56,13 @@ namespace UserService.Infrastructure.RabbitMQService
                 { "x-dead-letter-routing-key", queueName }
             };
 
-            await _channel.QueueDeclareAsync(dlqName, durable: true, exclusive: false, autoDelete: false, arguments: dlqArgs);
+            await _channel.QueueDeclareAsync(
+                dlqName, 
+                durable: true, 
+                exclusive: false, 
+                autoDelete: false, 
+                arguments: dlqArgs,
+                cancellationToken: cancellationToken);
         }
 
         public async ValueTask DisposeAsync()

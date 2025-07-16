@@ -29,7 +29,7 @@ namespace UserService.Infrastructure.Services
             _refreshTokenTokenRepository = refreshTokenTokenRepository;
         }
 
-        public async Task<string> GenerateAccessToken(User user)
+        public async Task<string> GenerateAccessTokenAsync(User user)
         {
             var roles = await _userManager.GetRolesAsync(user);
 
@@ -57,18 +57,16 @@ namespace UserService.Infrastructure.Services
             return tokenString;
         }
 
-        public async Task<string> GenerateRefreshToken(User user)
+        public async Task<string> GenerateRefreshTokenAsync(User user, CancellationToken cancellationToken)
         {
             string refreshToken = GenerateRandomToken();
 
             var token = new RefreshToken() { Token = refreshToken, UserId = user.Id };
 
-            _refreshTokenTokenRepository.Add(token);
-
-            await _refreshTokenTokenRepository.SaveChangesAsync();
+            await _refreshTokenTokenRepository.AddAsync(token, cancellationToken);
 
             BackgroundJob.Schedule(
-                () => DeleteToken(token),
+                () => DeleteTokenAsync(token, cancellationToken),
                 TimeSpan.FromDays(30));
 
             return refreshToken;
@@ -89,11 +87,9 @@ namespace UserService.Infrastructure.Services
             return refreshToken;
         }
 
-        public async Task DeleteToken(RefreshToken token)
+        public async Task DeleteTokenAsync(RefreshToken token, CancellationToken cancellationToken)
         {
-            _refreshTokenTokenRepository.Delete(token);
-
-            await _refreshTokenTokenRepository.SaveChangesAsync();
+            await _refreshTokenTokenRepository.DeleteAsync(token, cancellationToken);
         }
 
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)

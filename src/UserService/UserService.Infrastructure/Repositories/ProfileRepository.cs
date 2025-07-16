@@ -8,41 +8,43 @@ namespace UserService.Infrastructure.Repositories
     public class ProfileRepository : IProfileRepository
     {
         private readonly ApplicationDbContext _context;
+
         public ProfileRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public async Task<IEnumerable<Profile>?> GetAllByUserAsync(Guid userId)
+        public async Task<IEnumerable<Profile>?> GetAllByUserAsync(Guid userId, CancellationToken cancellationToken)
         {
             return await _context.Profiles
                 .Where(p => p.UserId == userId)
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<Profile?> GetByIdAsync(Guid id)
+        public async Task<Profile?> GetByIdAsync(Guid id,CancellationToken cancellationToken)
         {
-            return await _context.Profiles.FindAsync(id);
+            return await _context.Profiles.FindAsync(id, cancellationToken);
         }
 
-        public void Add(Profile entity)
+        public async Task AddAsync(Profile entity, CancellationToken cancellationToken)
         {
             _context.Profiles.Add(entity);
+
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public void Delete(Profile entity)
+        public async Task DeleteAsync(Profile entity, CancellationToken cancellationToken)
         {
             _context.Profiles.Remove(entity);
+
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        public void Update(Profile entity)
+        public async Task UpdateAsync(Profile entity, CancellationToken cancellationToken)
         {
             _context.Profiles.Update(entity);
-        }
 
-        public async Task SaveChangesAsync()
-        {
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }

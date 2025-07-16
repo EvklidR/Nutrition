@@ -1,32 +1,27 @@
 ﻿using System.Text;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using UserService.Application.Enums;
 using UserService.Infrastructure.RabbitMQService;
-using UserService.Application.UseCases.Commands;
+using UserService.Infrastructure.MSSQL;
+using Microsoft.EntityFrameworkCore;
+using UserService.Application.Exceptions;
 
 namespace UserService.Infrastructure.BackgroundJobs
 {
     public class ChooseMealPlanService : BackgroundService
     {
-        private readonly IServiceScopeFactory _factory;
+        private readonly ApplicationDbContext _dbContext;
         private readonly RabbitMQChooseMealPlanConsumer _consumer;
 
-        public ChooseMealPlanService(IServiceScopeFactory factory, RabbitMQChooseMealPlanConsumer consumer)
+        public ChooseMealPlanService(ApplicationDbContext dbContext, RabbitMQChooseMealPlanConsumer consumer)
         {
-            _factory = factory;
+            _dbContext = dbContext;
             _consumer = consumer;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             await _consumer.AddListenerAsync(async args =>
             {
-                using var scope = _factory.CreateScope();
-
-                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-
                 try
                 {
                     var body = args.Body.ToArray();
@@ -34,9 +29,18 @@ namespace UserService.Infrastructure.BackgroundJobs
 
                     if (Guid.TryParse(message, out var profileId))
                     {
-                        var command = new ChooseMealPlanCommand(profileId);
+                        var profile = await _dbContext.Profiles.FirstOrDefaultAsync(profile => profile.Id == profileId, cancellationToken);
 
-                        await mediator.Send(command, stoppingToken);
+                        if (profile == null)
+                        {
+                            throw new NotFound("Profile not found");
+                        }
+
+                        profile.ThereIsMealPlan = true;
+
+                        _dbContext.Profiles.Update(profile);
+
+                        await _dbContext.SaveChangesAsync(cancellationToken);
                     }
                     else
                     {
@@ -47,7 +51,8 @@ namespace UserService.Infrastructure.BackgroundJobs
                 {
                     Console.WriteLine($"{DateTime.Now} [ERROR] Failed to process message: {ex.Message}");
                 }
-            });
+            },
+            cancellationToken);
         }
     }
 }

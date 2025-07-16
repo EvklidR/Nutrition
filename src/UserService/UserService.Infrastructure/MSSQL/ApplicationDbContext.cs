@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UserService.Domain.Entities;
 using UserService.Infrastructure.MSSQL.Configurations;
+using System.Reflection;
 
 namespace UserService.Infrastructure.MSSQL
 {
@@ -17,9 +18,9 @@ namespace UserService.Infrastructure.MSSQL
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder);
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            builder.ApplyConfiguration(new ProfileConfiguration());
+            base.OnModelCreating(builder);
         }
     }
 }

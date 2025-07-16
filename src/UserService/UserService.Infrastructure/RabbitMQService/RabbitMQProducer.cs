@@ -23,7 +23,7 @@ namespace UserService.Infrastructure.RabbitMQService
                 Persistent = true
             };
 
-            await CreateQueueIfNotExistsAsync(queueName.ToString());
+            await CreateQueueIfNotExistsAsync(queueName.ToString(), cancellationToken);
 
             var body = Encoding.UTF8.GetBytes(message);
 
@@ -34,7 +34,8 @@ namespace UserService.Infrastructure.RabbitMQService
                     routingKey: queueName.ToString(),
                     mandatory: mandatory,
                     basicProperties: properties,
-                    body: body);
+                    body: body,
+                    cancellationToken);
             }
             catch (Exception ex)
             {

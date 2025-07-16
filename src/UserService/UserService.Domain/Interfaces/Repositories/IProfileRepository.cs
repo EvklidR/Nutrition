@@ -4,11 +4,10 @@ namespace UserService.Domain.Interfaces.Repositories
 {
     public interface IProfileRepository
     {
-        Task<Profile?> GetByIdAsync(Guid id);
-        Task<IEnumerable<Profile>?> GetAllByUserAsync(Guid userId);
-        void Add(Profile entity);
-        void Update(Profile entity);
-        void Delete(Profile entity);
-        Task SaveChangesAsync();
+        Task<Profile?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        Task<IEnumerable<Profile>?> GetAllByUserAsync(Guid userId, CancellationToken cancellationToken);
+        Task AddAsync(Profile entity, CancellationToken cancellationToken);
+        Task UpdateAsync(Profile entity, CancellationToken cancellationToken);
+        Task DeleteAsync(Profile entity, CancellationToken cancellationToken);
     }
 }
