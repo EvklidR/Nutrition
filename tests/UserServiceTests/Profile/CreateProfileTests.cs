@@ -3,7 +3,7 @@ using Bogus;
 using FluentAssertions;
 using Microsoft.AspNetCore.Identity;
 using Moq;
-using UserService.Application.DTOs;
+using UserService.Application.DTOs.Requests.ProfileDTOs;
 using UserService.Application.Exceptions;
 using UserService.Application.UseCases.Commands;
 using UserService.Domain.Entities;

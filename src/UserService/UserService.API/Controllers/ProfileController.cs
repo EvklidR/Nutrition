@@ -2,102 +2,102 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserService.API.Filters;
-using UserService.Application.DTOs;
-using UserService.Application.Models;
+using UserService.Application.DTOs.Requests.Profile;
+using UserService.Application.DTOs.Responces.Profile;
+using UserService.Application.DTOs.Responses.Profile;
 using UserService.Application.UseCases.Commands;
 using UserService.Application.UseCases.Queries;
 using UserService.Domain.Entities;
 
-namespace UserService.API.Controllers
+namespace UserService.API.Controllers;
+
+[Route("[controller]")]
+[ApiController]
+public class ProfileController : ControllerBase
 {
-    [Route("[controller]")]
-    [ApiController]
-    public class ProfileController : ControllerBase
+    private readonly IMediator _mediator;
+
+    public ProfileController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public ProfileController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+    [HttpPost]
+    [ServiceFilter(typeof(UserIdFilter))]
+    public async Task<ActionResult<ProfileResponseDto>> CreateProfile([FromBody] CreateProfileDTO profileDto)
+    {
+        Guid userId = (Guid)HttpContext.Items["UserId"]!;
 
-        [HttpPost]
-        [ServiceFilter(typeof(UserIdFilter))]
-        public async Task<ActionResult<Profile>> CreateProfile([FromBody] CreateProfileDTO profileDto)
-        {
-            Guid userId = (Guid)HttpContext.Items["UserId"]!;
-            profileDto.UserId = userId;
-            var command = new CreateProfileCommand(profileDto);
+        var command = new CreateProfileCommand(profileDto, userId);
 
-            var result = await _mediator.Send(command);
+        var result = await _mediator.Send(command);
 
-            return Ok(result);
-        }
+        return Ok(result);
+    }
 
-        [Authorize]
-        [ServiceFilter(typeof(UserIdFilter))]
-        [HttpGet("{profileId}/daily-needs")]
-        public async Task<ActionResult<DailyNeedsResponse>> CalculateDailyNeeds(Guid profileId)
-        {
-            var userId = (Guid)HttpContext.Items["UserId"]!;
-            var query = new CalculateDailyNutrientsQuery(profileId, userId);
+    [Authorize]
+    [ServiceFilter(typeof(UserIdFilter))]
+    [HttpGet("{profileId}/daily-needs")]
+    public async Task<ActionResult<DailyNeedsResponse>> CalculateDailyNeeds(Guid profileId)
+    {
+        var userId = (Guid)HttpContext.Items["UserId"]!;
+        var query = new CalculateDailyNutrientsQuery(profileId, userId);
 
-            var result = await _mediator.Send(query);
+        var result = await _mediator.Send(query);
 
-            return Ok(result);
-        }
+        return Ok(result);
+    }
 
-        [Authorize]
-        [ServiceFilter(typeof(UserIdFilter))]
-        [HttpDelete("{profileId}")]
-        public async Task<IActionResult> DeleteProfile(Guid profileId)
-        {
-            var userId = (Guid)HttpContext.Items["UserId"]!;
-            var command = new DeleteProfileCommand(profileId, userId);
+    [Authorize]
+    [ServiceFilter(typeof(UserIdFilter))]
+    [HttpDelete("{profileId}")]
+    public async Task<IActionResult> DeleteProfile(Guid profileId)
+    {
+        var userId = (Guid)HttpContext.Items["UserId"]!;
+        var command = new DeleteProfileCommand(profileId, userId);
 
-            await _mediator.Send(command);
+        await _mediator.Send(command);
 
-            return NoContent();
-        }
+        return NoContent();
+    }
 
-        [Authorize]
-        [ServiceFilter(typeof(UserIdFilter))]
-        [HttpGet("by-user")]
-        public async Task<ActionResult<IEnumerable<Profile>?>> GetUserProfiles()
-        {
-            var userId = (Guid)HttpContext.Items["UserId"]!;
-            var query = new GetUserProfilesQuery(userId);
+    [Authorize]
+    [ServiceFilter(typeof(UserIdFilter))]
+    [HttpGet("by-user")]
+    public async Task<ActionResult<IEnumerable<Profile>?>> GetUserProfiles()
+    {
+        var userId = (Guid)HttpContext.Items["UserId"]!;
+        var query = new GetUserProfilesQuery(userId);
 
-            var result = await _mediator.Send(query);
+        var result = await _mediator.Send(query);
 
-            return Ok(result);
-        }
+        return Ok(result);
+    }
 
-        [Authorize]
-        [ServiceFilter(typeof(UserIdFilter))]
-        [HttpGet("by-id/{profileId}")]
-        public async Task<ActionResult<Profile>> GetUserById(Guid profileId)
-        {
-            var userId = (Guid)HttpContext.Items["UserId"]!;
-            var query = new GetProfileByIdQuery(profileId, userId);
+    [Authorize]
+    [ServiceFilter(typeof(UserIdFilter))]
+    [HttpGet("by-id/{profileId}")]
+    public async Task<ActionResult<Profile>> GetUserById(Guid profileId)
+    {
+        var userId = (Guid)HttpContext.Items["UserId"]!;
+        var query = new GetProfileByIdQuery(profileId, userId);
 
-            var result = await _mediator.Send(query);
+        var result = await _mediator.Send(query);
 
-            return Ok(result);
-        }
+        return Ok(result);
+    }
 
-        [Authorize]
-        [ServiceFilter(typeof(UserIdFilter))]
-        [HttpPut]
-        public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDTO profileDto)
-        {
-            var userId = (Guid)HttpContext.Items["UserId"]!;
-            var command = new UpdateProfileCommand(profileDto, userId);
+    [Authorize]
+    [ServiceFilter(typeof(UserIdFilter))]
+    [HttpPut]
+    public async Task<IActionResult> UpdateProfile([FromBody] UpdateProfileDTO profileDto)
+    {
+        var userId = (Guid)HttpContext.Items["UserId"]!;
 
-            await _mediator.Send(command);
+        var command = new UpdateProfileCommand(profileDto, userId);
 
-            return NoContent();
-        }
+        await _mediator.Send(command);
 
+        return NoContent();
     }
 }

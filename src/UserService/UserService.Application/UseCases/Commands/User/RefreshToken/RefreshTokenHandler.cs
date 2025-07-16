@@ -1,9 +1,9 @@
 ﻿using UserService.Application.Exceptions;
-using UserService.Application.Models;
 using UserService.Application.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using UserService.Domain.Entities;
 using UserService.Domain.Interfaces.Repositories;
+using UserService.Application.DTOs.Responses.User;
 
 namespace UserService.Application.UseCases.Commands
 {

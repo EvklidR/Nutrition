@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using UserService.Infrastructure.MSSQL;
 using UserService.Infrastructure.Repositories;
-using UserService.Domain.Interfaces.Repositories;
 using UserService.Infrastructure.Services;
 using UserService.Infrastructure.Configurations;
 using UserService.Application.Interfaces;
@@ -14,6 +13,7 @@ using UserService.Infrastructure.RabbitMQService;
 using UserService.Infrastructure.BackgroundJobs;
 using Microsoft.Extensions.Options;
 using UserService.Infrastructure.RabbitMQService.Settings;
+using UserService.Contracts.DataAccess.Repositories;
 
 namespace UserService.Infrastructure.DependencyInjection
 {

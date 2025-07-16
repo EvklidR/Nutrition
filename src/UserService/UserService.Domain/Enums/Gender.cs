@@ -1,10 +1,9 @@
-﻿namespace UserService.Domain.Enums
+﻿namespace UserService.Domain.Enums;
+
+public enum Gender : byte
 {
-    public enum Gender : byte
-    {
-        Male,
-        Female
-    }
+    Male,
+    Female
 }
 
 

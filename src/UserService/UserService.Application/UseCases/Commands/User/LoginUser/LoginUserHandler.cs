@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using UserService.Application.DTOs.Responses.User;
 using UserService.Application.Exceptions;
 using UserService.Application.Interfaces;
-using UserService.Application.Models;
 using UserService.Application.UseCases.Commands;
 using UserService.Domain.Entities;
 

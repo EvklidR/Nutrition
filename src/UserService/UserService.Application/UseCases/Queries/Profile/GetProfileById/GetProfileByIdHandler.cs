@@ -1,32 +1,35 @@
-﻿using UserService.Application.Exceptions;
-using UserService.Domain.Entities;
-using UserService.Domain.Interfaces.Repositories;
+﻿using AutoMapper;
+using UserService.Application.DTOs.Responces.Profile;
+using UserService.Application.Exceptions;
+using UserService.Contracts.DataAccess.Repositories;
 
-namespace UserService.Application.UseCases.Queries
+namespace UserService.Application.UseCases.Queries;
+
+public class GetProfileByIdHandler : IQueryHandler<GetProfileByIdQuery, ProfileResponseDto>
 {
-    public class GetProfileByIdHandler : IQueryHandler<GetProfileByIdQuery, Profile>
+    private readonly IProfileRepository _profileRepository;
+    private readonly IMapper _mapper;
+
+    public GetProfileByIdHandler(IProfileRepository profileRepository, IMapper mapper)
     {
-        private readonly IProfileRepository _profileRepository;
-        public GetProfileByIdHandler(IProfileRepository profileRepository)
+        _profileRepository = profileRepository;
+        _mapper = mapper;
+    }
+
+    public async Task<ProfileResponseDto> Handle(GetProfileByIdQuery request, CancellationToken cancellationToken)
+    {
+        var profile = await _profileRepository.GetByIdAsync(request.profileId, cancellationToken);
+
+        if (profile == null)
         {
-            _profileRepository = profileRepository;
+            throw new NotFound("profile not found");
+        }    
+
+        if (profile.UserId != request.userId)
+        {
+            throw new Unauthorized("Owner isn't valid");
         }
 
-        public async Task<Profile> Handle(GetProfileByIdQuery request, CancellationToken cancellationToken)
-        {
-            var profile = await _profileRepository.GetByIdAsync(request.profileId, cancellationToken);
-
-            if (profile == null)
-            {
-                throw new NotFound("profile not found");
-            }    
-
-            if (profile.UserId != request.userId)
-            {
-                throw new Unauthorized("Owner isn't valid");
-            }
-
-            return profile;
-        }
+        return _mapper.Map<ProfileResponseDto>(profile);
     }
 }

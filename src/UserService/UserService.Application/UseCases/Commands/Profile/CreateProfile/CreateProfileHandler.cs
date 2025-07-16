@@ -1,55 +1,55 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
+using UserService.Application.DTOs.Responces.Profile;
 using UserService.Application.Exceptions;
-using UserService.Domain.Entities;
+using UserService.Contracts.DataAccess.Repositories;
 using UserService.Domain.Enums;
-using UserService.Domain.Interfaces.Repositories;
+using Profile = UserService.Domain.Entities.Profile;
 
-namespace UserService.Application.UseCases.Commands
+namespace UserService.Application.UseCases.Commands;
+
+public class CreateProfileHandler : ICommandHandler<CreateProfileCommand, ProfileResponseDto>
 {
-    public class CreateProfileHandler : ICommandHandler<CreateProfileCommand, Domain.Entities.Profile>
-    {
-        private readonly IProfileRepository _profileRepository;
-        private readonly UserManager<User> _userManager;
-        private readonly IMapper _mapper;
+    private readonly IProfileRepository _profileRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
 
-        public CreateProfileHandler(IProfileRepository profileRepository, UserManager<User> userManager, IMapper mapper)
+    public CreateProfileHandler(IProfileRepository profileRepository, IUserRepository userRepository, IMapper mapper)
+    {
+        _profileRepository = profileRepository;
+        _userRepository = userRepository;
+        _mapper = mapper;
+    }
+
+    public async Task<ProfileResponseDto> Handle(CreateProfileCommand command, CancellationToken cancellationToken)
+    {
+        var profile = _mapper.Map<Profile>(command.ProfileDto);
+
+        var userExists = await _userRepository.CheckIfExistsAsync(command.UserId, cancellationToken);
+
+        if (!userExists)
         {
-            _profileRepository = profileRepository;
-            _userManager = userManager;
-            _mapper = mapper;
+            throw new Unauthorized("User does not exist");
         }
 
-        public async Task<Domain.Entities.Profile> Handle(CreateProfileCommand request, CancellationToken cancellationToken)
+        profile.UserId = command.UserId;
+
+        var existingProfiles = await _profileRepository.GetAllByUserAsync(profile.UserId, cancellationToken);
+
+        if (existingProfiles != null)
         {
-            var profile = _mapper.Map<Domain.Entities.Profile>(request.profileDto);
-
-            var userExists = await _userManager.FindByIdAsync(profile.UserId.ToString());
-
-            if (userExists == null)
+            foreach (var prof in existingProfiles)
             {
-                throw new Unauthorized("User does not exist");
-            }
-
-            var existingProfiles = await _profileRepository.GetAllByUserAsync(profile.UserId);
-
-            if (existingProfiles != null)
-            {
-                foreach (var prof in existingProfiles)
+                if (prof.Name == profile.Name)
                 {
-                    if (prof.Name == profile.Name)
-                    {
-                        throw new AlreadyExists("Profile with this name in your account already exists");
-                    }
+                    throw new AlreadyExists("Profile with this name in your account already exists");
                 }
             }
-
-            profile.DesiredGlassesOfWater = profile.Gender == Gender.Female ? 11 : 15;
-            _profileRepository.Add(profile);
-
-            await _profileRepository.SaveChangesAsync();
-
-            return profile;
         }
+
+        profile.DesiredGlassesOfWater = profile.Gender == Gender.Female ? 11 : 15;
+
+        await _profileRepository.AddAsync(profile, cancellationToken);
+
+        return _mapper.Map<ProfileResponseDto>(profile);
     }
 }

@@ -1,7 +1,6 @@
-﻿using UserService.Application.DTOs;
-using UserService.Domain.Entities;
+﻿using UserService.Application.DTOs.Requests.Profile;
+using UserService.Application.DTOs.Responces.Profile;
 
-namespace UserService.Application.UseCases.Commands
-{
-    public record CreateProfileCommand(CreateProfileDTO profileDto) : ICommand<Profile>;
-}
+namespace UserService.Application.UseCases.Commands;
+
+public record CreateProfileCommand(CreateProfileDTO ProfileDto, Guid UserId) : ICommand<ProfileResponseDto>;

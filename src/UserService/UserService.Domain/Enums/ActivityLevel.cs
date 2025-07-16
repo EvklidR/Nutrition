@@ -1,11 +1,10 @@
-﻿namespace UserService.Domain.Enums
+﻿namespace UserService.Domain.Enums;
+
+public enum ActivityLevel : byte
 {
-    public enum ActivityLevel : byte
-    {
-        Sedentary,
-        Low,
-        Medium,
-        High,
-        VeryHigh
-    }
+    Sedentary,
+    Low,
+    Medium,
+    High,
+    VeryHigh
 }

@@ -1,16 +1,15 @@
 ﻿using FluentValidation;
 using UserService.Application.Validators;
 
-namespace UserService.Application.UseCases.Commands
+namespace UserService.Application.UseCases.Commands;
+
+public class CreateProfileCommandValidator : AbstractValidator<CreateProfileCommand>
 {
-    public class CreateProfileCommandValidator : AbstractValidator<CreateProfileCommand>
+    public CreateProfileCommandValidator(CreateProfileDTOValidator createProfileDTOValidator)
     {
-        public CreateProfileCommandValidator(CreateProfileDTOValidator createProfileDTOValidator)
-        {
-            RuleFor(x => x.profileDto)
-                .NotNull()
+        RuleFor(x => x.ProfileDto)
+            .NotNull()
                 .WithMessage("Profile data is required.")
-                .SetValidator(createProfileDTOValidator);
-        }
+            .SetValidator(createProfileDTOValidator);
     }
 }

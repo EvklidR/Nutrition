@@ -1,4 +1,4 @@
-﻿using UserService.Application.Models;
+﻿using UserService.Application.DTOs.Responses.User;
 
 namespace UserService.Application.UseCases.Commands
 {

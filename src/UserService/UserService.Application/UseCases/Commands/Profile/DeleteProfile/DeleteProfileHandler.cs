@@ -1,41 +1,39 @@
-﻿using UserService.Application.Exceptions;
+﻿using UserService.Application.Enums;
+using UserService.Application.Exceptions;
 using UserService.Application.Interfaces;
-using UserService.Domain.Interfaces.Repositories;
+using UserService.Contracts.DataAccess.Repositories;
 
-namespace UserService.Application.UseCases.Commands
+namespace UserService.Application.UseCases.Commands;
+
+public class DeleteProfileHandler : ICommandHandler<DeleteProfileCommand>
 {
-    public class DeleteProfileHandler : ICommandHandler<DeleteProfileCommand>
+    private readonly IProfileRepository _profileRepository;
+    private readonly IBrokerService _brokerService;
+
+    public DeleteProfileHandler(
+        IProfileRepository profileRepository,
+        IBrokerService brokerService)
     {
-        private readonly IProfileRepository _profileRepository;
-        private readonly IBrokerService _brokerService;
+        _profileRepository = profileRepository;
+        _brokerService = brokerService;
+    }
 
-        public DeleteProfileHandler(
-            IProfileRepository profileRepository,
-            IBrokerService brokerService)
+    public async Task Handle(DeleteProfileCommand request, CancellationToken cancellationToken)
+    {
+        var profile = await _profileRepository.GetByIdAsync(request.ProfileId, cancellationToken);
+
+        if (profile == null)
         {
-            _profileRepository = profileRepository;
-            _brokerService = brokerService;
+            throw new NotFound("Profile not found");
         }
 
-        public async Task Handle(DeleteProfileCommand request, CancellationToken cancellationToken)
+        if (request.UserId != profile!.UserId)
         {
-            var profile = await _profileRepository.GetByIdAsync(request.profileId);
-
-            if (profile == null)
-            {
-                throw new NotFound("Profile not found");
-            }
-
-            if (request.userId != profile!.UserId)
-            {
-                throw new Unauthorized("Owner isn't valid");
-            }
-
-            _profileRepository.Delete(profile);
-
-            await _profileRepository.SaveChangesAsync();
-
-            await _brokerService.PublishMessageAsync(profile.Id.ToString(), Enums.QueueName.ProfileDeleted);
+            throw new Unauthorized("Owner isn't valid");
         }
+
+        await _profileRepository.DeleteAsync(profile, cancellationToken);
+
+        await _brokerService.PublishMessageAsync(profile.Id.ToString(), QueueName.ProfileDeleted, cancellationToken);
     }
 }

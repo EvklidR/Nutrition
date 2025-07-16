@@ -41,10 +41,16 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.API", "src\UserService\UserService.API\UserService.API.csproj", "{AB441B18-56A8-46C9-BFD4-F15C03D10C85}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Application", "src\UserService\UserService.Application\UserService.Application.csproj", "{EBA53F19-7A0A-4695-8437-ED939231A9C4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{51769910-AB09-447A-9533-E210EE6380AF} = {51769910-AB09-447A-9533-E210EE6380AF}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Domain", "src\UserService\UserService.Domain\UserService.Domain.csproj", "{DBF76526-4455-41E3-9BD2-0461B01EE871}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService.Infrastructure", "src\UserService\UserService.Infrastructure\UserService.Infrastructure.csproj", "{4BC5622D-CC1B-4BD4-98CF-B24AC3C44885}"
+	ProjectSection(ProjectDependencies) = postProject
+		{51769910-AB09-447A-9533-E210EE6380AF} = {51769910-AB09-447A-9533-E210EE6380AF}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FoodServiceTests", "tests\FoodServiceTests\FoodServiceTests.csproj", "{A29C0406-03CF-43F9-883E-952317A8ADDD}"
 EndProject
@@ -61,6 +67,11 @@ EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{23C9B71D-4F6A-4F1B-B3B3-01E0A95AF307}"
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "Nutrition.Client", "src\Nutrition.Client\Nutrition.Client.esproj", "{01DF7C27-E50A-4AF9-B149-EDBF08EAF517}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService.Contracts", "src\UserService\UserService.Contracts\UserService.Contracts.csproj", "{51769910-AB09-447A-9533-E210EE6380AF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DBF76526-4455-41E3-9BD2-0461B01EE871} = {DBF76526-4455-41E3-9BD2-0461B01EE871}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -158,6 +169,10 @@ Global
 		{01DF7C27-E50A-4AF9-B149-EDBF08EAF517}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01DF7C27-E50A-4AF9-B149-EDBF08EAF517}.Release|Any CPU.Build.0 = Release|Any CPU
 		{01DF7C27-E50A-4AF9-B149-EDBF08EAF517}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{51769910-AB09-447A-9533-E210EE6380AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51769910-AB09-447A-9533-E210EE6380AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51769910-AB09-447A-9533-E210EE6380AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51769910-AB09-447A-9533-E210EE6380AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -188,6 +203,7 @@ Global
 		{21B65D4B-F884-4F2B-BC6B-BE89FD4F89A6} = {40818098-7F87-4A9A-9AD3-CD025F894AE6}
 		{F4199B0F-5B85-4942-914D-E7F85D6DF115} = {7251ECCF-E351-4BB5-9938-95E9B5F911A2}
 		{01DF7C27-E50A-4AF9-B149-EDBF08EAF517} = {B122DB00-21E0-4BE9-BCD1-1786F3B95814}
+		{51769910-AB09-447A-9533-E210EE6380AF} = {7A791B8A-6029-44CE-8B60-8F9B40655C1F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD8CDA70-C9EF-4C82-9517-9363D709C383}

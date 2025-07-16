@@ -1,8 +1,8 @@
-﻿using UserService.Application.Exceptions;
+﻿using UserService.Application.DTOs.Responses.Profile;
+using UserService.Application.Exceptions;
 using UserService.Application.Interfaces;
-using UserService.Application.Models;
+using UserService.Contracts.DataAccess.Repositories;
 using UserService.Domain.Enums;
-using UserService.Domain.Interfaces.Repositories;
 
 namespace UserService.Application.UseCases.Queries
 {
@@ -21,7 +21,7 @@ namespace UserService.Application.UseCases.Queries
             CalculateDailyNutrientsQuery request,
             CancellationToken cancellationToken)
         {
-            var profile = await _profileRepository.GetByIdAsync(request.profileId);
+            var profile = await _profileRepository.GetByIdAsync(request.profileId, cancellationToken);
 
             if (profile == null)
             {
@@ -33,7 +33,8 @@ namespace UserService.Application.UseCases.Queries
                 throw new Unauthorized("Owner isn't valid");
             }
 
-            DailyNeedsResponse response;
+            var response = new DailyNeedsResponse();
+            response.DesiredGlassesOfWater = profile.DesiredGlassesOfWater;
 
             if (!profile.ThereIsMealPlan)
             {
@@ -41,10 +42,12 @@ namespace UserService.Application.UseCases.Queries
             }
             else
             {
-                response = await _mealPlanService.GetDailyNeedsByMealPlanAsync(
+                var resp = await _mealPlanService.GetDailyNeedsByMealPlanAsync(
                     profile.Id,
                     profile.Weight,
                     CalculateDailyCalories(profile));
+
+                response = 
             }
 
             return response;

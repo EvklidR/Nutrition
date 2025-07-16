@@ -1,7 +1,6 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
 using UserService.Application.Interfaces;
-using UserService.Application.Models;
 using UserService.Application.Exceptions;
 using UserService.Grpc;
 
@@ -17,7 +16,7 @@ namespace UserService.Infrastructure.gRPC
             _client = new GRPCMealPlanService.GRPCMealPlanServiceClient(channel);
         }
 
-        public async Task<DailyNeedsResponse> GetDailyNeedsByMealPlanAsync(
+        public async Task<(double Calories, double Proteins, double Fats, double Carbohydrates)> GetDailyNeedsByMealPlanAsync(
             Guid userId,
             double bodyWeight,
             double dailyKcal)
@@ -33,7 +32,7 @@ namespace UserService.Infrastructure.gRPC
             {
                 var response = await _client.CalculateKcalAndMacrosAsync(request);
 
-                return new DailyNeedsResponse(response.Calories, response.Proteins, response.Fats, response.Carbohydrates);
+                return (response.Calories, response.Proteins, response.Fats, response.Carbohydrates);
             }
             catch (RpcException ex)
             {

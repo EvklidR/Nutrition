@@ -9,10 +9,6 @@
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-	
-  <ItemGroup>
-    <ProjectReference Include="..\UserService.Application\UserService.Application.csproj" />
-  </ItemGroup>
 
   <ItemGroup>
 	  <Protobuf Include="Protos\MealPlan.proto" GrpcServices="Client" />
@@ -41,6 +37,10 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
     <PackageReference Include="Polly" Version="8.5.2" />
     <PackageReference Include="RabbitMQ.Client" Version="7.1.1" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Include="..\UserService.Contracts\UserService.Contracts.csproj" />
   </ItemGroup>
 
 </Project>
