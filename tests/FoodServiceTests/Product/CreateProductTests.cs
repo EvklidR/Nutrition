@@ -1,20 +1,20 @@
 ﻿using AutoMapper;
 using Bogus;
 using FluentAssertions;
-using FoodService.Application.DTOs.Product;
 using FoodService.Application.UseCases.Commands.Product;
 using FoodService.Application.UseCases.CommandHandlers.Product;
 using FoodService.Application.Interfaces;
 using FoodService.Domain.Interfaces;
 using Moq;
 using FoodService.Application.Exceptions;
+using FoodService.Application.DTOs.Product.Requests;
 
 namespace FoodServiceTests.Product
 {
     public class CreateProductTests
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-        private readonly Mock<IUserService> _userServiceMock;
+        private readonly Mock<ICheckUserService> _userServiceMock;
         private readonly IMapper _mapper;
 
         private readonly CreateProductHandler _handler;
@@ -24,7 +24,7 @@ namespace FoodServiceTests.Product
         public CreateProductTests()
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _userServiceMock = new Mock<IUserService>();
+            _userServiceMock = new Mock<ICheckUserService>();
 
             var mapperConfig = new MapperConfiguration(cfg =>
             {

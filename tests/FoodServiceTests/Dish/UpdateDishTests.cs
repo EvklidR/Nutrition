@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Bogus;
 using FluentAssertions;
-using FoodService.Application.DTOs.Dish;
 using FoodService.Application.UseCases.Commands.Dish;
 using FoodService.Application.UseCases.CommandHandlers.Dish;
 using FoodService.Application.Interfaces;
@@ -10,6 +9,7 @@ using FoodService.Domain.Interfaces;
 using Moq;
 using FoodService.Application.Exceptions;
 using Microsoft.AspNetCore.Http.Internal;
+using FoodService.Application.DTOs.Recipe.Requests;
 
 namespace FoodServiceTests.Dish
 {
@@ -21,7 +21,7 @@ namespace FoodServiceTests.Dish
 
         private readonly UpdateDishHandler _handler;
 
-        private readonly Faker<UpdateDishDTO> _updateDishDtoFaker;
+        private readonly Faker<UpdateRecipeDTO> _updateDishDtoFaker;
 
         public UpdateDishTests()
         {
@@ -34,16 +34,16 @@ namespace FoodServiceTests.Dish
             });
             _mapper = mapperConfig.CreateMapper();
 
-            _updateDishDtoFaker = new Faker<UpdateDishDTO>()
+            _updateDishDtoFaker = new Faker<UpdateRecipeDTO>()
                 .RuleFor(d => d.Id, f => f.Random.Guid())
                 .RuleFor(d => d.Name, f => f.Lorem.Word())
                 .RuleFor(d => d.Description, f => f.Lorem.Sentence())
                 .RuleFor(d => d.AmountOfPortions, f => f.Random.Int(1, 5))
                 .RuleFor(d => d.Image, f => new FormFile(new MemoryStream(), 0, 0, "image", "test.jpg"))
-                .RuleFor(d => d.Ingredients, f => new List<CreateOrUpdateProductOfDishDTO>
+                .RuleFor(d => d.Ingredients, f => new List<CreateOrUpdateProductOfRecipeDTO>
                 {
-                    new CreateOrUpdateProductOfDishDTO { ProductId = Guid.NewGuid(), Weight = 300 },
-                    new CreateOrUpdateProductOfDishDTO { ProductId = Guid.NewGuid(), Weight = 150 }
+                    new CreateOrUpdateProductOfRecipeDTO { ProductId = Guid.NewGuid(), Weight = 300 },
+                    new CreateOrUpdateProductOfRecipeDTO { ProductId = Guid.NewGuid(), Weight = 150 }
                 });
 
             _handler = new UpdateDishHandler(_unitOfWorkMock.Object, _mapper, _imageServiceMock.Object);
@@ -134,7 +134,7 @@ namespace FoodServiceTests.Dish
                 Id = updateDishDto.Id,
                 UserId = ownerId,
                 ImageUrl = "old_image_url",
-                Ingredients = new List<ProductOfDish>()
+                Ingredients = new List<ProductOfRecipe>()
             };
 
             _unitOfWorkMock

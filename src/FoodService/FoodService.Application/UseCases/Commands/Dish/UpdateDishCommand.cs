@@ -1,6 +1,6 @@
-﻿using FoodService.Application.DTOs.Dish;
+﻿using FoodService.Application.DTOs.Recipe.Requests;
 
 namespace FoodService.Application.UseCases.Commands.Dish
 {
-    public record UpdateDishCommand(UpdateDishDTO UpdateDishDTO, Guid UserId) : ICommand;
+    public record UpdateDishCommand(UpdateRecipeDTO UpdateDishDTO, Guid UserId) : ICommand;
 }

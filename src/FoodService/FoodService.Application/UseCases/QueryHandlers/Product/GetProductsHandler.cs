@@ -1,8 +1,7 @@
 ﻿using FoodService.Domain.Interfaces;
-using FoodService.Application.DTOs.Product;
 using AutoMapper;
 using FoodService.Application.UseCases.Queries.Product;
-using FoodService.Application.Models;
+using FoodService.Application.DTOs.Product.Responses;
 
 namespace FoodService.Application.UseCases.QueryHandlers.Product
 {
@@ -21,7 +20,7 @@ namespace FoodService.Application.UseCases.QueryHandlers.Product
         {
             var response = await _unitOfWork.ProductRepository.GetAllAsync(request.UserId, request.Parameters);
             
-            var productsDTO = _mapper.Map<List<ProductDTO>>(response.products);
+            var productsDTO = _mapper.Map<List<ProductResponse>>(response.products);
 
             return new ProductsResponse()
             {

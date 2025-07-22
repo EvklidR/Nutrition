@@ -2,11 +2,11 @@
 using FoodService.Domain.Interfaces;
 using FoodService.Application.Exceptions;
 using FoodService.Application.UseCases.Queries.Dish;
-using FoodService.Application.DTOs.Dish;
+using FoodService.Application.DTOs.Recipe.Responses;
 
 namespace FoodService.Application.UseCases.QueryHandlers.Dish
 {
-    public class GetDishByIdHandler : IQueryHandler<GetDishByIdQuery, FullDishDTO>
+    public class GetDishByIdHandler : IQueryHandler<GetDishByIdQuery, CalculatedRecipeResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -17,7 +17,7 @@ namespace FoodService.Application.UseCases.QueryHandlers.Dish
             _mapper = mapper;
         }
 
-        public async Task<FullDishDTO> Handle(GetDishByIdQuery request, CancellationToken cancellationToken)
+        public async Task<CalculatedRecipeResponse> Handle(GetDishByIdQuery request, CancellationToken cancellationToken)
         {
             var dish = await _unitOfWork.DishRepository.GetByIdAsync(request.DishId);
 
@@ -31,7 +31,7 @@ namespace FoodService.Application.UseCases.QueryHandlers.Dish
                 throw new Forbidden("You dont have access to this dish");
             }
 
-            var dishDTO = _mapper.Map<FullDishDTO>(dish);
+            var dishDTO = _mapper.Map<CalculatedRecipeResponse>(dish);
 
             return dishDTO;
         }

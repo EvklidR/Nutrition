@@ -16,12 +16,12 @@ namespace FoodService.Infrastructure.DependencyInjection
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IUserService>(provider =>
+            services.AddScoped<ICheckUserService>(provider =>
             {
                 var url = configuration["GrpcServices:UserServiceUrl"];
                 var cacheService = provider.GetRequiredService<ICacheService>();
 
-                return new UserService(url, cacheService);
+                return new CheckUserService(url, cacheService);
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>

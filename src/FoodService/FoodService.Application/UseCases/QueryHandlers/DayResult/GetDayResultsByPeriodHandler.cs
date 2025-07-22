@@ -11,10 +11,10 @@ namespace FoodService.Application.UseCases.QueryHandlers.DayResult
         : IQueryHandler<GetDayResultsByPeriodQuery, IEnumerable<DayResultDTO>?>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IUserService _userService;
+        private readonly ICheckUserService _userService;
         private readonly IMapper _mapper;
 
-        public GetDayResultsByPeriodQueryHandler(IUnitOfWork unitOfWork, IUserService userService, IMapper mapper)
+        public GetDayResultsByPeriodQueryHandler(IUnitOfWork unitOfWork, ICheckUserService userService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _userService = userService;

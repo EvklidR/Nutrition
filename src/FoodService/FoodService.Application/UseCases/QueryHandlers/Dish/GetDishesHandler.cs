@@ -3,7 +3,7 @@ using FoodService.Domain.Interfaces;
 using FoodService.Application.UseCases.Queries.Dish;
 using AutoMapper;
 using FoodService.Application.DTOs.Dish;
-using FoodService.Application.Models;
+using FoodService.Application.DTOs.Dish.Responses;
 
 namespace FoodService.Application.UseCases.QueryHandlers.Dish
 {
@@ -22,7 +22,7 @@ namespace FoodService.Application.UseCases.QueryHandlers.Dish
         {
             var response = await _unitOfWork.DishRepository.GetAllAsync(request.UserId, request.Parameters);
 
-            var dishesDTO = _mapper.Map<List<BriefDishDTO>>(response.dishes);
+            var dishesDTO = _mapper.Map<List<DishResponse>>(response.dishes);
 
             return new DishesResponse() 
             { 

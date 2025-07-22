@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using FluentValidation;
-using PostService.BusinessLogic.Services;
-using StackExchange.Redis;
 using Microsoft.Extensions.Configuration;
-
+using PostService.BusinessLogic.Services;
 
 namespace PostService.BusinessLogic.DependencyInjection
 {

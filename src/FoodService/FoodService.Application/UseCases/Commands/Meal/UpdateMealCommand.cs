@@ -1,4 +1,4 @@
-﻿using FoodService.Application.DTOs.Meal;
+﻿using FoodService.Application.DTOs.Meal.Requests;
 
 namespace FoodService.Application.UseCases.Commands.Meal
 {

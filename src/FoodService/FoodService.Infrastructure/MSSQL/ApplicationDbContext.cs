@@ -13,7 +13,7 @@ namespace FoodService.Infrastructure.MSSQL
         public DbSet<Meal> Meals { get; set; }
         public DbSet<Dish> Dishes { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductOfDish> ProductsOfDishes { get; set; }
+        public DbSet<ProductOfRecipe> ProductsOfDishes { get; set; }
         public DbSet<EatenFood> EatenFoods { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

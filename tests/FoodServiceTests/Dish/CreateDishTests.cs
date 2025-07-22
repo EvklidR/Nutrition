@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Bogus;
 using FluentAssertions;
-using FoodService.Application.DTOs.Dish;
 using FoodService.Application.UseCases.Commands.Dish;
 using FoodService.Application.UseCases.CommandHandlers.Dish;
 using FoodService.Application.Interfaces;
@@ -11,24 +10,25 @@ using Moq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using FoodService.Application.Exceptions;
+using FoodService.Application.DTOs.Recipe.Requests;
 
 namespace FoodServiceTests.Dish
 {
     public class CreateDishTests
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-        private readonly Mock<IUserService> _userServiceMock;
+        private readonly Mock<ICheckUserService> _userServiceMock;
         private readonly Mock<IImageService> _imageServiceMock;
         private readonly IMapper _mapper;
 
         private readonly CreateDishHandler _handler;
 
-        private readonly Faker<CreateDishDTO> _createDishDtoFaker;
+        private readonly Faker<CreateRecipeDTO> _createDishDtoFaker;
 
         public CreateDishTests()
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _userServiceMock = new Mock<IUserService>();
+            _userServiceMock = new Mock<ICheckUserService>();
             _imageServiceMock = new Mock<IImageService>();
 
             var mapperConfig = new MapperConfiguration(cfg =>
@@ -37,16 +37,16 @@ namespace FoodServiceTests.Dish
             });
             _mapper = mapperConfig.CreateMapper();
 
-            _createDishDtoFaker = new Faker<CreateDishDTO>()
+            _createDishDtoFaker = new Faker<CreateRecipeDTO>()
                 .RuleFor(d => d.UserId, f => f.Random.Guid())
                 .RuleFor(d => d.Name, f => f.Lorem.Word())
                 .RuleFor(d => d.Description, f => f.Lorem.Sentence())
                 .RuleFor(d => d.AmountOfPortions, f => f.Random.Int(1, 5))
                 .RuleFor(d => d.Image, f => new FormFile(new MemoryStream(), 0, 0, "image", "test.jpg"))
-                .RuleFor(d => d.Ingredients, f => new List<CreateOrUpdateProductOfDishDTO>
+                .RuleFor(d => d.Ingredients, f => new List<CreateOrUpdateProductOfRecipeDTO>
                 {
-                    new CreateOrUpdateProductOfDishDTO { ProductId = Guid.NewGuid(), Weight = 300 },
-                    new CreateOrUpdateProductOfDishDTO { ProductId = Guid.NewGuid(), Weight = 150 }
+                    new CreateOrUpdateProductOfRecipeDTO { ProductId = Guid.NewGuid(), Weight = 300 },
+                    new CreateOrUpdateProductOfRecipeDTO { ProductId = Guid.NewGuid(), Weight = 150 }
                 });
 
             _handler = new CreateDishHandler(

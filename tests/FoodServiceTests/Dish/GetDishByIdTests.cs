@@ -34,7 +34,7 @@ namespace FoodServiceTests.Dish
                 .RuleFor(d => d.Name, f => f.Lorem.Word())
                 .RuleFor(d => d.Description, f => f.Lorem.Sentence())
                 .RuleFor(d => d.ImageUrl, f => f.Internet.Url())
-                .RuleFor(d => d.Ingredients, f => new List<ProductOfDish>());
+                .RuleFor(d => d.Ingredients, f => new List<ProductOfRecipe>());
 
             _handler = new GetDishByIdHandler(_unitOfWorkMock.Object, _mapper);
         }

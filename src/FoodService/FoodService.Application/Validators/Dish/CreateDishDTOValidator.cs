@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using FoodService.Application.DTOs;
-using FoodService.Application.DTOs.Dish;
+using FoodService.Application.DTOs.Recipe.Requests;
 using Microsoft.AspNetCore.Http;
 
 namespace FoodService.Application.Validators
 {
-    public class CreateDishDTOValidator : AbstractValidator<CreateDishDTO>
+    public class CreateDishDTOValidator : AbstractValidator<CreateRecipeDTO>
     {
         public CreateDishDTOValidator(IngredientOfDishDTOValidator ingredientOfDishDTOValidator)
         {

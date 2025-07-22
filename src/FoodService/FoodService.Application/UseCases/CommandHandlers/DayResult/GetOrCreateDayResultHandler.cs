@@ -11,10 +11,10 @@ namespace FoodService.Application.UseCases.CommandHandlers.DayResult
         : ICommandHandler<GetOrCreateDayResultCommand, DayResultDTO>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IUserService _userService;
+        private readonly ICheckUserService _userService;
         private readonly IMapper _mapper;
 
-        public GetOrCreateDayResultHandler(IUnitOfWork unitOfWork, IUserService userService, IMapper mapper)
+        public GetOrCreateDayResultHandler(IUnitOfWork unitOfWork, ICheckUserService userService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _userService = userService;

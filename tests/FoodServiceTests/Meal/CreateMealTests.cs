@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Bogus;
 using FluentAssertions;
-using FoodService.Application.DTOs.Meal;
 using FoodService.Application.UseCases.Commands.Meal;
 using FoodService.Application.UseCases.CommandHandlers.Meal;
 using FoodService.Application.Interfaces;
@@ -9,13 +8,14 @@ using FoodService.Domain.Entities;
 using FoodService.Domain.Interfaces;
 using Moq;
 using FoodService.Application.Exceptions;
+using FoodService.Application.DTOs.Meal.Requests;
 
 namespace FoodServiceTests.Meal
 {
     public class CreateMealTests
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-        private readonly Mock<IUserService> _userServiceMock;
+        private readonly Mock<ICheckUserService> _userServiceMock;
         private readonly IMapper _mapper;
 
         private readonly CreateMealHandler _handler;
@@ -27,7 +27,7 @@ namespace FoodServiceTests.Meal
         public CreateMealTests()
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _userServiceMock = new Mock<IUserService>();
+            _userServiceMock = new Mock<ICheckUserService>();
 
             var mapperConfig = new MapperConfiguration(cfg =>
             {

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using PostService.BusinessLogic.DTOs.Comment;
+using PostService.BusinessLogic.DTOs.Requests.Comment;
+using PostService.BusinessLogic.DTOs.Responses.Comment;
 using PostService.Core.Entities;
 
 namespace PostService.BusinessLogic.Mappers
@@ -15,7 +16,7 @@ namespace PostService.BusinessLogic.Mappers
 
             CreateMap<UpdateCommentDTO, Comment>();
 
-            CreateMap<Comment, CommentDTO>()
+            CreateMap<Comment, CommentResponse>()
                 .ForMember(dest => dest.AmountOfLikes, opt => opt.MapFrom(src => src.UserLikeIds.Count))
                 .ForMember(dest => dest.IsOwner, opt => opt.MapFrom((src, dest, destMember, context) =>
                     src.OwnerId == context.Items["CurrentUserId"].ToString()))

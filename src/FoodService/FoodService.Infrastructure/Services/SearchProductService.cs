@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
-using FoodService.Application.Models;
 using FoodService.Application.Interfaces;
+using FoodService.Application.DTOs.Product.Responses;
 
 namespace FoodService.Infrastructure.Services
 {

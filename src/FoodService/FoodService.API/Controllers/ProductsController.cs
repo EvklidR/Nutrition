@@ -1,12 +1,12 @@
-﻿using FoodService.Application.DTOs.Product;
-using FoodService.Application.UseCases.Commands.Product;
+﻿using FoodService.Application.UseCases.Commands.Product;
 using FoodService.Application.UseCases.Queries.Product;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using FoodService.API.Filters;
-using FoodService.Application.Models;
 using FoodService.Domain.Repositories.Models;
+using FoodService.Application.DTOs.Product.Responses;
+using FoodService.Application.DTOs.Product.Requests;
 
 namespace FoodService.API.Controllers
 {
@@ -63,7 +63,7 @@ namespace FoodService.API.Controllers
         [HttpPost]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        public async Task<ActionResult<ProductDTO>> CreateProduct([FromBody] CreateProductDTO createProductDTO)
+        public async Task<ActionResult<ProductResponse>> CreateProduct([FromBody] CreateProductDTO createProductDTO)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 

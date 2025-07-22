@@ -8,9 +8,9 @@ namespace FoodService.Application.UseCases.CommandHandlers.Meal
     public class DeleteMealHandler : ICommandHandler<DeleteMealCommand>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IUserService _userService;
+        private readonly ICheckUserService _userService;
 
-        public DeleteMealHandler(IUnitOfWork unitOfWork, IUserService userService)
+        public DeleteMealHandler(IUnitOfWork unitOfWork, ICheckUserService userService)
         {
             _unitOfWork = unitOfWork;
             _userService = userService;

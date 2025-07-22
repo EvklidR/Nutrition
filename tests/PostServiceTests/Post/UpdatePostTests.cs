@@ -2,7 +2,7 @@
 using Bogus;
 using FluentAssertions;
 using Moq;
-using PostService.BusinessLogic.DTOs.Post;
+using PostService.BusinessLogic.DTOs.Requests.Post;
 using PostService.BusinessLogic.Exceptions;
 using PostService.BusinessLogic.Mappers;
 using PostService.Core.Entities;

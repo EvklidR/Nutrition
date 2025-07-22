@@ -1,6 +1,6 @@
 ﻿using FoodService.Application.Exceptions;
 using FoodService.Domain.Entities;
-using FoodService.Domain.Repositories.Models;
+using FoodService.Domain.Interfaces.Repositories.Models.enums;
 using System.Linq.Expressions;
 
 namespace FoodService.Infrastructure.Extentions

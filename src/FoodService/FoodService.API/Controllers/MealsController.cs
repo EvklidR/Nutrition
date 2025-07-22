@@ -1,10 +1,11 @@
-﻿using FoodService.Application.DTOs.Meal;
-using FoodService.Application.UseCases.Commands.Meal;
+﻿using FoodService.Application.UseCases.Commands.Meal;
 using FoodService.Application.UseCases.Queries.Meal;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using FoodService.API.Filters;
+using FoodService.Application.DTOs.Meal.Responses;
+using FoodService.Application.DTOs.Meal.Requests;
 
 namespace FoodService.API.Controllers
 {
@@ -31,7 +32,7 @@ namespace FoodService.API.Controllers
         [HttpGet]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        public async Task<ActionResult<FullMealDTO>> GetMealById([FromQuery] Guid mealId, Guid dayId)
+        public async Task<ActionResult<FullMealResponse>> GetMealById([FromQuery] Guid mealId, Guid dayId)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
@@ -48,7 +49,7 @@ namespace FoodService.API.Controllers
         [HttpPost]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        public async Task<ActionResult<FullMealDTO>> CreateMeal([FromBody] CreateMealDTO createMealDTO)
+        public async Task<ActionResult<FullMealResponse>> CreateMeal([FromBody] CreateMealDTO createMealDTO)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 

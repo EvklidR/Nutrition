@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PostService.API.Filters;
-using PostService.BusinessLogic.DTOs.Post;
-using PostService.BusinessLogic.Models;
+using PostService.BusinessLogic.DTOs.Requests.Post;
+using PostService.BusinessLogic.DTOs.Responses.Post;
 
 namespace PostService.API.Controllers
 {
@@ -29,8 +29,8 @@ namespace PostService.API.Controllers
         /// <returns>A list of posts and the total count.</returns>
         [HttpGet]
         [ServiceFilter(typeof(UserIdFilter))]
-        [ProducesResponseType(typeof(PostsResponseModel), StatusCodes.Status200OK)]
-        public async Task<ActionResult<PostsResponseModel>> GetPosts([FromQuery] List<string>? words = null, int? page = 1, int? size = 10)
+        [ProducesResponseType(typeof(PostsResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult<PostsResponse>> GetPosts([FromQuery] List<string>? words = null, int? page = 1, int? size = 10)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
 
@@ -46,8 +46,8 @@ namespace PostService.API.Controllers
         /// <returns>A list of posts and the total count.</returns>
         [HttpGet("{postId}")]
         [ServiceFilter(typeof(UserIdFilter))]
-        [ProducesResponseType(typeof(PostDTO), StatusCodes.Status200OK)]
-        public async Task<ActionResult<PostDTO>> GetPost(string postId)
+        [ProducesResponseType(typeof(PostResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult<PostResponse>> GetPost(string postId)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
 
@@ -65,8 +65,8 @@ namespace PostService.API.Controllers
         [HttpGet("by_user")]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        [ProducesResponseType(typeof(PostsResponseModel), StatusCodes.Status200OK)]
-        public async Task<ActionResult<PostsResponseModel>> GetUserPosts(
+        [ProducesResponseType(typeof(PostsResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult<PostsResponse>> GetUserPosts(
             [FromQuery] int? page = 1,
             [FromQuery] int? size = 10)
         {
@@ -85,16 +85,13 @@ namespace PostService.API.Controllers
         [HttpPost]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        [ProducesResponseType(typeof(PostDTO), StatusCodes.Status200OK)]
-        public async Task<ActionResult<PostDTO>> CreatePost([FromForm] CreatePostDTO createPostDTO)
+        [ProducesResponseType(typeof(PostResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult<PostResponse>> CreatePost([FromForm] CreatePostDTO createPostDTO)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
             var userName = (string)HttpContext.Items["UserName"]!;
 
-            createPostDTO.OwnerId = userId;
-            createPostDTO.OwnerEmail = userName;
-
-            var response = await _postService.CreatePostAsync(createPostDTO);
+            var response = await _postService.CreatePostAsync(createPostDTO, userName, userId);
 
             return Ok(response);
         }

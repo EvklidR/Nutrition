@@ -5,6 +5,7 @@ using FoodService.Application.DTOs.DayResult;
 using FoodService.Application.UseCases.Commands.DayResult;
 using FoodService.Application.UseCases.Queries.DayResult;
 using FoodService.API.Filters;
+using FoodService.Application.DTOs.DayResult.Requests;
 
 namespace FoodService.API.Controllers
 {

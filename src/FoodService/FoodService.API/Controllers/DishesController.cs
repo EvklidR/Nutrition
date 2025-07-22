@@ -2,11 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using FoodService.Application.UseCases.Commands.Dish;
 using FoodService.Application.UseCases.Queries.Dish;
-using FoodService.Application.DTOs.Dish;
 using FoodService.Domain.Repositories.Models;
 using Microsoft.AspNetCore.Authorization;
 using FoodService.API.Filters;
-using FoodService.Application.Models;
+using FoodService.Application.DTOs.Recipe.Requests;
+using FoodService.Application.DTOs.Recipe.Responses;
+using FoodService.Application.DTOs.Dish.Responses;
 
 namespace FoodService.API.Controllers
 {
@@ -32,8 +33,8 @@ namespace FoodService.API.Controllers
         [HttpGet("{dishId}")]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        [ProducesResponseType(typeof(FullDishDTO), StatusCodes.Status200OK)]
-        public async Task<ActionResult<FullDishDTO>> GetDishById(Guid dishId)
+        [ProducesResponseType(typeof(CalculatedRecipeResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult<CalculatedRecipeResponse>> GetDishById(Guid dishId)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
@@ -68,8 +69,8 @@ namespace FoodService.API.Controllers
         [HttpPost]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        [ProducesResponseType(typeof(FullDishDTO), StatusCodes.Status201Created)]
-        public async Task<ActionResult<FullDishDTO>> CreateDish([FromForm] CreateDishDTO createDishDTO)
+        [ProducesResponseType(typeof(CalculatedRecipeResponse), StatusCodes.Status201Created)]
+        public async Task<ActionResult<CalculatedRecipeResponse>> CreateDish([FromForm] CreateRecipeDTO createDishDTO)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
@@ -88,7 +89,7 @@ namespace FoodService.API.Controllers
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateDish([FromForm] UpdateDishDTO updateDishDTO)
+        public async Task<IActionResult> UpdateDish([FromForm] UpdateRecipeDTO updateDishDTO)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 

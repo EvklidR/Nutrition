@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using FoodService.Application.DTOs.Product;
+using FoodService.Application.DTOs.Product.Requests;
+using FoodService.Application.DTOs.Product.Responses;
 using FoodService.Domain.Entities;
 
 namespace FoodService.Application.Mappers
@@ -18,7 +19,7 @@ namespace FoodService.Application.Mappers
                 dest => dest.Calories, 
                 opt => opt.MapFrom(src => src.Carbohydrates * 4 + src.Proteins * 4 + src.Fats * 9));
 
-            CreateMap<Product, ProductDTO>();
+            CreateMap<Product, ProductResponse>();
         }
     }
 }

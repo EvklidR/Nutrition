@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using FoodService.Application.DTOs.DayResult;
+using FoodService.Application.DTOs.DayResult.Requests;
+using FoodService.Application.DTOs.DayResult.Responses;
 using FoodService.Domain.Entities;
 
 namespace FoodService.Application.Mappers
@@ -12,7 +13,7 @@ namespace FoodService.Application.Mappers
 
             CreateMap<UpdateDayResultDTO, DayResult>();
 
-            CreateMap<DayResult, DayResultDTO>();
+            CreateMap<DayResult, DayResultResponse>();
         }
     }
 }

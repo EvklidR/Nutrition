@@ -12,12 +12,12 @@ namespace FoodService.Application.UseCases.CommandHandlers.DayResult
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IUserService _userService;
+        private readonly ICheckUserService _userService;
 
         public CreateDayResultHandler(
             IUnitOfWork unitOfWork,
             IMapper mapper,
-            IUserService userService)
+            ICheckUserService userService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;

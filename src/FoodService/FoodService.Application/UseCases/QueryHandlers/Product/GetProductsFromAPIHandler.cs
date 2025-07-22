@@ -1,5 +1,5 @@
-﻿using FoodService.Application.Interfaces;
-using FoodService.Application.Models;
+﻿using FoodService.Application.DTOs.Product.Responses;
+using FoodService.Application.Interfaces;
 using FoodService.Application.UseCases.Queries.Product;
 
 namespace FoodService.Application.UseCases.QueryHandlers.Product

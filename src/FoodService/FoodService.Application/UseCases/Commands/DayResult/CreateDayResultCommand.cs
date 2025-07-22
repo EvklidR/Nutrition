@@ -1,4 +1,5 @@
 ﻿using FoodService.Application.DTOs.DayResult;
+using FoodService.Application.DTOs.DayResult.Requests;
 
 namespace FoodService.Application.UseCases.Commands.DayResult
 {

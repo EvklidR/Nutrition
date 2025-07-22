@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using PostService.BusinessLogic.DTOs.Post;
+using PostService.BusinessLogic.DTOs.Requests.Post;
 
 namespace PostService.BusinessLogic.Validators
 {
@@ -9,13 +9,13 @@ namespace PostService.BusinessLogic.Validators
         {
             RuleFor(x => x.Text)
                 .NotEmpty()
-                .WithMessage("Text must be provided")
+                    .WithMessage("Text must be provided")
                 .MaximumLength(2000)
-                .WithMessage("Text length must be less than 2000 letters");
+                    .WithMessage("Text length must be less than 2000 letters");
 
             RuleFor(x => x.Title)
                 .MaximumLength(100)
-                .WithMessage("Title length must be less than 100 letters");
+                    .WithMessage("Title length must be less than 100 letters");
         }
     }
 }

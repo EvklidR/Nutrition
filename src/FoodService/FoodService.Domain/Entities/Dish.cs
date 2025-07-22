@@ -2,9 +2,8 @@
 {
     public class Dish : Food
     {
-        public string? Description { get; set; }
-        public string? ImageUrl { get; set; }
+        public Guid RecipeId { get; set; }
 
-        public List<ProductOfDish> Ingredients { get; set; } = [];
+        public Recipe Recipe { get; set; } = null!;
     }
 }

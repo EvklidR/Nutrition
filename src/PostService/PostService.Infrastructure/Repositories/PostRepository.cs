@@ -1,6 +1,8 @@
 ﻿using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using PostService.Core.Entities;
-using PostService.Infrastructure.Extentions;
+using PostService.Infrastructure.Extentions.IFindFluentExtensions;
+using PostService.Infrastructure.Extentions.IQueriableExtensions;
 using PostService.Infrastructure.MongoDB;
 using PostService.Infrastructure.Repositories.Interfaces;
 
@@ -31,15 +33,16 @@ namespace PostService.Infrastructure.Repositories
             }
         }
 
-        public async Task<(IEnumerable<Post>? posts, long totalCount)> GetByUserIdAsync(string userId, int? page, int? size)
+        public async Task<(IEnumerable<Post>? posts, long totalCount)> GetAllByUserIdAsync(string userId, int? page, int? size)
         {
             var filter = Builders<Post>.Filter.Eq(p => p.OwnerId, userId);
 
             var totalCount = await _posts.CountDocumentsAsync(filter);
 
-            var posts = (IEnumerable<Post>)await _posts.Find(filter).ToListAsync();
-
-            posts = posts.GetPaginated(page, size);
+            var posts = await _posts.AsQueryable()
+                .Where(p => p.OwnerId == userId)
+                .GetPaginated(page, size)
+                .ToListAsync();
 
             return (posts, totalCount);
         }
@@ -50,14 +53,12 @@ namespace PostService.Infrastructure.Repositories
 
             if (words != null && words.Any())
             {
-                filter = Builders<Post>.Filter.Text(string.Join(" ", words));
+                filter = Builders<Post>.Filter.Text(string.Join(" ", words), "russian");
             }
             
             var totalCount = await _posts.CountDocumentsAsync(filter);
 
-            var posts = (IEnumerable<Post>)await _posts.Find(filter).ToListAsync();
-
-            posts = posts.GetPaginated(page, size);
+            var posts = await _posts.Find(filter).GetPaginated(page, size).ToListAsync();
 
             return (posts, totalCount);
         }

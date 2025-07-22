@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using FoodService.Application.DTOs.Product;
+using FoodService.Application.DTOs.Product.Requests;
 
 namespace FoodService.Application.Validators
 {

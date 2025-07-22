@@ -1,4 +1,4 @@
-﻿using FoodService.Application.Models;
+﻿using FoodService.Application.DTOs.Dish.Responses;
 using FoodService.Domain.Repositories.Models;
 
 namespace FoodService.Application.UseCases.Queries.Dish

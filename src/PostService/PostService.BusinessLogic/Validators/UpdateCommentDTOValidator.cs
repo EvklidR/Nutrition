@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using PostService.BusinessLogic.DTOs.Comment;
+using PostService.BusinessLogic.DTOs.Requests.Comment;
 
 namespace PostService.BusinessLogic.Validators
 {
@@ -9,9 +9,9 @@ namespace PostService.BusinessLogic.Validators
         {
             RuleFor(x => x.Text)
                 .NotEmpty()
-                .WithMessage("Text must be provided")
+                    .WithMessage("Text must be provided")
                 .MaximumLength(1000)
-                .WithMessage("Text length must be less than 1000 letters");
+                    .WithMessage("Text length must be less than 1000 letters");
         }
     }
 }

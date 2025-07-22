@@ -110,9 +110,9 @@ namespace FoodServiceTests.Product
             {
                 new FoodService.Domain.Entities.Dish
                 {
-                    Ingredients = new List<ProductOfDish>
+                    Ingredients = new List<ProductOfRecipe>
                     {
-                        new ProductOfDish { ProductId = productId }
+                        new ProductOfRecipe { ProductId = productId }
                     }
                 }
             };

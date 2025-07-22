@@ -12,7 +12,7 @@ namespace FoodServiceTests.DayResult
     public class DeleteDayResultTests
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-        private readonly Mock<IUserService> _userServiceMock;
+        private readonly Mock<ICheckUserService> _userServiceMock;
 
         private readonly DeleteDayResultHandler _handler;
 
@@ -21,7 +21,7 @@ namespace FoodServiceTests.DayResult
         public DeleteDayResultTests()
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _userServiceMock = new Mock<IUserService>();
+            _userServiceMock = new Mock<ICheckUserService>();
 
             _faker = new Faker();
 

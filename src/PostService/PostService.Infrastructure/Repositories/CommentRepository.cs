@@ -2,7 +2,7 @@
 using PostService.Core.Entities;
 using PostService.Infrastructure.MongoDB;
 using PostService.Infrastructure.Repositories.Interfaces;
-using PostService.Infrastructure.Extentions;
+using PostService.Infrastructure.Extentions.IEnumerableExtensions;
 
 namespace PostService.Infrastructure.Repositories
 {
@@ -23,7 +23,7 @@ namespace PostService.Infrastructure.Repositories
             return post?.Comments.FirstOrDefault(c => c.Id == commentId);
         }
 
-        public async Task<IEnumerable<Comment>?> GetAllAsync(string postId, int? page, int? size)
+        public async Task<IEnumerable<Comment>> GetAllAsync(string postId, int? page, int? size)
         {
             var filter = Builders<Post>.Filter.Eq(p => p.Id, postId);
 
@@ -31,7 +31,7 @@ namespace PostService.Infrastructure.Repositories
 
             if (post == null)
             {
-                return null;
+                return [];
             }
 
             var comments = post.Comments.OrderByDescending(comment => comment.CreationDate).GetPaginated(page, size);

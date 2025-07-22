@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using FluentAssertions;
 using Moq;
-using FoodService.Application.DTOs.Product;
 using FoodService.Application.UseCases.Queries.Product;
 using FoodService.Application.UseCases.QueryHandlers.Product;
 using FoodService.Domain.Interfaces;
 using FoodService.Domain.Repositories.Models;
 using Bogus;
+using FoodService.Application.DTOs.Product.Responses;
 
 namespace FoodServiceTests.Product
 {
@@ -27,7 +27,7 @@ namespace FoodServiceTests.Product
 
             var mapperConfig = new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<FoodService.Domain.Entities.Product, ProductDTO>();
+                cfg.CreateMap<FoodService.Domain.Entities.Product, ProductResponse>();
             });
             _mapper = mapperConfig.CreateMapper();
 

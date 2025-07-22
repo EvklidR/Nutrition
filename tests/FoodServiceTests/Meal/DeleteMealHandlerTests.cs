@@ -11,13 +11,13 @@ namespace FoodServiceTests.Meal
     public class DeleteMealHandlerTests
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-        private readonly Mock<IUserService> _userServiceMock;
+        private readonly Mock<ICheckUserService> _userServiceMock;
         private readonly DeleteMealHandler _handler;
 
         public DeleteMealHandlerTests()
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _userServiceMock = new Mock<IUserService>();
+            _userServiceMock = new Mock<ICheckUserService>();
             _handler = new DeleteMealHandler(_unitOfWorkMock.Object, _userServiceMock.Object);
         }
 

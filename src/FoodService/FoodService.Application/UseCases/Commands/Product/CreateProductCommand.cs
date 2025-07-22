@@ -1,6 +1,7 @@
-﻿using FoodService.Application.DTOs.Product;
+﻿using FoodService.Application.DTOs.Product.Requests;
+using FoodService.Application.DTOs.Product.Responses;
 
 namespace FoodService.Application.UseCases.Commands.Product
 {
-    public record CreateProductCommand(CreateProductDTO CreateProductDTO) : ICommand<ProductDTO>;
+    public record CreateProductCommand(CreateProductDTO CreateProductDTO) : ICommand<ProductResponse>;
 }

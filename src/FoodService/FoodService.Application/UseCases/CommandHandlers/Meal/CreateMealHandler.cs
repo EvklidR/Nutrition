@@ -2,25 +2,25 @@
 using FoodService.Domain.Interfaces;
 using FoodService.Application.Exceptions;
 using FoodService.Application.UseCases.Commands.Meal;
-using FoodService.Application.DTOs.Meal;
 using FoodService.Application.Interfaces;
+using FoodService.Application.DTOs.Meal.Responses;
 
 namespace FoodService.Application.UseCases.CommandHandlers.Meal
 {
-    public class CreateMealHandler : ICommandHandler<CreateMealCommand, FullMealDTO>
+    public class CreateMealHandler : ICommandHandler<CreateMealCommand, FullMealResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IUserService _userService;
+        private readonly ICheckUserService _userService;
 
-        public CreateMealHandler(IUnitOfWork unitOfWork, IMapper mapper, IUserService userService)
+        public CreateMealHandler(IUnitOfWork unitOfWork, IMapper mapper, ICheckUserService userService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _userService = userService;
         }
 
-        public async Task<FullMealDTO> Handle(CreateMealCommand request, CancellationToken cancellationToken)
+        public async Task<FullMealResponse> Handle(CreateMealCommand request, CancellationToken cancellationToken)
         {
             var day = await _unitOfWork.DayResultRepository.GetByIdAsync(request.CreateMealDTO.DayId);
 
@@ -64,7 +64,7 @@ namespace FoodService.Application.UseCases.CommandHandlers.Meal
 
             await _unitOfWork.SaveChangesAsync();
 
-            var mealDTO = _mapper.Map<FullMealDTO>(meal);
+            var mealDTO = _mapper.Map<FullMealResponse>(meal);
 
             return mealDTO;
         }

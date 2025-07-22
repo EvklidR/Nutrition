@@ -1,4 +1,4 @@
-﻿using FoodService.Application.DTOs.Product;
+﻿using FoodService.Application.DTOs.Product.Requests;
 
 namespace FoodService.Application.UseCases.Commands.Product
 {

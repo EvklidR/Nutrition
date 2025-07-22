@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PostService.API.Filters;
-using PostService.BusinessLogic.DTOs.Comment;
-using PostService.BusinessLogic.DTOs.Post;
+using PostService.BusinessLogic.DTOs.Requests.Comment;
+using PostService.BusinessLogic.DTOs.Responses.Comment;
 using PostService.BusinessLogic.Services;
 
 namespace PostService.API.Controllers
@@ -30,8 +30,8 @@ namespace PostService.API.Controllers
         /// <returns>A list of comments.</returns>
         [HttpGet("{postId}")]
         [ServiceFilter(typeof(UserIdFilter))]
-        [ProducesResponseType(typeof(List<CommentDTO>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<CommentDTO>>> GetComments(string postId, [FromQuery] int? page = 1, int? size = 10)
+        [ProducesResponseType(typeof(List<CommentResponse>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<List<CommentResponse>>> GetComments(string postId, [FromQuery] int? page = 1, int? size = 10)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
 
@@ -48,16 +48,13 @@ namespace PostService.API.Controllers
         [HttpPost]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        [ProducesResponseType(typeof(CommentDTO), StatusCodes.Status200OK)]
-        public async Task<ActionResult<CommentDTO>> AddComment([FromBody] CreateCommentDTO createCommentDTO)
+        [ProducesResponseType(typeof(CommentResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult<CommentResponse>> AddComment([FromBody] CreateCommentDTO createCommentDTO)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
             var userName = (string)HttpContext.Items["UserName"]!;
 
-            createCommentDTO.OwnerId = userId;
-            createCommentDTO.OwnerEmail = userName;
-
-            var responce = await _commentService.AddCommentAsync(createCommentDTO);
+            var responce = await _commentService.AddCommentAsync(createCommentDTO, userName, userId);
 
             return Ok(responce);
         }

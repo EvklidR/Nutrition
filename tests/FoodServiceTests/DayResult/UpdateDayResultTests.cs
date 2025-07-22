@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Bogus;
 using FluentAssertions;
-using FoodService.Application.DTOs.DayResult;
+using FoodService.Application.DTOs.DayResult.Requests;
 using FoodService.Application.Exceptions;
 using FoodService.Application.Interfaces;
 using FoodService.Application.UseCases.CommandHandlers.DayResult;
@@ -14,7 +14,7 @@ namespace FoodServiceTests.DayResult
     public class UpdateDayResultTests
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-        private readonly Mock<IUserService> _userServiceMock;
+        private readonly Mock<ICheckUserService> _userServiceMock;
         private readonly Mock<IMapper> _mapperMock;
 
         private readonly UpdateDayResultHandler _handler;
@@ -26,7 +26,7 @@ namespace FoodServiceTests.DayResult
         public UpdateDayResultTests()
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _userServiceMock = new Mock<IUserService>();
+            _userServiceMock = new Mock<ICheckUserService>();
             _mapperMock = new Mock<IMapper>();
 
             _faker = new Faker();

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using PostService.BusinessLogic.DTOs.Comment;
+using PostService.BusinessLogic.DTOs.Requests.Comment;
+using PostService.BusinessLogic.DTOs.Responses.Comment;
 using PostService.BusinessLogic.Exceptions;
 using PostService.Core.Entities;
 using PostService.Infrastructure.Repositories.Interfaces;
@@ -19,11 +20,11 @@ namespace PostService.BusinessLogic.Services
             _mapper = mapper;
         }
 
-        public async Task<List<CommentDTO>?> GetCommentsAsync(string postId, int? page, int? size, string userId)
+        public async Task<List<CommentResponse>> GetCommentsAsync(string postId, int? page, int? size, string userId)
         {
             var comments = await _commentRepository.GetAllAsync(postId, page, size);
 
-            var commentsDTO = _mapper.Map<List<CommentDTO>>(comments, opts =>
+            var commentsDTO = _mapper.Map<List<CommentResponse>>(comments, opts =>
             {
                 opts.Items["CurrentUserId"] = userId;
             });
@@ -31,7 +32,7 @@ namespace PostService.BusinessLogic.Services
             return commentsDTO;
         }
 
-        public async Task<CommentDTO> AddCommentAsync(CreateCommentDTO commentDTO)
+        public async Task<CommentResponse> AddCommentAsync(CreateCommentDTO commentDTO, string ownerEmail, string ownerId)
         {
             var post = await _postRepository.GetByIdAsync(commentDTO.PostId);
 
@@ -41,12 +42,14 @@ namespace PostService.BusinessLogic.Services
             }
 
             var comment = _mapper.Map<Comment>(commentDTO);
+            comment.OwnerEmail = ownerEmail;
+            comment.OwnerId = ownerId;
 
             await _commentRepository.AddAsync(commentDTO.PostId, comment);
 
-            return _mapper.Map<CommentDTO>(comment, opts =>
+            return _mapper.Map<CommentResponse>(comment, opts =>
             {
-                opts.Items["CurrentUserId"] = commentDTO.OwnerId;
+                opts.Items["CurrentUserId"] = ownerId;
             });
         }
 

@@ -8,9 +8,9 @@ namespace FoodService.Application.UseCases.CommandHandlers.DayResult
     public class DeleteDayResultHandler : ICommandHandler<DeleteDayResultCommand>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IUserService _userService;
+        private readonly ICheckUserService _userService;
 
-        public DeleteDayResultHandler(IUnitOfWork unitOfWork, IUserService userService)
+        public DeleteDayResultHandler(IUnitOfWork unitOfWork, ICheckUserService userService)
         {
             _unitOfWork = unitOfWork;
             _userService = userService;

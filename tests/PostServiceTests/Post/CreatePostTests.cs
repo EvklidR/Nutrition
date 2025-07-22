@@ -2,7 +2,8 @@
 using Bogus;
 using FluentAssertions;
 using Moq;
-using PostService.BusinessLogic.DTOs.Post;
+using PostService.BusinessLogic.DTOs.Requests.Post;
+using PostService.BusinessLogic.DTOs.Responses.Post;
 using PostService.BusinessLogic.Exceptions;
 using PostService.Core.Entities;
 using PostService.Infrastructure.gRPC.Interfaces;
@@ -53,7 +54,7 @@ namespace PostServiceTests
             //Arrange
             CreatePostDTO createPostDTO = _createPostDTOFaker.Generate();
             Post post = _postFaker.Generate();
-            PostDTO postDTO = new PostDTO()
+            PostResponse postDTO = new PostResponse()
             {
                 Id = post.Id
             };
@@ -61,7 +62,7 @@ namespace PostServiceTests
             _userServiceMock.Setup(us => us.CheckUserExistence(createPostDTO.OwnerId!)).ReturnsAsync(true);
 
             _mapperMock.Setup(m => m.Map<Post>(createPostDTO)).Returns(post);
-            _mapperMock.Setup(m => m.Map<PostDTO>(post, It.IsAny<Action<IMappingOperationOptions<object, PostDTO>>>()))
+            _mapperMock.Setup(m => m.Map<PostResponse>(post, It.IsAny<Action<IMappingOperationOptions<object, PostResponse>>>()))
                 .Returns(postDTO);
 
             _postRepositoryMock.Setup(pr => pr.AddAsync(post)).Returns(Task.CompletedTask);
@@ -75,7 +76,7 @@ namespace PostServiceTests
 
             _userServiceMock.Verify(us => us.CheckUserExistence(createPostDTO.OwnerId!), Times.Once);
             _mapperMock.Verify(m => m.Map<Post>(createPostDTO), Times.Once);
-            _mapperMock.Verify(m => m.Map<PostDTO>(post, It.IsAny<Action<IMappingOperationOptions<object, PostDTO>>>()), Times.Once);
+            _mapperMock.Verify(m => m.Map<PostResponse>(post, It.IsAny<Action<IMappingOperationOptions<object, PostResponse>>>()), Times.Once);
             _postRepositoryMock.Verify(pr => pr.AddAsync(post), Times.Once);
         }
 

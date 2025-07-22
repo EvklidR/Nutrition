@@ -10,9 +10,9 @@ namespace FoodService.Application.UseCases.CommandHandlers.DayResult
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly IUserService _userService; 
+        private readonly ICheckUserService _userService; 
 
-        public UpdateDayResultHandler(IUnitOfWork unitOfWork, IMapper mapper, IUserService userService)
+        public UpdateDayResultHandler(IUnitOfWork unitOfWork, IMapper mapper, ICheckUserService userService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;

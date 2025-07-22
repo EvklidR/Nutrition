@@ -3,7 +3,7 @@ using FoodService.Domain.Interfaces;
 using FoodService.Application.Exceptions;
 using FoodService.Application.UseCases.Commands.Dish;
 using FoodService.Application.Interfaces;
-using FoodService.Application.DTOs.Dish;
+using FoodService.Application.DTOs.Recipe.Requests;
 
 namespace FoodService.Application.UseCases.CommandHandlers.Dish;
 
@@ -74,7 +74,7 @@ public class UpdateDishHandler : ICommandHandler<UpdateDishCommand>
         dish.Carbohydrates = dish.Carbohydrates / weight;
     }
 
-    private async Task UpdateImages(Domain.Entities.Dish dish, UpdateDishDTO updateDishDTO) 
+    private async Task UpdateImages(Domain.Entities.Dish dish, UpdateRecipeDTO updateDishDTO) 
     {
         if (updateDishDTO.Image != null)
         {

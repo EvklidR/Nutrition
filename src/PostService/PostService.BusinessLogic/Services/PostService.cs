@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using PostService.BusinessLogic.DTOs.Post;
+using PostService.BusinessLogic.DTOs.Requests.Post;
+using PostService.BusinessLogic.DTOs.Responses.Post;
 using PostService.BusinessLogic.Exceptions;
-using PostService.BusinessLogic.Models;
 using PostService.Core.Entities;
 using PostService.Infrastructure.gRPC.Interfaces;
 using PostService.Infrastructure.Repositories.Interfaces;
@@ -30,7 +30,7 @@ namespace PostService.BusinessLogic.Services
             _imageService = imageService;
         }
 
-        public async Task<PostsResponseModel> GetPostsAsync(
+        public async Task<PostsResponse> GetPostsAsync(
             List<string>? words,
             int? page,
             int? size,
@@ -38,19 +38,19 @@ namespace PostService.BusinessLogic.Services
         {
             var response = await _postRepository.GetAllAsync(words, page, size);
 
-            var postsDTO = _mapper.Map<List<PostDTO>>(response.posts, opts =>
+            var postsDTO = _mapper.Map<List<PostResponse>>(response.posts, opts =>
             {
                 opts.Items["CurrentUserId"] = userId;
             });
 
-            return new PostsResponseModel
+            return new PostsResponse
             {
                 Posts = postsDTO,
                 TotalCount = response.totalCount
             };
         }
 
-        public async Task<PostDTO> GetPostAsync(
+        public async Task<PostResponse> GetPostAsync(
             string postId,
             string userId)
         {
@@ -61,7 +61,7 @@ namespace PostService.BusinessLogic.Services
                 throw new NotFound("Post not found");
             }
 
-            var postDTO = _mapper.Map<PostDTO>(response, opts =>
+            var postDTO = _mapper.Map<PostResponse>(response, opts =>
             {
                 opts.Items["CurrentUserId"] = userId;
             });
@@ -69,25 +69,25 @@ namespace PostService.BusinessLogic.Services
             return postDTO;
         }
 
-        public async Task<PostsResponseModel> GetUserPostsAsync(int? page, int? size, string userId)
+        public async Task<PostsResponse> GetUserPostsAsync(int? page, int? size, string userId)
         {
             var response = await _postRepository.GetByUserIdAsync(userId, page, size);
 
-            var postsDTO = _mapper.Map<List<PostDTO>>(response.posts, opts =>
+            var postsDTO = _mapper.Map<List<PostResponse>>(response.posts, opts =>
             {
                 opts.Items["CurrentUserId"] = userId;
             });
 
-            return new PostsResponseModel() 
+            return new PostsResponse() 
             { 
                 Posts = postsDTO,
                 TotalCount = response.totalCount
             };
         }
 
-        public async Task<PostDTO> CreatePostAsync(CreatePostDTO postDTO)
+        public async Task<PostResponse> CreatePostAsync(CreatePostDTO postDTO, string ownerEmail, string ownerId)
         {
-            var userExists = await _userService.CheckUserExistence(postDTO.OwnerId!);
+            var userExists = await _userService.CheckUserExistence(ownerId!);
 
             if (!userExists)
             {
@@ -99,12 +99,14 @@ namespace PostService.BusinessLogic.Services
             postDTO.Text = markdown;
 
             var post = _mapper.Map<Post>(postDTO);
+            post.OwnerEmail = ownerEmail;
+            post.OwnerId = ownerId;
 
             await _postRepository.AddAsync(post);
 
-            return _mapper.Map<PostDTO>(post, opts =>
+            return _mapper.Map<PostResponse>(post, opts =>
             {
-                opts.Items["CurrentUserId"] = postDTO.OwnerId;
+                opts.Items["CurrentUserId"] = ownerId;
             });
         }
 

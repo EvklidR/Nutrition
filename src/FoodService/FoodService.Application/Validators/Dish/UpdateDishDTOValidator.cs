@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using FoodService.Application.DTOs;
-using FoodService.Application.DTOs.Dish;
+using FoodService.Application.DTOs.Recipe.Requests;
 
 namespace FoodService.Application.Validators
 {
-    public class UpdateDishDTOValidator : AbstractValidator<UpdateDishDTO>
+    public class UpdateDishDTOValidator : AbstractValidator<UpdateRecipeDTO>
     {
         public UpdateDishDTOValidator(IngredientOfDishDTOValidator ingredientOfDishDTOValidator)
         {
