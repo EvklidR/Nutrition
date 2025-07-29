@@ -8,9 +8,10 @@ namespace FoodService.Application.Validators.DayResult
         public GetDayResultsByPeriodQueryValidator()
         {
             RuleFor(query => query.EndDate)
-                .NotEmpty().WithMessage("EndDate is required")
+                .NotEmpty()
+                    .WithMessage("EndDate is required")
                 .GreaterThan(query => query.StartDate)
-                .WithMessage("EndDate must be greater than StartDate");
+                    .WithMessage("EndDate must be greater than StartDate");
         }
     }
 }

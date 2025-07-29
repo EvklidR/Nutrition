@@ -11,9 +11,9 @@ namespace FoodService.Application.UseCases.CommandHandlers.Meal
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ICheckUserService _userService;
+        private readonly IUserService _userService;
 
-        public CreateMealHandler(IUnitOfWork unitOfWork, IMapper mapper, ICheckUserService userService)
+        public CreateMealHandler(IUnitOfWork unitOfWork, IMapper mapper, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -22,21 +22,16 @@ namespace FoodService.Application.UseCases.CommandHandlers.Meal
 
         public async Task<FullMealResponse> Handle(CreateMealCommand request, CancellationToken cancellationToken)
         {
-            var day = await _unitOfWork.DayResultRepository.GetByIdAsync(request.CreateMealDTO.DayId);
+            var day = await _unitOfWork.DayResultRepository.GetByIdAsync(request.CreateMealDTO.DayResultId);
 
             if (day == null) 
             {
                 throw new NotFound("Day not found");
             }
 
-            var doesProfileBelongUser = await _userService.CheckProfileBelonging(
+            await _userService.CheckProfileBelongingAsync(
                 request.UserId,
                 day.ProfileId);
-
-            if (!doesProfileBelongUser)
-            {
-                throw new Forbidden("You dont have access to this meal");
-            }
 
             foreach (var product in request.CreateMealDTO.Products)
             {

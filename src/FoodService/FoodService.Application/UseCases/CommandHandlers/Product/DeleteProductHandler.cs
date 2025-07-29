@@ -29,12 +29,12 @@ namespace FoodService.Application.UseCases.CommandHandlers.Product
 
             var dishes = await _unitOfWork.DishRepository.GetAllAsync(product.UserId);
 
-            var doesDishContains = dishes != null ? dishes.Any(d => d.Ingredients.Any(i => i.ProductId == product.Id)) : false;
+            //var doesDishContains = dishes != null ? dishes.Any(d => d.Ingredients.Any(i => i.ProductId == product.Id)) : false;
 
-            if (doesDishContains)
-            {
-                throw new BadRequest("This product there is in some dish");
-            }
+            //if (doesDishContains)
+            //{
+            //    throw new BadRequest("This product there is in some dish");
+            //}
 
             var dayResults = await _unitOfWork.DayResultRepository.GetAllAsync(product.UserId);
 

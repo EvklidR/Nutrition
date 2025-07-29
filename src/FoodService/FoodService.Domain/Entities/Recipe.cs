@@ -9,6 +9,6 @@
         public Guid DishId { get; set; }
 
         public Dish Dish { get; set; } = null!;
-        public List<.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Dish.Name))> Ingredients { get; set; } = [];
+        public List<ProductOfRecipe> Ingredients { get; set; } = [];
     }
 }

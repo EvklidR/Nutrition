@@ -14,7 +14,7 @@ public class ProfileRepository : IProfileRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Profile>?> GetAllByUserAsync(Guid userId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Profile>> GetAllByUserAsync(Guid userId, CancellationToken cancellationToken)
     {
         return await _context.Profiles
             .Where(p => p.UserId == userId)

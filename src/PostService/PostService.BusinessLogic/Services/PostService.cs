@@ -71,7 +71,7 @@ namespace PostService.BusinessLogic.Services
 
         public async Task<PostsResponse> GetUserPostsAsync(int? page, int? size, string userId)
         {
-            var response = await _postRepository.GetByUserIdAsync(userId, page, size);
+            var response = await _postRepository.GetAllByUserIdAsync(userId, page, size);
 
             var postsDTO = _mapper.Map<List<PostResponse>>(response.posts, opts =>
             {

@@ -4,35 +4,29 @@ using FoodService.Application.Interfaces;
 using FoodService.Application.DTOs.DayResult;
 using AutoMapper;
 using FoodService.Application.UseCases.Commands.DayResult;
+using FoodService.Application.DTOs.DayResult.Responses;
 
 namespace FoodService.Application.UseCases.CommandHandlers.DayResult
 {
     public class GetOrCreateDayResultHandler 
-        : ICommandHandler<GetOrCreateDayResultCommand, DayResultDTO>
+        : ICommandHandler<GetOrCreateDayResultCommand, DayResultResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICheckUserService _userService;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public GetOrCreateDayResultHandler(IUnitOfWork unitOfWork, ICheckUserService userService, IMapper mapper)
+        public GetOrCreateDayResultHandler(IUnitOfWork unitOfWork, IUserService userService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _userService = userService;
             _mapper = mapper;
         }
 
-        public async Task<DayResultDTO> Handle(
+        public async Task<DayResultResponse> Handle(
             GetOrCreateDayResultCommand request,
             CancellationToken cancellationToken)
         {
-            var doesProfileBelongUser = await _userService.CheckProfileBelonging(
-                request.UserId,
-                request.ProfileId);
-
-            if (!doesProfileBelongUser)
-            {
-                throw new Forbidden("You dont have access to this meal");
-            }
+            var profileWeight = await _userService.GetProfileWeightAsync(request.ProfileId);
 
             var currentDay = DateOnly.FromDateTime(DateTime.Now);
 
@@ -44,7 +38,8 @@ namespace FoodService.Application.UseCases.CommandHandlers.DayResult
                 {
                     ProfileId = request.ProfileId,
                     Date = currentDay,
-                    GlassesOfWater = 0
+                    GlassesOfWater = 0,
+                    Weight = profileWeight
                 };
 
                 _unitOfWork.DayResultRepository.Add(dayResult);
@@ -52,7 +47,7 @@ namespace FoodService.Application.UseCases.CommandHandlers.DayResult
                 await _unitOfWork.SaveChangesAsync();
             }
 
-            var dayResultDTO = _mapper.Map<DayResultDTO>(dayResult);
+            var dayResultDTO = _mapper.Map<DayResultResponse>(dayResult);
 
             return dayResultDTO;
         }

@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System.Text.Json;
 using MealPlanService.Infrastructure.Enums;
 using MealPlanService.BusinessLogic.Services;
 using MealPlanService.Infrastructure.RabbitMQService;

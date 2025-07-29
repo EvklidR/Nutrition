@@ -65,4 +65,26 @@ public class UserService : GRPCUserService.GRPCUserServiceBase
             throw new RpcException(new Status(StatusCode.InvalidArgument, "Ids aren't Guid type"));
         }
     }
+
+    public async override Task<GetProfileWeightResponse> GetProfileWeight(GetProfileWeightRequest request, ServerCallContext context)
+    {
+        if (Guid.TryParse(request.ProfileId, out Guid profileId))
+        {
+            var profile = await _dbContext.Profiles.FirstOrDefaultAsync(profile => profile.Id == profileId);
+
+            if (profile == null)
+            {
+                throw new RpcException(new Status(StatusCode.NotFound, "Profile not found"));
+            }
+
+            return new GetProfileWeightResponse()
+            {
+                Weight = profile.Weight
+            };
+        }
+        else
+        {
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Profile Id isn't Guid type"));
+        }
+    }
 }

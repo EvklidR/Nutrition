@@ -15,7 +15,7 @@ namespace FoodServiceTests.DayResult
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly Mock<IMapper> _mapperMock;
-        private readonly Mock<ICheckUserService> _userServiceMock;
+        private readonly Mock<IUserService> _userServiceMock;
 
         private readonly CreateDayResultHandler _handler;
 
@@ -25,7 +25,7 @@ namespace FoodServiceTests.DayResult
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
             _mapperMock = new Mock<IMapper>();
-            _userServiceMock = new Mock<ICheckUserService>();
+            _userServiceMock = new Mock<IUserService>();
 
             _faker = new Faker();
 

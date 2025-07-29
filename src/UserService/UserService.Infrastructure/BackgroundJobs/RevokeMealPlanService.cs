@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using UserService.Infrastructure.RabbitMQService;
 using System.Text;
 using UserService.Infrastructure.MSSQL;
@@ -9,12 +10,12 @@ namespace UserService.Infrastructure.BackgroundJobs;
 
 public class RevokeMealPlanService : BackgroundService
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly IServiceScopeFactory _scopeFactory;
     private readonly RabbitMQRevokeMealPlanConsumer _consumer;
 
-    public RevokeMealPlanService(ApplicationDbContext dbContext, RabbitMQRevokeMealPlanConsumer consumer)
+    public RevokeMealPlanService(IServiceScopeFactory scopeFactory, RabbitMQRevokeMealPlanConsumer consumer)
     {
-        _dbContext = dbContext;
+        _scopeFactory = scopeFactory;
         _consumer = consumer;
     }
 
@@ -22,6 +23,9 @@ public class RevokeMealPlanService : BackgroundService
     {
         await _consumer.AddListenerAsync(async args =>
         {
+            using var scope = _scopeFactory.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
             try
             {
                 var body = args.Body.ToArray();
@@ -29,7 +33,9 @@ public class RevokeMealPlanService : BackgroundService
 
                 if (Guid.TryParse(message, out var profileId))
                 {
-                    var profile = await _dbContext.Profiles.FirstOrDefaultAsync(profile => profile.Id == profileId, cancellationToken);
+                    var profile = await dbContext.Profiles.FirstOrDefaultAsync(
+                        p => p.Id == profileId,
+                        cancellationToken);
 
                     if (profile == null)
                     {
@@ -38,9 +44,8 @@ public class RevokeMealPlanService : BackgroundService
 
                     profile.ThereIsMealPlan = false;
 
-                    _dbContext.Profiles.Update(profile);
-
-                    await _dbContext.SaveChangesAsync(cancellationToken);
+                    dbContext.Profiles.Update(profile);
+                    await dbContext.SaveChangesAsync(cancellationToken);
                 }
                 else
                 {

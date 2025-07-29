@@ -52,21 +52,21 @@ public class UpdateDishHandler : ICommandHandler<UpdateDishCommand>
         dish.Fats = 0;
         dish.Carbohydrates = 0;
 
-        foreach (var ingredient in dish.Ingredients)
-        {
-            var ingredientBD = await _unitOfWork.ProductRepository.GetByIdAsync(ingredient.ProductId);
+        //foreach (var ingredient in dish.Ingredients)
+        //{
+        //    var ingredientBD = await _unitOfWork.ProductRepository.GetByIdAsync(ingredient.ProductId);
 
-            if (ingredientBD == null)
-            {
-                throw new NotFound("Ingredient not found");
-            }
+        //    if (ingredientBD == null)
+        //    {
+        //        throw new NotFound("Ingredient not found");
+        //    }
 
-            dish.Calories += ingredientBD.Calories * ingredient.WeightPerPortion;
-            dish.Proteins += ingredientBD.Proteins * ingredient.WeightPerPortion;
-            dish.Fats += ingredientBD.Fats * ingredient.WeightPerPortion;
-            dish.Carbohydrates += ingredientBD.Carbohydrates * ingredient.WeightPerPortion;
-            weight += ingredient.WeightPerPortion;
-        }
+        //    dish.Calories += ingredientBD.Calories * ingredient.WeightPerPortion;
+        //    dish.Proteins += ingredientBD.Proteins * ingredient.WeightPerPortion;
+        //    dish.Fats += ingredientBD.Fats * ingredient.WeightPerPortion;
+        //    dish.Carbohydrates += ingredientBD.Carbohydrates * ingredient.WeightPerPortion;
+        //    weight += ingredient.WeightPerPortion;
+        //}
 
         dish.Calories = dish.Calories / weight;
         dish.Fats = dish.Fats / weight;
@@ -76,23 +76,23 @@ public class UpdateDishHandler : ICommandHandler<UpdateDishCommand>
 
     private async Task UpdateImages(Domain.Entities.Dish dish, UpdateRecipeDTO updateDishDTO) 
     {
-        if (updateDishDTO.Image != null)
-        {
-            var filePath = await _imageService.UploadImageAsync(updateDishDTO.Image);
+        //if (updateDishDTO.Image != null)
+        //{
+        //    var filePath = await _imageService.UploadImageAsync(updateDishDTO.Image);
 
-            if (dish.ImageUrl != null)
-            {
-                await _imageService.DeleteImageAsync(dish.ImageUrl);
-            }
+        //    if (dish.ImageUrl != null)
+        //    {
+        //        await _imageService.DeleteImageAsync(dish.ImageUrl);
+        //    }
 
-            dish.ImageUrl = filePath;
-        }
-        else if (updateDishDTO.DeleteImageIfNull)
-        {
-            if (dish.ImageUrl != null)
-            {
-                await _imageService.DeleteImageAsync(dish.ImageUrl);
-            }
-        }
+        //    dish.ImageUrl = filePath;
+        //}
+        //else if (updateDishDTO.DeleteImageIfNull)
+        //{
+        //    if (dish.ImageUrl != null)
+        //    {
+        //        await _imageService.DeleteImageAsync(dish.ImageUrl);
+        //    }
+        //}
     }
 }

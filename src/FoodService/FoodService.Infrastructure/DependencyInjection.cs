@@ -9,6 +9,8 @@ using FoodService.Application.Interfaces;
 using FoodService.Infrastructure.Services;
 using StackExchange.Redis;
 using FoodService.Infrastructure.Grpc;
+using FoodService.Infrastructure.BackgroundJobs;
+using Hangfire;
 
 namespace FoodService.Infrastructure.DependencyInjection
 {
@@ -16,12 +18,12 @@ namespace FoodService.Infrastructure.DependencyInjection
     {
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<ICheckUserService>(provider =>
+            services.AddScoped<IUserService>(provider =>
             {
                 var url = configuration["GrpcServices:UserServiceUrl"];
                 var cacheService = provider.GetRequiredService<ICacheService>();
 
-                return new CheckUserService(url, cacheService);
+                return new UserService(url, cacheService);
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -47,6 +49,15 @@ namespace FoodService.Infrastructure.DependencyInjection
 
                 return new ImageService(appKey, appSecret, refresh, cacheService);
             });
+
+            services.AddScoped<CreateDayResultsJob>();
+            services.AddScoped<CreateTodayDayResultJob>();
+
+            BackgroundJob.Enqueue<CreateDayResultsJob>(job => job.Run());
+
+            RecurringJob.AddOrUpdate<CreateTodayDayResultJob>("CreateTodayDayResults",
+                job => job.Run(),
+                Cron.Daily(0));
 
             return services;
         }

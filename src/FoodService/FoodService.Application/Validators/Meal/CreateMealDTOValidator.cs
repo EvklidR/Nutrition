@@ -5,14 +5,10 @@ namespace FoodService.Application.Validators
 {
     public class CreateMealDTOValidator : AbstractValidator<CreateMealDTO>
     {
-        public CreateMealDTOValidator(CreateOrUpdateEatenFoodDTOValidator сreateEatenFoodDTOValidator)
+        public CreateMealDTOValidator(CreateOrUpdateEatenDishDTOValidator createEatenDishDTOValidator, CreateOrUpdateEatenProductDTOValidator createEatenProductDTOValidator)
         {
-            RuleFor(m => m.Name)
-                .NotEmpty().WithMessage("Meal name is required");
-
-            RuleForEach(m => m.Products).SetValidator(сreateEatenFoodDTOValidator);
-            RuleForEach(m => m.Dishes).SetValidator(сreateEatenFoodDTOValidator);
-
+            RuleForEach(m => m.Products).SetValidator(createEatenProductDTOValidator);
+            RuleForEach(m => m.Dishes).SetValidator(createEatenDishDTOValidator);
         }
     }
 }

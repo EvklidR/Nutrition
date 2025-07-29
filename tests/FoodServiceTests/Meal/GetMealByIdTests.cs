@@ -14,7 +14,7 @@ namespace FoodServiceTests.Meal
     public class GetMealByIdTests
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-        private readonly Mock<ICheckUserService> _userServiceMock;
+        private readonly Mock<IUserService> _userServiceMock;
         private readonly IMapper _mapper;
 
         private readonly GetMealByIdHandler _handler;
@@ -24,7 +24,7 @@ namespace FoodServiceTests.Meal
         public GetMealByIdTests()
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _userServiceMock = new Mock<ICheckUserService>();
+            _userServiceMock = new Mock<IUserService>();
 
             var mapperConfig = new MapperConfiguration(cfg =>
             {

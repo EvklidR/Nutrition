@@ -15,8 +15,6 @@ namespace FoodService.Infrastructure.Repositories
         {
             return await _dbSet
                 .Where(d => d.Id == id)
-                .Include(d => d.Ingredients)
-                .ThenInclude(iod => iod.Product)
                 .FirstOrDefaultAsync();
         }
 
@@ -32,7 +30,6 @@ namespace FoodService.Infrastructure.Repositories
             var dishes = await query
                 .GetPaginated(parameters.Page, parameters.PageSize)
                 .Cast<Dish>()
-                .Include(d => d.Ingredients)
                 .ToListAsync();
 
             return (dishes, totalRecords);
@@ -43,7 +40,6 @@ namespace FoodService.Infrastructure.Repositories
         {
             return await _dbSet
                 .Where(d => d.UserId == userId)
-                .Include(d => d.Ingredients)
                 .ToListAsync();
         }
     }

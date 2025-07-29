@@ -10,9 +10,9 @@ namespace FoodService.Application.UseCases.CommandHandlers.DayResult
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ICheckUserService _userService; 
+        private readonly IUserService _userService; 
 
-        public UpdateDayResultHandler(IUnitOfWork unitOfWork, IMapper mapper, ICheckUserService userService)
+        public UpdateDayResultHandler(IUnitOfWork unitOfWork, IMapper mapper, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -28,12 +28,7 @@ namespace FoodService.Application.UseCases.CommandHandlers.DayResult
                 throw new NotFound("DayResult not found");
             }
 
-            var doesProfileBelongUser = await _userService.CheckProfileBelonging(request.UserId, dayResult.ProfileId);
-
-            if (!doesProfileBelongUser)
-            {
-                throw new Forbidden("You dont have access to this meal");
-            }
+            await _userService.CheckProfileBelongingAsync(request.UserId, dayResult.ProfileId);
 
             _mapper.Map(request.UpdateDayResultDTO, dayResult);
 

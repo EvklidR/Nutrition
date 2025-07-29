@@ -11,9 +11,9 @@ namespace FoodService.Application.UseCases.CommandHandlers.Product
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ICheckUserService _userService;
+        private readonly IUserService _userService;
 
-        public CreateProductHandler(IUnitOfWork unitOfWork, IMapper mapper, ICheckUserService userService)
+        public CreateProductHandler(IUnitOfWork unitOfWork, IMapper mapper, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -24,13 +24,7 @@ namespace FoodService.Application.UseCases.CommandHandlers.Product
             CreateProductCommand request,
             CancellationToken cancellationToken)
         {
-            var doesUserExist = await _userService.CheckUserByIdAsync(
-                (Guid)request.CreateProductDTO.UserId!);
-
-            if (!doesUserExist)
-            {
-                throw new Forbidden("This user doesn't exist");
-            }
+            await _userService.CheckUserByIdAsync(request.UserId!);
 
             var product = _mapper.Map<Domain.Entities.Product>(request.CreateProductDTO);
 

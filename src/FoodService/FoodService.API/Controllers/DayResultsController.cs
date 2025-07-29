@@ -6,6 +6,7 @@ using FoodService.Application.UseCases.Commands.DayResult;
 using FoodService.Application.UseCases.Queries.DayResult;
 using FoodService.API.Filters;
 using FoodService.Application.DTOs.DayResult.Requests;
+using FoodService.Application.DTOs.DayResult.Responses;
 
 namespace FoodService.API.Controllers
 {
@@ -32,31 +33,14 @@ namespace FoodService.API.Controllers
         [HttpPost]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        [ProducesResponseType(typeof(DayResultDTO), 200)]
-        public async Task<ActionResult<DayResultDTO>> Create([FromBody] CreateDayResultDTO dto)
+        [ProducesResponseType(typeof(DayResultResponse), 200)]
+        public async Task<ActionResult<DayResultResponse>> Create([FromBody] CreateDayResultDTO dto)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
             var result = await _mediator.Send(new CreateDayResultCommand(dto, userId));
 
             return Ok(result);
-        }
-
-        /// <summary>
-        /// Deletes a day result.
-        /// </summary>
-        /// <param name="dayResultId">The ID of the day result.</param>
-        [HttpDelete]
-        [Authorize]
-        [ServiceFilter(typeof(UserIdFilter))]
-        [ProducesResponseType(204)]
-        public async Task<IActionResult> Delete(Guid dayResultId)
-        {
-            var userId = (Guid)HttpContext.Items["UserId"]!;
-
-            await _mediator.Send(new DeleteDayResultCommand(dayResultId, userId));
-
-            return NoContent();
         }
 
         /// <summary>
@@ -67,8 +51,8 @@ namespace FoodService.API.Controllers
         [HttpGet("by-profile/{profileId}")]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        [ProducesResponseType(typeof(DayResultDTO), 200)]
-        public async Task<ActionResult<DayResultDTO>> GetOrCreate(Guid profileId)
+        [ProducesResponseType(typeof(DayResultResponse), 200)]
+        public async Task<ActionResult<DayResultResponse>> GetOrCreate(Guid profileId)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
@@ -104,8 +88,8 @@ namespace FoodService.API.Controllers
         [HttpGet("by-period/{profileId}")]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        [ProducesResponseType(typeof(IEnumerable<DayResultDTO>), 200)]
-        public async Task<ActionResult<IEnumerable<DayResultDTO>>> GetByPeriod(Guid profileId, DateOnly startDate, DateOnly endDate)
+        [ProducesResponseType(typeof(IEnumerable<DayResultResponse>), 200)]
+        public async Task<ActionResult<IEnumerable<DayResultResponse>>> GetByPeriod(Guid profileId, DateOnly startDate, DateOnly endDate)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 

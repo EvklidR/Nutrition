@@ -8,9 +8,9 @@ namespace FoodService.Application.UseCases.CommandHandlers.Meal
     public class DeleteMealHandler : ICommandHandler<DeleteMealCommand>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICheckUserService _userService;
+        private readonly IUserService _userService;
 
-        public DeleteMealHandler(IUnitOfWork unitOfWork, ICheckUserService userService)
+        public DeleteMealHandler(IUnitOfWork unitOfWork, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _userService = userService;
@@ -24,14 +24,9 @@ namespace FoodService.Application.UseCases.CommandHandlers.Meal
                 throw new NotFound("Day not found");
             }
 
-            var doesProfileBelongUser = await _userService.CheckProfileBelonging(
+            await _userService.CheckProfileBelongingAsync(
                 request.UserId,
                 day.ProfileId);
-
-            if (!doesProfileBelongUser)
-            {
-                throw new Forbidden("You dont have access to this meal");
-            }
 
             var meal = day.Meals.FirstOrDefault(m => m.Id == request.MealId);
 

@@ -11,12 +11,12 @@ namespace FoodService.Application.UseCases.CommandHandlers.Dish
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private readonly ICheckUserService _userService;
+        private readonly IUserService _userService;
         private readonly IImageService _imageService;
 
         public CreateDishHandler(
             IUnitOfWork unitOfWork,
-            IMapper mapper, ICheckUserService userService, IImageService imageService)
+            IMapper mapper, IUserService userService, IImageService imageService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
@@ -26,13 +26,7 @@ namespace FoodService.Application.UseCases.CommandHandlers.Dish
 
         public async Task<CalculatedRecipeResponse> Handle(CreateDishCommand request, CancellationToken cancellationToken)
         {
-            var doesUserExist = await _userService.CheckUserByIdAsync(
-                request.CreateDishDTO.UserId);
-
-            if (!doesUserExist)
-            {
-                throw new Forbidden("This user doesn't exist");
-            }
+            await _userService.CheckUserByIdAsync(request.UserId);
 
             var dish = _mapper.Map<Domain.Entities.Dish>(request.CreateDishDTO);
             
@@ -40,7 +34,7 @@ namespace FoodService.Application.UseCases.CommandHandlers.Dish
 
             var filePath = await _imageService.UploadImageAsync(request.CreateDishDTO.Image);
 
-            dish.ImageUrl = filePath;
+            //dish.ImageUrl = filePath;
 
             _unitOfWork.DishRepository.Add(dish);
 
@@ -55,21 +49,21 @@ namespace FoodService.Application.UseCases.CommandHandlers.Dish
         {
             double weight = 0;
 
-            foreach (var ingredient in dish.Ingredients)
-            {
-                var ingredientBD = await _unitOfWork.ProductRepository.GetByIdAsync(ingredient.ProductId);
+            //foreach (var ingredient in dish.Ingredients)
+            //{
+            //    var ingredientBD = await _unitOfWork.ProductRepository.GetByIdAsync(ingredient.ProductId);
 
-                if (ingredientBD == null)
-                {
-                    throw new NotFound("Ingredient not found");
-                }
+            //    if (ingredientBD == null)
+            //    {
+            //        throw new NotFound("Ingredient not found");
+            //    }
 
-                dish.Calories += ingredientBD.Calories * ingredient.WeightPerPortion;
-                dish.Proteins += ingredientBD.Proteins * ingredient.WeightPerPortion;
-                dish.Fats += ingredientBD.Fats * ingredient.WeightPerPortion;
-                dish.Carbohydrates += ingredientBD.Carbohydrates * ingredient.WeightPerPortion;
-                weight += ingredient.WeightPerPortion;
-            }
+            //    dish.Calories += ingredientBD.Calories * ingredient.WeightPerPortion;
+            //    dish.Proteins += ingredientBD.Proteins * ingredient.WeightPerPortion;
+            //    dish.Fats += ingredientBD.Fats * ingredient.WeightPerPortion;
+            //    dish.Carbohydrates += ingredientBD.Carbohydrates * ingredient.WeightPerPortion;
+            //    weight += ingredient.WeightPerPortion;
+            //}
 
             dish.Calories = dish.Calories / weight;
             dish.Fats = dish.Fats / weight;

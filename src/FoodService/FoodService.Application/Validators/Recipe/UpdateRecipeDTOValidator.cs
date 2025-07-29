@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 using FoodService.Application.DTOs;
 using FoodService.Application.DTOs.Recipe.Requests;
-using Microsoft.AspNetCore.Http;
 
 namespace FoodService.Application.Validators
 {
-    public class CreateDishDTOValidator : AbstractValidator<CreateRecipeDTO>
+    public class UpdateRecipeDTOValidator : AbstractValidator<UpdateRecipeDTO>
     {
-        public CreateDishDTOValidator(IngredientOfDishDTOValidator ingredientOfDishDTOValidator)
+        public UpdateRecipeDTOValidator(ProductOfRecipeDTOValidator ingredientOfDishDTOValidator)
         {
             RuleFor(d => d.Name)
                 .NotEmpty().WithMessage("Name is required")

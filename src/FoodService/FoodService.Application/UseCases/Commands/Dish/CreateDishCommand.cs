@@ -3,5 +3,5 @@ using FoodService.Application.DTOs.Recipe.Responses;
 
 namespace FoodService.Application.UseCases.Commands.Dish
 {
-    public record CreateDishCommand(CreateRecipeDTO CreateDishDTO) : ICommand<CalculatedRecipeResponse>;
+    public record CreateDishCommand(CreateRecipeDTO CreateDishDTO, Guid UserId) : ICommand<CalculatedRecipeResponse>;
 }

@@ -46,10 +46,10 @@ namespace FoodService.Application.UseCases.CommandHandlers.Dish
                 }
             }
 
-            if (dish.ImageUrl != null)
-            {
-                await _imageService.DeleteImageAsync(dish.ImageUrl);
-            }
+            //if (dish.ImageUrl != null)
+            //{
+            //    await _imageService.DeleteImageAsync(dish.ImageUrl);
+            //}
         }
     }
 }

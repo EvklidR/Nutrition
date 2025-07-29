@@ -67,9 +67,7 @@ namespace FoodService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
-            createProductDTO.UserId = userId;
-
-            var result = await _mediator.Send(new CreateProductCommand(createProductDTO));
+            var result = await _mediator.Send(new CreateProductCommand(createProductDTO, userId));
 
             return Ok(result);
         }

@@ -5,11 +5,11 @@ using PostService.Infrastructure.Options;
 using PostService.Infrastructure.Repositories.Interfaces;
 using Microsoft.Extensions.Configuration;
 using PostService.Infrastructure.gRPC.Interfaces;
-using PostService.Infrastructure.gRPC;
 using PostService.Infrastructure.Services.Interfaces;
 using PostService.Infrastructure.Services;
 using PostService.Infrastructure.MongoDB.Configurators;
 using StackExchange.Redis;
+using PostService.Infrastructure.gRPC_services.Implementation;
 
 namespace PostService.Infrastructure.DependencyInjection
 {

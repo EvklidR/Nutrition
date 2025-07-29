@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using MediatR;
+using Newtonsoft.Json;
+using UserService.Contracts.Broker;
+using UserService.Contracts.Broker.Enums;
 using UserService.Contracts.DataAccess.Repositories;
 using UserService.Contracts.Exceptions;
 
@@ -8,14 +10,17 @@ namespace UserService.Application.UseCases.Commands;
 public class UpdateProfileHandler : ICommandHandler<UpdateProfileCommand>
 {
     private readonly IProfileRepository _profileRepository;
+    private readonly IBrokerService _brokerService;
     private readonly IMapper _mapper;
-    private readonly IMediator _mediator;
 
-    public UpdateProfileHandler(IProfileRepository profileRepository, IMapper mapper, IMediator mediator)
+    public UpdateProfileHandler(
+        IProfileRepository profileRepository, 
+        IBrokerService brokerService,
+        IMapper mapper)
     {
         _profileRepository = profileRepository;
+        _brokerService = brokerService;
         _mapper = mapper;
-        _mediator = mediator;
     }
 
     public async Task Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
@@ -32,17 +37,31 @@ public class UpdateProfileHandler : ICommandHandler<UpdateProfileCommand>
             throw new Unauthorized("Owner isn't valid");
         }
 
-        var existingProfiles = await _profileRepository.GetAllByUserAsync(profile.UserId, cancellationToken);
-
-        if (existingProfiles != null)
+        if (profile.Name != request.ProfileDto.Name)
         {
-            foreach (var prof in existingProfiles)
+            var existingProfiles = await _profileRepository.GetAllByUserAsync(profile.UserId, cancellationToken);
+
+            if (existingProfiles.Any())
             {
-                if (prof.Name == request.ProfileDto.Name && prof != profile)
+                foreach (var prof in existingProfiles)
                 {
-                    throw new AlreadyExists("Profile with this name in your account already exists");
+                    if (prof.Name == request.ProfileDto.Name)
+                    {
+                        throw new AlreadyExists("Profile with this name in your account already exists");
+                    }
                 }
             }
+        }
+
+        if (profile.Weight != request.ProfileDto.Weight)
+        {
+            var message = JsonConvert.SerializeObject(new
+            {
+                ProfileId = profile.Id,
+                NewWeight = request.ProfileDto.Weight
+            });
+
+            await _brokerService.PublishMessageAsync(message, QueueName.ProfileWeightChanged);
         }
 
         _mapper.Map(request.ProfileDto, profile);

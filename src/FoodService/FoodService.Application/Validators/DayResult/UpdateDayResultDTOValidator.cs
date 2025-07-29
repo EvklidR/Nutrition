@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using FoodService.Application.DTOs.DayResult;
+using FoodService.Application.DTOs.DayResult.Requests;
 
 namespace FoodService.Application.Validators
 {
@@ -8,8 +8,7 @@ namespace FoodService.Application.Validators
         public UpdateDayResultDTOValidator()
         {
             RuleFor(x => x.Weight)
-                .GreaterThan(0).WithMessage("Weight must be grater than 0 if provided")
-                .When(x => x.Weight.HasValue);
+                .GreaterThan(0).WithMessage("Weight must be grater than 0 if provided");
 
             RuleFor(x => x.GlassesOfWater)
                 .GreaterThanOrEqualTo(0).WithMessage("Amount should be grater than or equal to 0");

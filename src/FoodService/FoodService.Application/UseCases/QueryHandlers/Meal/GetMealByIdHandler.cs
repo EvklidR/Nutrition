@@ -11,9 +11,9 @@ namespace FoodService.Application.UseCases.QueryHandlers.Meal.GetMealById
     {
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICheckUserService _userService;
+        private readonly IUserService _userService;
 
-        public GetMealByIdHandler(IMapper mapper, IUnitOfWork unitOfWork, ICheckUserService userService)
+        public GetMealByIdHandler(IMapper mapper, IUnitOfWork unitOfWork, IUserService userService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -29,14 +29,9 @@ namespace FoodService.Application.UseCases.QueryHandlers.Meal.GetMealById
                 throw new NotFound("Day not found");
             }
 
-            var isProfileBelongUser = await _userService.CheckProfileBelonging(
+            await _userService.CheckProfileBelongingAsync(
                 request.UserId,
                 day.ProfileId);
-
-            if (!isProfileBelongUser)
-            {
-                throw new Forbidden("You dont have access to this meal");
-            }
 
             var meal = day.Meals.FirstOrDefault(m => m.Id == request.MealId);
 

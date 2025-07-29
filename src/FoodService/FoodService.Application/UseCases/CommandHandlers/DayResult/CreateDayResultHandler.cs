@@ -1,51 +1,44 @@
 ﻿using AutoMapper;
-using FoodService.Application.Exceptions;
 using FoodService.Domain.Interfaces;
 using FoodService.Application.Interfaces;
-using FoodService.Application.DTOs.DayResult;
 using FoodService.Application.UseCases.Commands.DayResult;
+using FoodService.Application.DTOs.DayResult.Responses;
 
-namespace FoodService.Application.UseCases.CommandHandlers.DayResult
+namespace FoodService.Application.UseCases.CommandHandlers.DayResult;
+
+public class CreateDayResultHandler 
+    : ICommandHandler<CreateDayResultCommand, DayResultResponse>
 {
-    public class CreateDayResultHandler 
-        : ICommandHandler<CreateDayResultCommand, DayResultDTO>
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+    private readonly IUserService _userService;
+
+    public CreateDayResultHandler(
+        IUnitOfWork unitOfWork,
+        IMapper mapper,
+        IUserService checkUserService)
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly ICheckUserService _userService;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+        _userService = checkUserService;
+    }
 
-        public CreateDayResultHandler(
-            IUnitOfWork unitOfWork,
-            IMapper mapper,
-            ICheckUserService userService)
-        {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-            _userService = userService;
-        }
+    public async Task<DayResultResponse> Handle(
+        CreateDayResultCommand request,
+        CancellationToken cancellationToken)
+    {
+        await _userService.CheckProfileBelongingAsync(
+            request.UserId, 
+            request.CreateDayResultDTO.ProfileId);
 
-        public async Task<DayResultDTO> Handle(
-            CreateDayResultCommand request,
-            CancellationToken cancellationToken)
-        {
-            var doesProfileBelongUser = await _userService.CheckProfileBelonging(
-                request.UserId, 
-                request.CreateDayResultDTO.ProfileId);
+        var dayResult = _mapper.Map<Domain.Entities.DayResult>(request.CreateDayResultDTO);
 
-            if (!doesProfileBelongUser)
-            {
-                throw new Forbidden("You dont have access to this meal");
-            }
+        _unitOfWork.DayResultRepository.Add(dayResult);
 
-            var dayResult = _mapper.Map<Domain.Entities.DayResult>(request.CreateDayResultDTO);
+        await _unitOfWork.SaveChangesAsync();
 
-            _unitOfWork.DayResultRepository.Add(dayResult);
+        var dayResultDTO = _mapper.Map<DayResultResponse>(dayResult);
 
-            await _unitOfWork.SaveChangesAsync();
-
-            var dayResultDTO = _mapper.Map<DayResultDTO>(dayResult);
-
-            return dayResultDTO;
-        }
+        return dayResultDTO;
     }
 }

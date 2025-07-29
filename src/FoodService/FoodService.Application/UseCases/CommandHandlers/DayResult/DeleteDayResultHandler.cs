@@ -8,9 +8,9 @@ namespace FoodService.Application.UseCases.CommandHandlers.DayResult
     public class DeleteDayResultHandler : ICommandHandler<DeleteDayResultCommand>
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICheckUserService _userService;
+        private readonly IUserService _userService;
 
-        public DeleteDayResultHandler(IUnitOfWork unitOfWork, ICheckUserService userService)
+        public DeleteDayResultHandler(IUnitOfWork unitOfWork, IUserService userService)
         {
             _unitOfWork = unitOfWork;
             _userService = userService;
@@ -25,12 +25,7 @@ namespace FoodService.Application.UseCases.CommandHandlers.DayResult
                 throw new NotFound("DayResult not found");
             }
                
-            var doesProfileBelongUser = await _userService.CheckProfileBelonging(request.UserId, dayResult.ProfileId);
-
-            if (!doesProfileBelongUser)
-            {
-                throw new Forbidden("You dont have access to this meal");
-            }
+            await _userService.CheckProfileBelongingAsync(request.UserId, dayResult.ProfileId);
 
             _unitOfWork.DayResultRepository.Delete(dayResult);
 

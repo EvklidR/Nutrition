@@ -10,13 +10,13 @@ namespace FoodService.Infrastructure.MSSQL.Configurations
         {
             builder.HasKey(iod => new 
             {
-                iod.DishId,
+                iod.RecipeId,
                 iod.ProductId 
             });
 
-            builder.HasOne<Dish>()
+            builder.HasOne<Recipe>()
                 .WithMany(d => d.Ingredients)
-                .HasForeignKey(iod => iod.DishId)
+                .HasForeignKey(iod => iod.RecipeId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(iod => iod.Product)

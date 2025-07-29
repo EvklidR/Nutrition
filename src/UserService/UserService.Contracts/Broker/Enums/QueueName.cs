@@ -4,5 +4,7 @@ public enum QueueName
 {
     ProfileDeleted,
     MealPlanChoosen,
-    MealPlanRevoked
+    MealPlanRevoked,
+    ProfileWeightChanged,
+    DayResultWeightChanged
 }

@@ -7,6 +7,7 @@ package userService;
 service GRPCUserService {
     rpc CheckUser (CheckUserRequest) returns (CheckUserResponse);
     rpc CheckProfileBelonging (CheckProfileBelongingRequest) returns (CheckProfileBelongingResponse);
+    rpc GetProfileWeight (GetProfileWeightRequest) returns (GetProfileWeightResponse);
 }
 
 message CheckUserRequest {
@@ -24,4 +25,12 @@ message CheckProfileBelongingRequest {
 
 message CheckProfileBelongingResponse {
     bool belong = 1;
+}
+
+message GetProfileWeightRequest {
+    string profileId = 1;
+}
+
+message GetProfileWeightResponse {
+    double weight = 1;
 }

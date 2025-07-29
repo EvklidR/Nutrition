@@ -17,7 +17,7 @@ namespace FoodServiceTests.Dish
     public class CreateDishTests
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
-        private readonly Mock<ICheckUserService> _userServiceMock;
+        private readonly Mock<IUserService> _userServiceMock;
         private readonly Mock<IImageService> _imageServiceMock;
         private readonly IMapper _mapper;
 
@@ -28,7 +28,7 @@ namespace FoodServiceTests.Dish
         public CreateDishTests()
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
-            _userServiceMock = new Mock<ICheckUserService>();
+            _userServiceMock = new Mock<IUserService>();
             _imageServiceMock = new Mock<IImageService>();
 
             var mapperConfig = new MapperConfiguration(cfg =>
