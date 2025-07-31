@@ -5,7 +5,7 @@ namespace UserService.Application.UseCases.Commands.Profile.ChangeDesiredGlasses
 
 public class ChangeDesiredGlassesOfWaterCommandValidator : AbstractValidator<ChangeDesiredGlassesOfWaterCommand>
 {
-    ChangeDesiredGlassesOfWaterCommandValidator()
+    public ChangeDesiredGlassesOfWaterCommandValidator()
     {
         RuleFor(x => x.DesiredGlassesOfWater)
             .GreaterThanOrEqualTo(0)

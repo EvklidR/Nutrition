@@ -9,5 +9,5 @@ public class DayResult
     public int GlassesOfWater { get; set; } = 0;
 
 
-    public List<Meal> Meals { get; set; } = [];
+    public List<Meal> Meals { get; set; } = new List<Meal>();
 }

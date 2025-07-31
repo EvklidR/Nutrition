@@ -16,11 +16,18 @@ public class CreateDayResultsJob
     public async Task Run()
     {
         var lastDayResults = await _dbContext.DayResults
-            .GroupBy(dr => dr.ProfileId)
-            .Select(g => g
-                .OrderByDescending(a => a.Date)
-                .FirstOrDefault())
-            .Where(dr => dr != null)
+            .Join(
+                _dbContext.DayResults
+                    .GroupBy(dr => dr.ProfileId)
+                    .Select(g => new
+                    {
+                        ProfileId = g.Key,
+                        LastDate = g.Max(x => x.Date)
+                    }),
+                dr => new { dr.ProfileId, dr.Date },
+                g => new { g.ProfileId, Date = g.LastDate },
+                (dr, g) => dr
+            )
             .ToListAsync();
 
         var now = DateOnly.FromDateTime(DateTime.Now);
@@ -28,7 +35,8 @@ public class CreateDayResultsJob
 
         foreach (var dayResult in lastDayResults)
         {
-            if (dayResult!.Date != now) {
+            if (dayResult!.Date != now) 
+            {
                 var day = dayResult.Date.AddDays(1);
 
                 while (day <= now)
@@ -40,7 +48,7 @@ public class CreateDayResultsJob
                         GlassesOfWater = 0,
                         Weight = dayResult.Weight
                     });
-                    day.AddDays(1);
+                    day = day.AddDays(1);
                 }
             }
         }

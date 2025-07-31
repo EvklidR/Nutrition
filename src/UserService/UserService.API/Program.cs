@@ -29,8 +29,9 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
             app.ApplyMigrations();
-            app.SetHangfireConfiguration();
         }
+        
+        //app.SetHangfireConfiguration();
 
         app.UseMiddleware<ExceptionHandlingMiddleware>();
 

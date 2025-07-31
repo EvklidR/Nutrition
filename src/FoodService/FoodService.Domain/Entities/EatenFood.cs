@@ -1,21 +1,20 @@
-﻿namespace FoodService.Domain.Entities
+﻿namespace FoodService.Domain.Entities;
+
+public class EatenFood
 {
-    public class EatenFood
-    {
-        public Guid Id { get; set; }
-        public Guid FoodId { get; set; }
-        public Guid MealId { get; set; }
+    public Guid Id { get; set; }
+    public Guid FoodId { get; set; }
+    public Guid MealId { get; set; }
 
-        public Food Food { get; set; } = null!;
-    }
+    public Food Food { get; set; } = null!;
+}
 
-    public class EatenProduct : EatenFood
-    {
-        public double Weight { get; set; }
-    }
+public class EatenProduct : EatenFood
+{
+    public double Weight { get; set; }
+}
 
-    public class EatenDish : EatenFood
-    {
-        public int AmountOfPortions { get; set; }
-    }
+public class EatenDish : EatenFood
+{
+    public int AmountOfPortions { get; set; }
 }

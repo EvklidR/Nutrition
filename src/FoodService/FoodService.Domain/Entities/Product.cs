@@ -1,6 +1,5 @@
-﻿namespace FoodService.Domain.Entities
+﻿namespace FoodService.Domain.Entities;
+
+public class Product : Food
 {
-    public class Product : Food
-    {
-    }
 }

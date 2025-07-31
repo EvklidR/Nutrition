@@ -4,7 +4,7 @@ using FoodService.Domain.Entities;
 
 namespace FoodService.Infrastructure.MSSQL.Configurations
 {
-    public class ProductOfDishConfiguration : IEntityTypeConfiguration<ProductOfRecipe>
+    public class ProductOfRecipeConfiguration : IEntityTypeConfiguration<ProductOfRecipe>
     {
         public void Configure(EntityTypeBuilder<ProductOfRecipe> builder)
         {

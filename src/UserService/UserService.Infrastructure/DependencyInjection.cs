@@ -8,7 +8,6 @@ using UserService.Infrastructure.Configurations;
 using UserService.Contracts.Services;
 using UserService.Infrastructure.gRPC;
 using Hangfire;
-using RabbitMQ.Client;
 using UserService.Infrastructure.RabbitMQService;
 using UserService.Infrastructure.BackgroundJobs;
 using Microsoft.Extensions.Options;
@@ -42,6 +41,8 @@ namespace UserService.Infrastructure.DependencyInjection
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IProfileRepository, ProfileRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
             services.AddScoped<IRefreshTokenTokenRepository, RefreshTokenTokenRepository>();
 
             services.AddScoped<RoleInitializer>();

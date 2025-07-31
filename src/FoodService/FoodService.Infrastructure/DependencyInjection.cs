@@ -1,16 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using FoodService.Infrastructure.MSSQL;
-using FoodService.Infrastructure.Repositories;
-using FoodService.Domain.Interfaces;
-using Microsoft.Extensions.Configuration;
-using FoodService.Domain.Interfaces.Repositories;
+﻿using FoodService.API.BackgroundJobs;
 using FoodService.Application.Interfaces;
-using FoodService.Infrastructure.Services;
-using StackExchange.Redis;
-using FoodService.Infrastructure.Grpc;
+using FoodService.Domain.Interfaces;
+using FoodService.Domain.Interfaces.Repositories;
 using FoodService.Infrastructure.BackgroundJobs;
+using FoodService.Infrastructure.Grpc;
+using FoodService.Infrastructure.MSSQL;
+using FoodService.Infrastructure.RabbitMQService;
+using FoodService.Infrastructure.RabbitMQService.Settings;
+using FoodService.Infrastructure.Repositories;
+using FoodService.Infrastructure.Services;
 using Hangfire;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using StackExchange.Redis;
 
 namespace FoodService.Infrastructure.DependencyInjection
 {
@@ -28,6 +32,14 @@ namespace FoodService.Infrastructure.DependencyInjection
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddHangfire(conf => conf
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddHangfireServer();
 
             services.AddScoped<IDayResultRepository, DayResultRepository>();
             services.AddScoped<IDishRepository, DishRepository>();
@@ -53,11 +65,13 @@ namespace FoodService.Infrastructure.DependencyInjection
             services.AddScoped<CreateDayResultsJob>();
             services.AddScoped<CreateTodayDayResultJob>();
 
-            BackgroundJob.Enqueue<CreateDayResultsJob>(job => job.Run());
+            var rabbitMqSection = configuration.GetSection("RabbitMq");
+            services.Configure<RabbitMqSettings>(rabbitMqSection);
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<RabbitMqSettings>>().Value);
 
-            RecurringJob.AddOrUpdate<CreateTodayDayResultJob>("CreateTodayDayResults",
-                job => job.Run(),
-                Cron.Daily(0));
+            services.AddSingleton<RabbitMQConsumer>();
+            services.AddSingleton<IBrokerService, RabbitMQProducer>();
+            services.AddHostedService<ChangeProfileWeightListener>();
 
             return services;
         }

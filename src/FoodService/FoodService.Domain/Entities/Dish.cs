@@ -1,9 +1,8 @@
-﻿namespace FoodService.Domain.Entities
-{
-    public class Dish : Food
-    {
-        public Guid RecipeId { get; set; }
+﻿namespace FoodService.Domain.Entities;
 
-        public Recipe Recipe { get; set; } = null!;
-    }
+public class Dish : Food
+{
+    public Guid RecipeId { get; set; }
+
+    public Recipe Recipe { get; set; } = null!;
 }

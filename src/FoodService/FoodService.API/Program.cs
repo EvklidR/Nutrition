@@ -4,6 +4,7 @@ using FoodService.API.DependencyInjection;
 using FoodService.API.Extentions;
 using FoodService.Application.DependencyInjection;
 using FoodService.Infrastructure.DependencyInjection;
+using Hangfire;
 
 namespace FoodService.API;
 
@@ -27,12 +28,19 @@ public class Program
             app.ApplyMigrations();
         }
 
+        if (!app.Environment.IsEnvironment("Testing"))
+        {
+            using var scope = app.Services.CreateScope();
+            app.UseHangfireDashboard();
+            scope.AddJobs();
+        }
+
+
         app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
-
 
         app.MapControllers();
 
