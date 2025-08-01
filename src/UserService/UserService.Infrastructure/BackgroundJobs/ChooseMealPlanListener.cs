@@ -1,19 +1,19 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using System.Text;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using UserService.Infrastructure.RabbitMQService;
-using System.Text;
-using UserService.Infrastructure.MSSQL;
 using Microsoft.EntityFrameworkCore;
+using UserService.Infrastructure.RabbitMQService;
+using UserService.Infrastructure.MSSQL;
 using UserService.Contracts.Exceptions;
 
 namespace UserService.Infrastructure.BackgroundJobs;
 
-public class RevokeMealPlanService : BackgroundService
+public class ChooseMealPlanListener : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
-    private readonly RabbitMQRevokeMealPlanConsumer _consumer;
+    private readonly RabbitMQChooseMealPlanConsumer _consumer;
 
-    public RevokeMealPlanService(IServiceScopeFactory scopeFactory, RabbitMQRevokeMealPlanConsumer consumer)
+    public ChooseMealPlanListener(IServiceScopeFactory scopeFactory, RabbitMQChooseMealPlanConsumer consumer)
     {
         _scopeFactory = scopeFactory;
         _consumer = consumer;
@@ -42,7 +42,7 @@ public class RevokeMealPlanService : BackgroundService
                         throw new NotFound("Profile not found");
                     }
 
-                    profile.ThereIsMealPlan = false;
+                    profile.ThereIsMealPlan = true;
 
                     dbContext.Profiles.Update(profile);
                     await dbContext.SaveChangesAsync(cancellationToken);

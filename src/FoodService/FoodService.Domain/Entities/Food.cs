@@ -1,6 +1,8 @@
-﻿namespace FoodService.Domain.Entities;
+﻿using FoodService.Domain.Entities.Interfaces;
 
-public abstract class Food
+namespace FoodService.Domain.Entities;
+
+public abstract class Food : IHasId
 {
     public Guid Id { get; set; }
     public Guid UserId { get; set; }

@@ -1,55 +1,49 @@
 ﻿using FoodService.Application.Exceptions;
 using FoodService.Application.Interfaces;
 using FoodService.Domain.Interfaces;
-using FoodService.Application.UseCases.Commands.Dish;
+using FoodService.Application.UseCases.Commands.Dishes;
 
-namespace FoodService.Application.UseCases.CommandHandlers.Dish
+namespace FoodService.Application.UseCases.CommandHandlers.Dishes;
+
+public class DeleteDishHandler : ICommandHandler<DeleteDishCommand>
 {
-    public class DeleteDishHandler : ICommandHandler<DeleteDishCommand>
-    {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IImageService _imageService;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IImageService _imageService;
 
-        public DeleteDishHandler(IUnitOfWork unitOfWork, IImageService imageService)
+    public DeleteDishHandler(IUnitOfWork unitOfWork, IImageService imageService)
+    {
+        _unitOfWork = unitOfWork;
+        _imageService = imageService;
+    }
+
+    public async Task Handle(DeleteDishCommand request, CancellationToken cancellationToken)
+    {
+        var dish = await _unitOfWork.DishRepository.GetByIdWithRecipeAsync(request.DishId);
+
+        if (dish == null)
         {
-            _unitOfWork = unitOfWork;
-            _imageService = imageService;
+            throw new NotFound("Dish not found");
         }
 
-        public async Task Handle(DeleteDishCommand request, CancellationToken cancellationToken)
+        if (dish.UserId != request.UserId)
         {
-            var dish = await _unitOfWork.DishRepository.GetByIdAsync(request.DishId);
+            throw new Forbidden("You dont have access to this dish");
+        }
 
-            if (dish == null)
-            {
-                throw new NotFound("Dish not found");
-            }
+        var doesAnyDayResultContainsDish = await _unitOfWork.DayResultRepository.DoesAnyDayResultContainsFoodByIdAsync(dish.Id, aboutProduct: false);
 
-            if (dish.UserId != request.UserId)
-            {
-                throw new Forbidden("You dont have access to this dish");
-            }
+        if (doesAnyDayResultContainsDish)
+        {
+            throw new BadRequest("Some day results alredy contain this dish");
+        }
 
-            try
-            {
-                _unitOfWork.DishRepository.Delete(dish);
-                await _unitOfWork.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                if (e.InnerException.Message.StartsWith("The DELETE statement conflicted with the REFERENCE constraint")) {
-                    throw new BadRequest("This dish is used in some meals");
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        _unitOfWork.DishRepository.Delete(dish);
 
-            //if (dish.ImageUrl != null)
-            //{
-            //    await _imageService.DeleteImageAsync(dish.ImageUrl);
-            //}
+        await _unitOfWork.SaveChangesAsync();
+
+        if (dish.Recipe.ImageUrl != null)
+        {
+            await _imageService.DeleteImageAsync(dish.Recipe.ImageUrl);
         }
     }
 }

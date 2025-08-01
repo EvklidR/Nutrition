@@ -7,6 +7,7 @@ namespace FoodService.Domain.Interfaces
         IDishRepository DishRepository { get; }
         IProductRepository ProductRepository { get; }
         IDayResultRepository DayResultRepository { get; }
+        IRecipeRepository RecipeRepository { get; }
         Task SaveChangesAsync();
     }
 }

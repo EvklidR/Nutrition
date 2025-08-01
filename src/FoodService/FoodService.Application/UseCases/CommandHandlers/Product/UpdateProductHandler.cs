@@ -22,7 +22,7 @@ namespace FoodService.Application.UseCases.CommandHandlers.Product
 
             if (product == null)
             {
-                throw new NotFound("Ingredient not found");
+                throw new NotFound("Product not found");
             }
 
             if (product.UserId != request.UserId)

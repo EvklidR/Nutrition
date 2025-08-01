@@ -1,6 +1,4 @@
-﻿using UserService.Domain.Entities;
-
-namespace UserService.Contracts.DataAccess.Repositories;
+﻿namespace UserService.Contracts.DataAccess.Repositories;
 
 public interface IProfileRepository
 {

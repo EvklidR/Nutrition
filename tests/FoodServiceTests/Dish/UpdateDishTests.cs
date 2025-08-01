@@ -19,7 +19,7 @@ namespace FoodServiceTests.Dish
         private readonly Mock<IImageService> _imageServiceMock;
         private readonly IMapper _mapper;
 
-        private readonly UpdateDishHandler _handler;
+        private readonly UpdateRecipeHandler _handler;
 
         private readonly Faker<UpdateRecipeDTO> _updateDishDtoFaker;
 
@@ -46,7 +46,7 @@ namespace FoodServiceTests.Dish
                     new CreateOrUpdateProductOfRecipeDTO { ProductId = Guid.NewGuid(), Weight = 150 }
                 });
 
-            _handler = new UpdateDishHandler(_unitOfWorkMock.Object, _mapper, _imageServiceMock.Object);
+            _handler = new UpdateRecipeHandler(_unitOfWorkMock.Object, _mapper, _imageServiceMock.Object);
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace FoodServiceTests.Dish
             // Arrange
             var updateDishDto = _updateDishDtoFaker.Generate();
             var userId = Guid.NewGuid();
-            var command = new UpdateDishCommand(updateDishDto, userId);
+            var command = new UpdateRecipeCommand(updateDishDto, userId);
 
             int amountOfPortions = updateDishDto.AmountOfPortions;
 
@@ -104,7 +104,7 @@ namespace FoodServiceTests.Dish
             // Arrange
             var updateDishDto = _updateDishDtoFaker.Generate();
             var userId = Guid.NewGuid();
-            var command = new UpdateDishCommand(updateDishDto, userId);
+            var command = new UpdateRecipeCommand(updateDishDto, userId);
 
             _unitOfWorkMock
                 .Setup(u => u.DishRepository.GetByIdAsync(updateDishDto.Id))
@@ -127,7 +127,7 @@ namespace FoodServiceTests.Dish
             var updateDishDto = _updateDishDtoFaker.Generate();
             var ownerId = Guid.NewGuid();
             var anotherUserId = Guid.NewGuid();
-            var command = new UpdateDishCommand(updateDishDto, anotherUserId);
+            var command = new UpdateRecipeCommand(updateDishDto, anotherUserId);
 
             var dish = new FoodService.Domain.Entities.Dish
             {

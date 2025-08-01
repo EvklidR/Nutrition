@@ -21,7 +21,7 @@ namespace FoodServiceTests.Dish
         private readonly Mock<IImageService> _imageServiceMock;
         private readonly IMapper _mapper;
 
-        private readonly CreateDishHandler _handler;
+        private readonly CreateRecipeHandler _handler;
 
         private readonly Faker<CreateRecipeDTO> _createDishDtoFaker;
 
@@ -49,7 +49,7 @@ namespace FoodServiceTests.Dish
                     new CreateOrUpdateProductOfRecipeDTO { ProductId = Guid.NewGuid(), Weight = 150 }
                 });
 
-            _handler = new CreateDishHandler(
+            _handler = new CreateRecipeHandler(
                 _unitOfWorkMock.Object,
                 _mapper,
                 _userServiceMock.Object,

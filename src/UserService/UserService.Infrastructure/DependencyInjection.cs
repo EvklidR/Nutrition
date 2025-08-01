@@ -52,10 +52,12 @@ namespace UserService.Infrastructure.DependencyInjection
             services.AddSingleton(sp => sp.GetRequiredService<IOptions<RabbitMqSettings>>().Value);
 
             services.AddSingleton<RabbitMQRevokeMealPlanConsumer>();
+            services.AddSingleton<DayResultWeightChangedConsumer>();
             services.AddSingleton<RabbitMQChooseMealPlanConsumer>();
             services.AddSingleton<IBrokerService, RabbitMQProducer>();
-            services.AddHostedService<RevokeMealPlanService>();
-            services.AddHostedService<ChooseMealPlanService>();
+            services.AddHostedService<RevokeMealPlanListener>();
+            services.AddHostedService<DayResultWeightChangedListener>();
+            services.AddHostedService<ChooseMealPlanListener>();
 
             return services;
         }

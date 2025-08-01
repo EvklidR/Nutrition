@@ -1,0 +1,48 @@
+﻿using FoodService.Application.Exceptions;
+using FoodService.Domain.Entities;
+using FoodService.Domain.Interfaces.Repositories.Models;
+using System.Linq.Expressions;
+
+namespace FoodService.Infrastructure.IQueriableExtentions;
+
+public static class FoodExtentions
+{
+    public static IQueryable<Food> GetByName(this IQueryable<Food> collection, string? Name)
+    {
+        if (Name != null)
+        {
+            collection = collection.Where(x => x.Name.Contains(Name));
+        }
+
+        return collection;
+    }
+
+    public static IQueryable<Food> SortByCriteria(
+        this IQueryable<Food> collection,
+        bool? sortAsc,
+        SortingCriteria criteria)
+    {
+        if (sortAsc == null)
+        {
+            return collection;
+        }
+
+        var keySelector = GetSortingExpression(criteria);
+
+        return sortAsc == true
+            ? collection.OrderBy(keySelector)
+            : collection.OrderByDescending(keySelector);
+    }
+
+    private static Expression<Func<Food, double>> GetSortingExpression(SortingCriteria criteria)
+    {
+        return criteria switch
+        {
+            SortingCriteria.Calories => x => x.Calories,
+            SortingCriteria.Proteins => x => x.Proteins,
+            SortingCriteria.Fats => x => x.Fats,
+            SortingCriteria.Carbohydrates => x => x.Carbohydrates,
+            _ => throw new BadRequest("Invalid criteria")
+        };
+    }
+}

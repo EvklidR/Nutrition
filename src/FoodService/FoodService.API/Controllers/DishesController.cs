@@ -74,7 +74,7 @@ namespace FoodService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
-            var result = await _mediator.Send(new CreateDishCommand(createDishDTO, userId));
+            var result = await _mediator.Send(new CreateRecipeCommand(createDishDTO, userId));
 
             return Ok(result);
         }
@@ -91,7 +91,7 @@ namespace FoodService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
-            await _mediator.Send(new UpdateDishCommand(updateDishDTO, userId));
+            await _mediator.Send(new UpdateRecipeCommand(updateDishDTO, userId));
 
             return NoContent();
         }
@@ -108,7 +108,7 @@ namespace FoodService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
-            await _mediator.Send(new DeleteDishCommand(dishId, userId));
+            await _mediator.Send(new DeleteRecipeCommand(dishId, userId));
 
             return NoContent();
         }

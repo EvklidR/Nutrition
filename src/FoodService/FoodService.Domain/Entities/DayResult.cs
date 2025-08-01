@@ -1,6 +1,8 @@
-﻿namespace FoodService.Domain.Entities;
+﻿using FoodService.Domain.Entities.Interfaces;
 
-public class DayResult
+namespace FoodService.Domain.Entities;
+
+public class DayResult : IHasId, IHasDate
 {
     public Guid Id { get; set; }
     public Guid ProfileId { get; set; }

@@ -11,6 +11,7 @@ namespace FoodService.Infrastructure.Repositories
         private IDishRepository? _dishRepository;
         private IProductRepository? _productRepository;
         private IDayResultRepository? _dayResultRepository;
+        private IRecipeRepository? _recipeRepository;
 
         public UnitOfWork(ApplicationDbContext context)
         {
@@ -25,6 +26,9 @@ namespace FoodService.Infrastructure.Repositories
 
         public IDayResultRepository DayResultRepository
             => _dayResultRepository ??= new DayResultRepository(_context);
+
+        public IRecipeRepository RecipeRepository
+            => _recipeRepository ??= new RecipeRepository(_context);
 
         public async Task SaveChangesAsync()
         {

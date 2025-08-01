@@ -11,10 +11,11 @@ namespace FoodService.Infrastructure.Repositories
     {
         public DishRepository(ApplicationDbContext context) : base(context) { }
 
-        public override async Task<Dish?> GetByIdAsync(Guid id)
+        public async Task<Dish?> GetByIdWithRecipeAsync(Guid id)
         {
             return await _dbSet
                 .Where(d => d.Id == id)
+                .Include(d => d.Recipe)
                 .FirstOrDefaultAsync();
         }
 
@@ -28,7 +29,7 @@ namespace FoodService.Infrastructure.Repositories
             long totalRecords = await query.CountAsync();
 
             var dishes = await query
-                .GetPaginated(parameters.Page, parameters.PageSize)
+                .GetPaginated(parameters.PaginationParameters)
                 .Cast<Dish>()
                 .ToListAsync();
 

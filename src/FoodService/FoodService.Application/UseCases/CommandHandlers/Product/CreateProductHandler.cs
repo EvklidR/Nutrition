@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using FoodService.Domain.Interfaces;
 using FoodService.Application.UseCases.Commands.Product;
-using FoodService.Application.Exceptions;
 using FoodService.Application.Interfaces;
 using FoodService.Application.DTOs.Product.Responses;
 

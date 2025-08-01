@@ -1,10 +1,10 @@
 ﻿using FoodService.Domain.Entities;
 using FoodService.Domain.Repositories.Models;
 
-namespace FoodService.Domain.Interfaces.Repositories
+namespace FoodService.Domain.Interfaces.Repositories;
+
+public interface IDishRepository : IBaseRepository<Dish>
 {
-    public interface IDishRepository : IBaseRepository<Dish>
-    {
-        Task<(IEnumerable<Dish>? dishes, long totalCount)> GetAllAsync(Guid userId, GetFoodRequestParameters requestParameters);
-    }
+    Task<Dish?> GetByIdWithRecipeAsync(Guid id);
+    Task<(IEnumerable<Dish>? dishes, long totalCount)> GetAllAsync(Guid userId, GetFoodRequestParameters requestParameters);
 }

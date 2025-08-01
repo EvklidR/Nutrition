@@ -1,8 +1,7 @@
-﻿namespace FoodService.Application.DTOs.Recipe.Requests
+﻿namespace FoodService.Application.DTOs.Recipe.Requests;
+
+public class CreateOrUpdateProductOfRecipeDTO
 {
-    public class CreateOrUpdateProductOfRecipeDTO
-    {
-        public Guid ProductId { get; set; }
-        public double Weight { get; set; }
-    }
+    public Guid ProductId { get; set; }
+    public double WeightInRecipe { get; set; }
 }

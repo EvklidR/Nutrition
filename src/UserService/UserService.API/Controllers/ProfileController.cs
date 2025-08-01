@@ -6,6 +6,7 @@ using UserService.Application.DTOs.Requests.Profile;
 using UserService.Application.DTOs.Responces.Profile;
 using UserService.Application.DTOs.Responses.Profile;
 using UserService.Application.UseCases.Commands;
+using UserService.Application.UseCases.Commands.Profile.IncreaseDesiredGlassesOfWater;
 using UserService.Application.UseCases.Queries;
 
 namespace UserService.API.Controllers;
@@ -94,6 +95,23 @@ public class ProfileController : ControllerBase
         var userId = (Guid)HttpContext.Items["UserId"]!;
 
         var command = new UpdateProfileCommand(profileDto, userId);
+
+        await _mediator.Send(command, cancellationToken);
+
+        return NoContent();
+    }
+
+    [Authorize]
+    [ServiceFilter(typeof(UserIdFilter))]
+    [HttpPut]
+    public async Task<IActionResult> ChangeDesiredGlassesOfWater(
+        [FromBody] int desiredGlassesOfWater,
+        [FromBody] Guid profileid,
+        CancellationToken cancellationToken)
+    {
+        var userId = (Guid)HttpContext.Items["UserId"]!;
+
+        var command = new ChangeDesiredGlassesOfWaterCommand(desiredGlassesOfWater, profileid, userId);
 
         await _mediator.Send(command, cancellationToken);
 

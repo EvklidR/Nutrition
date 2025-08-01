@@ -1,6 +1,8 @@
-﻿namespace FoodService.Domain.Entities;
+﻿using FoodService.Domain.Entities.Interfaces;
 
-public class Recipe
+namespace FoodService.Domain.Entities;
+
+public class Recipe : IHasId
 {
     public Guid Id { get; set; }
     public string? Description { get; set; }

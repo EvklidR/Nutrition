@@ -13,14 +13,14 @@ namespace FoodServiceTests.Dish
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly Mock<IImageService> _imageServiceMock;
 
-        private readonly DeleteDishHandler _handler;
+        private readonly DeleteRecipeHandler _handler;
 
         public DeleteDishTests()
         {
             _unitOfWorkMock = new Mock<IUnitOfWork>();
             _imageServiceMock = new Mock<IImageService>();
 
-            _handler = new DeleteDishHandler(_unitOfWorkMock.Object, _imageServiceMock.Object);
+            _handler = new DeleteRecipeHandler(_unitOfWorkMock.Object, _imageServiceMock.Object);
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace FoodServiceTests.Dish
                 .Setup(u => u.SaveChangesAsync())
                 .Returns(Task.CompletedTask);
 
-            var command = new DeleteDishCommand(dishId, userId);
+            var command = new DeleteRecipeCommand(dishId, userId);
 
             // Act
             await _handler.Handle(command, CancellationToken.None);
@@ -73,7 +73,7 @@ namespace FoodServiceTests.Dish
                 .Setup(u => u.DishRepository.GetByIdAsync(dishId))
                 .ReturnsAsync((FoodService.Domain.Entities.Dish)null);
 
-            var command = new DeleteDishCommand(dishId, userId);
+            var command = new DeleteRecipeCommand(dishId, userId);
 
             // Act
             Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);
@@ -105,7 +105,7 @@ namespace FoodServiceTests.Dish
                 .Setup(u => u.DishRepository.GetByIdAsync(dishId))
                 .ReturnsAsync(dish);
 
-            var command = new DeleteDishCommand(dishId, anotherUserId);
+            var command = new DeleteRecipeCommand(dishId, anotherUserId);
 
             // Act
             Func<Task> act = async () => await _handler.Handle(command, CancellationToken.None);

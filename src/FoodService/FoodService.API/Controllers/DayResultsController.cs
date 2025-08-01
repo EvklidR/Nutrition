@@ -7,6 +7,7 @@ using FoodService.Application.UseCases.Queries.DayResult;
 using FoodService.API.Filters;
 using FoodService.Application.DTOs.DayResult.Requests;
 using FoodService.Application.DTOs.DayResult.Responses;
+using FoodService.Domain.Interfaces.Repositories.Models;
 
 namespace FoodService.API.Controllers
 {
@@ -93,7 +94,9 @@ namespace FoodService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
-            var results = await _mediator.Send(new GetDayResultsByPeriodQuery(profileId, startDate, endDate, userId));
+            var periodParams = new PeriodParameters(startDate, endDate);
+
+            var results = await _mediator.Send(new GetStatisticsByPeriodQuery(profileId, periodParams, userId));
 
             return Ok(results);
         }

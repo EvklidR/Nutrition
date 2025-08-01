@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FoodService.Application.DTOs.DayResult.Responses;
-using FoodService.Application.Exceptions;
 using FoodService.Application.Interfaces;
 using FoodService.Application.UseCases.Queries.DayResult;
 using FoodService.Domain.Interfaces;
@@ -8,7 +7,7 @@ using FoodService.Domain.Interfaces;
 namespace FoodService.Application.UseCases.QueryHandlers.DayResult
 {
     public class GetDayResultsByPeriodQueryHandler 
-        : IQueryHandler<GetDayResultsByPeriodQuery, IEnumerable<DayResultResponse>?>
+        : IQueryHandler<GetStatisticsByPeriodQuery, IEnumerable<ShortDayResultResponse>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
@@ -21,20 +20,20 @@ namespace FoodService.Application.UseCases.QueryHandlers.DayResult
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<DayResultResponse>?> Handle(
-            GetDayResultsByPeriodQuery request,
+        public async Task<IEnumerable<ShortDayResultResponse>> Handle(
+            GetStatisticsByPeriodQuery request,
             CancellationToken cancellationToken)
         {
             await _userService.CheckProfileBelongingAsync(
                 request.UserId,
                 request.ProfileId);
 
-            var dayResults = await _unitOfWork.DayResultRepository.GetAllByPeriodAsync(
+            var dayResults = await _unitOfWork.DayResultRepository.GetAllByParametersAsync(
                 request.ProfileId, 
-                request.StartDate, 
-                request.EndDate);
+                paginatedParameters: null,
+                request.PeriodParameters);
 
-            var dayResultsDTO = _mapper.Map<List<DayResultResponse>>(dayResults);
+            var dayResultsDTO = _mapper.Map<List<ShortDayResultResponse>>(dayResults);
 
             return dayResultsDTO;
         }

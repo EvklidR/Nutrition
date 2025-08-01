@@ -1,7 +1,5 @@
-﻿using FoodService.Application.Exceptions;
-using FoodService.Domain.Interfaces;
+﻿using FoodService.Domain.Interfaces;
 using FoodService.Application.Interfaces;
-using FoodService.Application.DTOs.DayResult;
 using AutoMapper;
 using FoodService.Application.UseCases.Commands.DayResult;
 using FoodService.Application.DTOs.DayResult.Responses;

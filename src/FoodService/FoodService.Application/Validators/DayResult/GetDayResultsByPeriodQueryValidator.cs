@@ -3,7 +3,7 @@ using FoodService.Application.UseCases.Queries.DayResult;
 
 namespace FoodService.Application.Validators.DayResult
 {
-    public class GetDayResultsByPeriodQueryValidator : AbstractValidator<GetDayResultsByPeriodQuery>
+    public class GetDayResultsByPeriodQueryValidator : AbstractValidator<GetStatisticsByPeriodQuery>
     {
         public GetDayResultsByPeriodQueryValidator()
         {

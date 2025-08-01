@@ -2,6 +2,8 @@
 using FoodService.Domain.Entities;
 using FoodService.Domain.Interfaces.Repositories;
 using FoodService.Infrastructure.MSSQL;
+using FoodService.Domain.Interfaces.Repositories.Models;
+using FoodService.Infrastructure.IQueriableExtentions;
 
 namespace FoodService.Infrastructure.Repositories
 {
@@ -13,37 +15,20 @@ namespace FoodService.Infrastructure.Repositories
         {
             return await _dbSet
                 .Where(d => d.Id == id)
-                .Include(dr => dr.Meals)
-                    .ThenInclude(m => m.Dishes)
-                        .ThenInclude(f => f.Food)
-                .Include(d => d.Meals)
-                    .ThenInclude(m => m.Products)
-                        .ThenInclude(p => p.Food)
+                .IncludeFood()
                 .FirstOrDefaultAsync();
         }
 
-        public override async Task<IEnumerable<DayResult>?> GetAllAsync(Guid profileId) 
+        public async Task<IEnumerable<DayResult>> GetAllByParametersAsync(
+            Guid ProfileId, 
+            PaginatedParameters? paginatedParameters, 
+            PeriodParameters? periodParameters)
         {
             return await _dbSet
-                .Where(e => e.ProfileId == profileId)
-                .Include(dr => dr.Meals)
-                    .ThenInclude(m => m.Dishes)
-                .Include(d => d.Meals)
-                    .ThenInclude(m => m.Products)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<DayResult>?> GetAllByPeriodAsync(Guid ProfileId, DateOnly dateStart, DateOnly dateEnd)
-        {
-            return await _dbSet
-                .Where(dr => dr.Date >= dateStart && dr.Date <= dateEnd)
+                .GetByPeriod(periodParameters)
+                .GetPaginated(paginatedParameters)
                 .Where(dr => dr.ProfileId == ProfileId)
-                .Include(dr => dr.Meals)
-                    .ThenInclude(m => m.Dishes)
-                        .ThenInclude(f => f.Food)
-                .Include(d => d.Meals)
-                    .ThenInclude(m => m.Products)
-                        .ThenInclude(p => p.Food)
+                .IncludeFood()
                 .ToListAsync();
         }
 
@@ -52,13 +37,32 @@ namespace FoodService.Infrastructure.Repositories
             return await _dbSet
                 .Where(dr => dr.Date == date)
                 .Where(dr => dr.ProfileId == ProfileId)
-                .Include(dr => dr.Meals)
-                    .ThenInclude(m => m.Dishes)
-                        .ThenInclude(f => f.Food)
-                .Include(d => d.Meals)
-                    .ThenInclude(m => m.Products)
-                        .ThenInclude(p => p.Food)
+                .IncludeFood()
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<bool> DoesAnyDayResultContainsFoodByIdAsync(Guid id, bool aboutProduct)
+        {
+            if (aboutProduct)
+            {
+                return await _dbSet.AnyAsync(
+                        dr => dr.Meals.Any(
+                                meal => meal.Products.Any(
+                                        pr => pr.Id == id
+                                    )
+                            )
+                    );
+            }
+            else
+            {
+                return await _dbSet.AnyAsync(
+                        dr => dr.Meals.Any(
+                                meal => meal.Dishes.Any(
+                                        dish => dish.Id == id
+                                    )
+                            )
+                    );
+            }
         }
     }
 }
