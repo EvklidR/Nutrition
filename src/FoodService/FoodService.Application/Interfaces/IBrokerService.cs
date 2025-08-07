@@ -6,8 +6,8 @@ public interface IBrokerService
 {
     Task PublishMessageAsync(
         string message,
-        QueueName queueName,
-        string exchange = "",
+        QueueName? queueName,
+        ExchangeName? exchange,
         bool mandatory = true,
         CancellationToken cancellationToken = default);
 }

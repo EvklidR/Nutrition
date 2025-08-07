@@ -28,7 +28,7 @@ namespace MealPlanService.Infrastructure.DependencyInjection
             services.Configure<RabbitMqSettings>(rabbitMqSection);
             services.AddSingleton(sp => sp.GetRequiredService<IOptions<RabbitMqSettings>>().Value);
 
-            services.AddSingleton<RabbitMQConsumer>();
+            services.AddSingleton<DeleteProfileConsumer>();
             services.AddSingleton<IBrokerService, RabbitMQProducer>();
 
             return services;

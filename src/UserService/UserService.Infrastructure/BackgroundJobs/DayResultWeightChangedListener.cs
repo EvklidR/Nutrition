@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System.Text;
 using UserService.Infrastructure.MSSQL;
-using UserService.Infrastructure.RabbitMQService;
+using UserService.Infrastructure.RabbitMQService.Consumers;
 
 namespace UserService.Infrastructure.BackgroundJobs;
 

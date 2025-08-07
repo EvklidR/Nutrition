@@ -18,8 +18,8 @@ namespace MealPlanService.Infrastructure.RabbitMQService
 
         public async Task PublishMessageAsync(
             string message,
-            QueueName queueName,
-            string exchange = "",
+            QueueName? queueName,
+            ExchangeName? exchangeName,
             bool mandatory = true,
             CancellationToken cancellationToken = default)
         {
@@ -28,15 +28,22 @@ namespace MealPlanService.Infrastructure.RabbitMQService
                 Persistent = true
             };
 
-            await CreateQueueIfNotExistsAsync(queueName.ToString());
+            if (exchangeName != null)
+            {
+                await CreateExchangeIfNotExistsAsync(exchangeName.Value);
+            }
+            else if (queueName != null)
+            {
+                await CreateQueueIfNotExistsAsync(queueName.Value);
+            }
 
             var body = Encoding.UTF8.GetBytes(message);
 
             await _retryPolicy.ExecuteAsync(async () =>
             {
                 await _channel.BasicPublishAsync(
-                    exchange: exchange,
-                    routingKey: queueName.ToString(),
+                    exchange: exchangeName.ToString() ?? "",
+                    routingKey: queueName.ToString() ?? "",
                     mandatory: mandatory,
                     basicProperties: properties,
                     body: body);

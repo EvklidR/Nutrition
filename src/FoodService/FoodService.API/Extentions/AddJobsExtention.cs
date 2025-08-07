@@ -9,7 +9,7 @@ public static class AddJobsExtention
     {
         BackgroundJob.Enqueue<CreateDayResultsJob>(job => job.Run());
 
-        RecurringJob.AddOrUpdate<CreateTodayDayResultJob>("CreateTodayDayResults",
+        RecurringJob.AddOrUpdate<CreateDayResultsJob>("CreateDayResults",
             job => job.Run(),
             Cron.Daily(0));
 

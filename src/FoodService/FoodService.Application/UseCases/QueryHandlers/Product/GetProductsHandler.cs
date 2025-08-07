@@ -22,7 +22,7 @@ namespace FoodService.Application.UseCases.QueryHandlers.Product
             
             var productsDTO = _mapper.Map<List<ProductResponse>>(response.products);
 
-            return new ProductsResponse()
+            return new ProductsResponse
             {
                 Products = productsDTO,
                 TotalCount = response.totalCount

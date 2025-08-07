@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using UserService.Infrastructure.RabbitMQService.Settings;
 using UserService.Contracts.DataAccess.Repositories;
 using UserService.Contracts.Broker;
+using UserService.Infrastructure.RabbitMQService.Consumers;
 
 namespace UserService.Infrastructure.DependencyInjection
 {

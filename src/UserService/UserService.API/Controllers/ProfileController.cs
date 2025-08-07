@@ -67,6 +67,7 @@ public class ProfileController : ControllerBase
     public async Task<ActionResult<IEnumerable<ShortProfileResponse>>> GetUserProfiles(CancellationToken cancellationToken)
     {
         var userId = (Guid)HttpContext.Items["UserId"]!;
+
         var query = new GetUserProfilesQuery(userId);
 
         var result = await _mediator.Send(query, cancellationToken);
@@ -103,10 +104,10 @@ public class ProfileController : ControllerBase
 
     [Authorize]
     [ServiceFilter(typeof(UserIdFilter))]
-    [HttpPut]
+    [HttpPut("desired-glasses-of-water")]
     public async Task<IActionResult> ChangeDesiredGlassesOfWater(
         [FromBody] int desiredGlassesOfWater,
-        [FromBody] Guid profileid,
+        [FromQuery] Guid profileid,
         CancellationToken cancellationToken)
     {
         var userId = (Guid)HttpContext.Items["UserId"]!;

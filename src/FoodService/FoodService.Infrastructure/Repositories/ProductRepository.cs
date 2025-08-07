@@ -3,7 +3,7 @@ using FoodService.Domain.Entities;
 using FoodService.Domain.Interfaces.Repositories;
 using FoodService.Infrastructure.MSSQL;
 using FoodService.Domain.Repositories.Models;
-using FoodService.Infrastructure.Extentions;
+using FoodService.Infrastructure.IQueriableExtentions;
 
 namespace FoodService.Infrastructure.Repositories;
 

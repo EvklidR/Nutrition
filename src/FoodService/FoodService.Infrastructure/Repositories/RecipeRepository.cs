@@ -9,6 +9,14 @@ public class RecipeRepository : BaseRepository<Recipe>, IRecipeRepository
 {
     public RecipeRepository(ApplicationDbContext context) : base(context) { }
 
+    public async override Task<Recipe?> GetByIdAsync(Guid id)
+    {
+        return await _dbSet
+            .Where(recipe => recipe.Id == id)
+            .Include(recipe => recipe.Dish)
+            .FirstOrDefaultAsync();
+    }
+
     public async Task<bool> DoesAnyRecipeContainsProductByIdAsync(Guid id)
     {
         return await _dbSet

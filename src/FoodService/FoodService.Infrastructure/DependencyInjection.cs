@@ -1,11 +1,12 @@
-﻿using FoodService.API.BackgroundJobs;
-using FoodService.Application.Interfaces;
+﻿using FoodService.Application.Interfaces;
 using FoodService.Domain.Interfaces;
 using FoodService.Domain.Interfaces.Repositories;
 using FoodService.Infrastructure.BackgroundJobs;
 using FoodService.Infrastructure.Grpc;
 using FoodService.Infrastructure.MSSQL;
 using FoodService.Infrastructure.RabbitMQService;
+using FoodService.Infrastructure.RabbitMQService.Consumers;
+using FoodService.Infrastructure.RabbitMQService.Listeners;
 using FoodService.Infrastructure.RabbitMQService.Settings;
 using FoodService.Infrastructure.Repositories;
 using FoodService.Infrastructure.Services;
@@ -63,15 +64,18 @@ namespace FoodService.Infrastructure.DependencyInjection
             });
 
             services.AddScoped<CreateDayResultsJob>();
-            services.AddScoped<CreateTodayDayResultJob>();
 
             var rabbitMqSection = configuration.GetSection("RabbitMq");
             services.Configure<RabbitMqSettings>(rabbitMqSection);
             services.AddSingleton(sp => sp.GetRequiredService<IOptions<RabbitMqSettings>>().Value);
 
-            services.AddSingleton<RabbitMQConsumer>();
             services.AddSingleton<IBrokerService, RabbitMQProducer>();
+            services.AddSingleton<ProfileDeletedConsumer>();
+            services.AddSingleton<ProfileCreatedConsumer>();
+            services.AddSingleton<ChangeProfileWeightConsumer>();
             services.AddHostedService<ChangeProfileWeightListener>();
+            services.AddHostedService<ProfileCreatedListener>();
+            services.AddHostedService<ProfileDeletedListener>();
 
             return services;
         }

@@ -116,7 +116,7 @@ namespace MealPlanService.API.DependencyInjection
                 });
             });
 
-            services.AddHostedService<DeleteProfileMealPlanService>();
+            services.AddHostedService<DeleteProfileListener>();
 
             return services;
         }

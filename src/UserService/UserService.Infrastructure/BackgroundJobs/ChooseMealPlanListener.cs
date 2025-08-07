@@ -2,9 +2,9 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using UserService.Infrastructure.RabbitMQService;
 using UserService.Infrastructure.MSSQL;
 using UserService.Contracts.Exceptions;
+using UserService.Infrastructure.RabbitMQService.Consumers;
 
 namespace UserService.Infrastructure.BackgroundJobs;
 

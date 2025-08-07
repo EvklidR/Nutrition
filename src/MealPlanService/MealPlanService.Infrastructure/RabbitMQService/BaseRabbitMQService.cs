@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using MealPlanService.Infrastructure.RabbitMQService.Settings;
+using MealPlanService.Infrastructure.Enums;
 
 namespace MealPlanService.Infrastructure.RabbitMQService
 {
@@ -31,7 +32,7 @@ namespace MealPlanService.Infrastructure.RabbitMQService
             _channel = _connection.CreateChannelAsync(channelOpts).GetAwaiter().GetResult();
         }
 
-        protected async Task CreateQueueIfNotExistsAsync(string queueName)
+        protected async Task CreateQueueIfNotExistsAsync(QueueName queueName)
         {
             string dlqName = queueName + "-dlq";
 
@@ -41,7 +42,7 @@ namespace MealPlanService.Infrastructure.RabbitMQService
                 { "x-dead-letter-routing-key", dlqName }
             };
 
-            await _channel.QueueDeclareAsync(queueName, durable: true, exclusive: false, autoDelete: false, arguments: mainQueueArgs);
+            await _channel.QueueDeclareAsync(queueName.ToString(), durable: true, exclusive: false, autoDelete: false, arguments: mainQueueArgs);
 
             var dlqArgs = new Dictionary<string, object?>
             {
@@ -51,6 +52,31 @@ namespace MealPlanService.Infrastructure.RabbitMQService
             };
 
             await _channel.QueueDeclareAsync(dlqName, durable: true, exclusive: false, autoDelete: false, arguments: dlqArgs);
+        }
+
+        protected async Task CreateExchangeIfNotExistsAsync(
+            ExchangeName exchangeName,
+            string exchangeType = ExchangeType.Fanout,
+            CancellationToken cancellationToken = default)
+        {
+            await _channel.ExchangeDeclareAsync(
+                exchange: exchangeName.ToString(),
+                type: exchangeType,
+                durable: true,
+                cancellationToken: cancellationToken);
+        }
+
+        protected async Task BindQueueToExchangeAsync(
+            ExchangeName exchangeName,
+            QueueName queueName,
+            string routingKey = "",
+            CancellationToken cancellationToken = default)
+        {
+            await _channel.QueueBindAsync(
+                queue: queueName.ToString(),
+                exchange: exchangeName.ToString(),
+                routingKey: routingKey,
+                cancellationToken: cancellationToken);
         }
 
         public async ValueTask DisposeAsync()

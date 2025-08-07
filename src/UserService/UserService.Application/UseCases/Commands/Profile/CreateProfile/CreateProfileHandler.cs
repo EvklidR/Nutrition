@@ -10,6 +10,7 @@ public class CreateProfileHandler : ICommandHandler<CreateProfileCommand, Profil
 {
     private readonly IProfileRepository _profileRepository;
     private readonly IUserRepository _userRepository;
+
     private readonly IMapper _mapper;
 
     public CreateProfileHandler(IProfileRepository profileRepository, IUserRepository userRepository, IMapper mapper)
