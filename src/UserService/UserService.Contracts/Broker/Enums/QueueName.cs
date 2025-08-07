@@ -2,7 +2,9 @@
 
 public enum QueueName
 {
-    ProfileDeleted,
+    ProfileDeletedForMealPlanService,
+    ProfileDeletedForDayResultService,
+    ProfileCreated,
     MealPlanChoosen,
     MealPlanRevoked,
     ProfileWeightChanged,

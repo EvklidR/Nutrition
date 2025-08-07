@@ -2,7 +2,7 @@
 {
     public enum QueueName
     {
-        ProfileDeleted,
+        ProfileDeletedForMealPlanService,
         MealPlanChoosen,
         MealPlanRevoked
     }

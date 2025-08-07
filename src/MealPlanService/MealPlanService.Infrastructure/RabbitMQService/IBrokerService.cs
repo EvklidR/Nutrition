@@ -6,8 +6,8 @@ namespace MealPlanService.Infrastructure.RabbitMQService
     {
         Task PublishMessageAsync(
             string message,
-            QueueName queueName,
-            string exchange = "",
+            QueueName? queueName,
+            ExchangeName? exchangeName,
             bool mandatory = true,
             CancellationToken cancellationToken = default);
     }

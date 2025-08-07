@@ -3,5 +3,7 @@
 public enum QueueName
 {
     ProfileWeightChanged,
-    DayResultWeightChanged
+    DayResultWeightChanged,
+    ProfileDeletedForDayResultService,
+    ProfileCreated
 }

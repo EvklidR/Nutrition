@@ -71,7 +71,7 @@ namespace MealPlanService.BusinessLogic.Services
 
             foreach (var profile in profilePlans)
             {
-                await _brokerService.PublishMessageAsync(profile.ProfileId, QueueName.MealPlanRevoked);
+                await _brokerService.PublishMessageAsync(profile.ProfileId, QueueName.MealPlanRevoked, exchangeName: null);
             }
         }
 

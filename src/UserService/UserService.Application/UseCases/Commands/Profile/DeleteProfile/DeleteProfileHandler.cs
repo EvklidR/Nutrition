@@ -34,6 +34,10 @@ public class DeleteProfileHandler : ICommandHandler<DeleteProfileCommand>
 
         await _profileRepository.DeleteAsync(profile, cancellationToken);
 
-        await _brokerService.PublishMessageAsync(profile.Id.ToString(), QueueName.ProfileDeleted, cancellationToken: cancellationToken);
+        await _brokerService.PublishMessageAsync(
+            profile.Id.ToString(), 
+            queueName: null, 
+            exchange: ExchangeName.ProfileDeleted, 
+            cancellationToken: cancellationToken);
     }
 }

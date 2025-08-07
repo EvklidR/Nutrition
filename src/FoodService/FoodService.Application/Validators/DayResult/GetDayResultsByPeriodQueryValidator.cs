@@ -3,15 +3,18 @@ using FoodService.Application.UseCases.Queries.DayResult;
 
 namespace FoodService.Application.Validators.DayResult
 {
-    public class GetDayResultsByPeriodQueryValidator : AbstractValidator<GetStatisticsByPeriodQuery>
+    public class GetAllDayResultsQueryValidator : AbstractValidator<GetAllDayResultsQuery>
     {
-        public GetDayResultsByPeriodQueryValidator()
+        public GetAllDayResultsQueryValidator()
         {
-            RuleFor(query => query.EndDate)
+            RuleFor(query => query.PeriodParameters)
                 .NotEmpty()
-                    .WithMessage("EndDate is required")
-                .GreaterThan(query => query.StartDate)
-                    .WithMessage("EndDate must be greater than StartDate");
+                    .WithMessage("PeriodParameters is required");
+
+            RuleFor(query => query.PeriodParameters!.EndDate)
+                .GreaterThan(query => query.PeriodParameters!.StartDate)
+                    .WithMessage("EndDate must be greater than StartDate")
+                .When(query => query.PeriodParameters != null);
         }
     }
 }

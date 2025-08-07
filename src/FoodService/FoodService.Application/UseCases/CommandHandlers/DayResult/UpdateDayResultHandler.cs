@@ -47,7 +47,7 @@ namespace FoodService.Application.UseCases.CommandHandlers.DayResult
                     NewWeight = request.UpdateDayResultDTO.Weight
                 });
 
-                await _brokerService.PublishMessageAsync(message, QueueName.DayResultWeightChanged);
+                await _brokerService.PublishMessageAsync(message, QueueName.DayResultWeightChanged, exchange: null);
             }
 
             _mapper.Map(request.UpdateDayResultDTO, dayResult);

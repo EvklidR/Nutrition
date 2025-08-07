@@ -13,8 +13,8 @@ internal class RabbitMQProducer : BaseRabbitMQService, IBrokerService
 
     public async Task PublishMessageAsync(
         string message,
-        QueueName queueName,
-        string exchange = "",
+        QueueName? queueName,
+        ExchangeName? exchangeName,
         bool mandatory = true,
         CancellationToken cancellationToken = default)
     {
@@ -23,15 +23,22 @@ internal class RabbitMQProducer : BaseRabbitMQService, IBrokerService
             Persistent = true
         };
 
-        await CreateQueueIfNotExistsAsync(queueName.ToString(), cancellationToken);
+        if (exchangeName != null)
+        {
+            await CreateExchangeIfNotExistsAsync(exchangeName.Value);
+        }
+        else if (queueName != null)
+        {
+            await CreateQueueIfNotExistsAsync(queueName.Value.ToString(), cancellationToken);
+        }
 
         var body = Encoding.UTF8.GetBytes(message);
 
         try
         {
             await _channel.BasicPublishAsync(
-                exchange: exchange,
-                routingKey: queueName.ToString(),
+                exchange: exchangeName?.ToString() ?? "",
+                routingKey: queueName?.ToString() ?? "",
                 mandatory: mandatory,
                 basicProperties: properties,
                 body: body,

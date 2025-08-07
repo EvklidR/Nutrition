@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using FoodService.Application.UseCases.Commands.Dish;
 using FoodService.Application.UseCases.Queries.Dish;
 using FoodService.Domain.Repositories.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +7,9 @@ using FoodService.API.Filters;
 using FoodService.Application.DTOs.Recipe.Requests;
 using FoodService.Application.DTOs.Recipe.Responses;
 using FoodService.Application.DTOs.Dish.Responses;
+using FoodService.Application.UseCases.Queries.Recipe;
+using FoodService.Application.UseCases.Commands.Recipes;
+using FoodService.Application.UseCases.Commands.Dishes;
 
 namespace FoodService.API.Controllers
 {
@@ -26,19 +28,19 @@ namespace FoodService.API.Controllers
         }
 
         /// <summary>
-        /// Gets a dish by its ID.
+        /// Gets a recipe by its ID.
         /// </summary>
-        /// <param name="dishId">The dish ID.</param>
-        /// <returns>The requested dish.</returns>
-        [HttpGet("{dishId}")]
+        /// <param name="recipeId">The recipe ID.</param>
+        /// <returns>The requested recipe.</returns>
+        [HttpGet("{recipeId}")]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(typeof(CalculatedRecipeResponse), StatusCodes.Status200OK)]
-        public async Task<ActionResult<CalculatedRecipeResponse>> GetDishById(Guid dishId)
+        public async Task<ActionResult<CalculatedRecipeResponse>> GetRecipeById(Guid recipeId)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
-            var result = await _mediator.Send(new GetDishByIdQuery(dishId, userId));
+            var result = await _mediator.Send(new GetRecipeByIdQuery(recipeId, userId));
 
             return Ok(result);
         }
@@ -62,36 +64,36 @@ namespace FoodService.API.Controllers
         }
 
         /// <summary>
-        /// Creates a new dish.
+        /// Creates a new recipe.
         /// </summary>
-        /// <param name="createDishDTO">Dish data.</param>
-        /// <returns>The created dish.</returns>
+        /// <param name="createRecipeDTO">Recipe data.</param>
+        /// <returns>The created recipe.</returns>
         [HttpPost]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(typeof(CalculatedRecipeResponse), StatusCodes.Status201Created)]
-        public async Task<ActionResult<CalculatedRecipeResponse>> CreateDish([FromForm] CreateRecipeDTO createDishDTO)
+        public async Task<ActionResult<CalculatedRecipeResponse>> CreateDish([FromForm] CreateRecipeDTO createRecipeDTO)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
-            var result = await _mediator.Send(new CreateRecipeCommand(createDishDTO, userId));
+            var result = await _mediator.Send(new CreateRecipeCommand(createRecipeDTO, userId));
 
             return Ok(result);
         }
 
         /// <summary>
-        /// Updates an existing dish.
+        /// Updates an existing recipe.
         /// </summary>
-        /// <param name="updateDishDTO">Updated dish data.</param>
+        /// <param name="updateRecipeDTO">Updated recipe data.</param>
         [HttpPut]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateDish([FromForm] UpdateRecipeDTO updateDishDTO)
+        public async Task<IActionResult> UpdateDish([FromForm] UpdateRecipeDTO updateRecipeDTO)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
-            await _mediator.Send(new UpdateRecipeCommand(updateDishDTO, userId));
+            await _mediator.Send(new UpdateRecipeCommand(updateRecipeDTO, userId));
 
             return NoContent();
         }
@@ -108,7 +110,7 @@ namespace FoodService.API.Controllers
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
-            await _mediator.Send(new DeleteRecipeCommand(dishId, userId));
+            await _mediator.Send(new DeleteDishCommand(dishId, userId));
 
             return NoContent();
         }
@@ -116,15 +118,18 @@ namespace FoodService.API.Controllers
         /// <summary>
         /// Retrieves the image of a dish.
         /// </summary>
-        /// <param name="dishId">The dish ID.</param>
+        /// <param name="recipeId">The recipe ID.</param>
         /// <returns>The dish image.</returns>
-        [HttpGet("{dishId}/image")]
+        [HttpGet("{recipeId}/image")]
         [Authorize]
+        [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(typeof(FileResult), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetDishImage(Guid dishId)
+        public async Task<IActionResult> GetRecipeImage(Guid recipeId)
         {
-            var fileStream = await _mediator.Send(new GetDishImageQuery(dishId));
+            var userId = (Guid)HttpContext.Items["UserId"]!;
+
+            var fileStream = await _mediator.Send(new GetRecipeImageQuery(recipeId, userId));
 
             return File(fileStream, "image/jpeg");
         }

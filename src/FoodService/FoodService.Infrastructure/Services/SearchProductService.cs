@@ -13,7 +13,9 @@ namespace FoodService.Infrastructure.Services
             using (HttpClient client = new HttpClient())
             {
                 string url = string.Format(ApiUrlSearch, productName);
+
                 var response = await client.GetStringAsync(url);
+
                 var searchResults = JsonConvert.DeserializeObject<SearchResponse>(response);
 
                 List<ProductResponseFromAPI> products = new List<ProductResponseFromAPI>();
@@ -22,7 +24,7 @@ namespace FoodService.Infrastructure.Services
                 {
                     foreach (var product in searchResults.Products)
                     {
-                        products.Add(new ProductResponseFromAPI() {
+                        products.Add(new ProductResponseFromAPI {
                             Name = product.Name,
                             Calories = product.Nutrition?.Calories ?? 0,
                             Proteins = product.Nutrition?.Protein ?? 0,

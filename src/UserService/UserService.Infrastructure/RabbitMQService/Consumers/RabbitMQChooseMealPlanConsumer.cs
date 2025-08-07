@@ -2,12 +2,12 @@
 using UserService.Contracts.Broker.Enums;
 using UserService.Infrastructure.RabbitMQService.Settings;
 
-namespace UserService.Infrastructure.RabbitMQService;
+namespace UserService.Infrastructure.RabbitMQService.Consumers;
 
 public class RabbitMQChooseMealPlanConsumer : BaseRabbitMQConsumer
 {
     public RabbitMQChooseMealPlanConsumer(IOptions<RabbitMqSettings> options) : base(options)
     {
-        _queueName = QueueName.MealPlanChoosen.ToString();
+        _queueName = QueueName.MealPlanChoosen;
     }
 }

@@ -2,11 +2,11 @@
 using Bogus;
 using FluentAssertions;
 using FoodService.Application.UseCases.Queries.Dish;
-using FoodService.Application.UseCases.QueryHandlers.Dish;
 using FoodService.Application.Exceptions;
 using FoodService.Domain.Entities;
 using FoodService.Domain.Interfaces;
 using Moq;
+using FoodService.Application.UseCases.QueryHandlers.Recipe;
 
 namespace FoodServiceTests.Dish
 {
@@ -14,7 +14,7 @@ namespace FoodServiceTests.Dish
     {
         private readonly Mock<IUnitOfWork> _unitOfWorkMock;
         private readonly IMapper _mapper;
-        private readonly GetDishByIdHandler _handler;
+        private readonly GetRecipeByIdHandler _handler;
 
         private readonly Faker<FoodService.Domain.Entities.Dish> _dishFaker;
 
@@ -36,7 +36,7 @@ namespace FoodServiceTests.Dish
                 .RuleFor(d => d.ImageUrl, f => f.Internet.Url())
                 .RuleFor(d => d.Ingredients, f => new List<ProductOfRecipe>());
 
-            _handler = new GetDishByIdHandler(_unitOfWorkMock.Object, _mapper);
+            _handler = new GetRecipeByIdHandler(_unitOfWorkMock.Object, _mapper);
         }
 
         [Fact]

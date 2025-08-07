@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using UserService.Infrastructure.RabbitMQService;
 using System.Text;
 using UserService.Infrastructure.MSSQL;
 using Microsoft.EntityFrameworkCore;
 using UserService.Contracts.Exceptions;
+using UserService.Infrastructure.RabbitMQService.Consumers;
 
 namespace UserService.Infrastructure.BackgroundJobs;
 
@@ -57,6 +57,6 @@ public class RevokeMealPlanListener : BackgroundService
                 Console.WriteLine($"{DateTime.Now} [ERROR] Failed to process message: {ex.Message}");
             }
         },
-        cancellationToken);
+        cancellationToken: cancellationToken);
     }
 }

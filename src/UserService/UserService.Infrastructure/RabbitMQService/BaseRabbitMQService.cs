@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
+using UserService.Contracts.Broker.Enums;
 using UserService.Infrastructure.RabbitMQService.Settings;
 
 namespace UserService.Infrastructure.RabbitMQService;
@@ -62,6 +63,31 @@ public class BaseRabbitMQService : IAsyncDisposable
             exclusive: false, 
             autoDelete: false, 
             arguments: dlqArgs,
+            cancellationToken: cancellationToken);
+    }
+
+    protected async Task CreateExchangeIfNotExistsAsync(
+        ExchangeName exchangeName,
+        string exchangeType = ExchangeType.Fanout,
+        CancellationToken cancellationToken = default)
+    {
+        await _channel.ExchangeDeclareAsync(
+            exchange: exchangeName.ToString(),
+            type: exchangeType,
+            durable: true,
+            cancellationToken: cancellationToken);
+    }
+
+    protected async Task BindQueueToExchangeAsync(
+        ExchangeName exchangeName,
+        QueueName queueName,
+        string routingKey = "",
+        CancellationToken cancellationToken = default)
+    {
+        await _channel.QueueBindAsync(
+            queue: queueName.ToString(),
+            exchange: exchangeName.ToString(),
+            routingKey: routingKey,
             cancellationToken: cancellationToken);
     }
 

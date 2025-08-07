@@ -1,16 +1,16 @@
 ﻿using System.Text;
-using MealPlanService.Infrastructure.Enums;
 using MealPlanService.BusinessLogic.Services;
+using MealPlanService.Infrastructure.Enums;
 using MealPlanService.Infrastructure.RabbitMQService;
 
 namespace MealPlanService.API.BackgroundJobs
 {
-    public class DeleteProfileMealPlanService : BackgroundService
+    public class DeleteProfileListener : BackgroundService
     {
         private readonly IServiceScopeFactory _factory;
-        private readonly RabbitMQConsumer _consumer;
+        private readonly DeleteProfileConsumer _consumer;
 
-        public DeleteProfileMealPlanService(IServiceScopeFactory factory, RabbitMQConsumer consumer)
+        public DeleteProfileListener(IServiceScopeFactory factory, DeleteProfileConsumer consumer)
         {
             _factory = factory;
             _consumer = consumer;
@@ -18,7 +18,7 @@ namespace MealPlanService.API.BackgroundJobs
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _consumer.AddListenerAsync(QueueName.ProfileDeleted.ToString(), async args =>
+            await _consumer.AddListenerAsync(async args =>
             {
                 using var scope = _factory.CreateScope();
 
@@ -35,7 +35,8 @@ namespace MealPlanService.API.BackgroundJobs
                 {
                     Console.WriteLine($"{DateTime.Now} [ERROR] Failed to process message: {ex.Message}");
                 }
-            });
+            },
+            ExchangeName.ProfileDeleted);
         }
     }
 }

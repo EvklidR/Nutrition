@@ -7,7 +7,7 @@ using FoodService.Domain.Interfaces;
 namespace FoodService.Application.UseCases.QueryHandlers.DayResult
 {
     public class GetDayResultsByPeriodQueryHandler 
-        : IQueryHandler<GetStatisticsByPeriodQuery, IEnumerable<ShortDayResultResponse>>
+        : IQueryHandler<GetDayResultByIdQuery, DayResultResponse>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserService _userService;
@@ -20,20 +20,17 @@ namespace FoodService.Application.UseCases.QueryHandlers.DayResult
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ShortDayResultResponse>> Handle(
-            GetStatisticsByPeriodQuery request,
+        public async Task<DayResultResponse> Handle(
+            GetDayResultByIdQuery request,
             CancellationToken cancellationToken)
         {
             await _userService.CheckProfileBelongingAsync(
                 request.UserId,
                 request.ProfileId);
 
-            var dayResults = await _unitOfWork.DayResultRepository.GetAllByParametersAsync(
-                request.ProfileId, 
-                paginatedParameters: null,
-                request.PeriodParameters);
+            var dayResult = await _unitOfWork.DayResultRepository.GetByIdAsync(request.DayResultId);
 
-            var dayResultsDTO = _mapper.Map<List<ShortDayResultResponse>>(dayResults);
+            var dayResultsDTO = _mapper.Map<DayResultResponse>(dayResult);
 
             return dayResultsDTO;
         }

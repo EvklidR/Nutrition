@@ -42,6 +42,8 @@ namespace FoodService.Infrastructure.MSSQL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProfileId", "Date");
+
                     b.ToTable("DayResults");
                 });
 

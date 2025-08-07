@@ -1,21 +1,20 @@
-﻿using FoodService.Application.Enums;
-using FoodService.Domain.Entities;
+﻿using FoodService.Domain.Entities;
 using FoodService.Infrastructure.MSSQL;
-using FoodService.Infrastructure.RabbitMQService;
+using FoodService.Infrastructure.RabbitMQService.Consumers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace FoodService.API.BackgroundJobs;
+namespace FoodService.Infrastructure.RabbitMQService.Listeners;
 
 public class ChangeProfileWeightListener : BackgroundService
 {
     private readonly IServiceScopeFactory _factory;
-    private readonly RabbitMQConsumer _consumer;
+    private readonly ChangeProfileWeightConsumer _consumer;
 
-    public ChangeProfileWeightListener(IServiceScopeFactory factory, RabbitMQConsumer consumer)
+    public ChangeProfileWeightListener(IServiceScopeFactory factory, ChangeProfileWeightConsumer consumer)
     {
         _factory = factory;
         _consumer = consumer;
@@ -23,7 +22,7 @@ public class ChangeProfileWeightListener : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        await _consumer.AddListenerAsync(QueueName.ProfileWeightChanged.ToString(), async args =>
+        await _consumer.AddListenerAsync(async args =>
         {
             using var scope = _factory.CreateScope();
 

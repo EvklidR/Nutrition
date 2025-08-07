@@ -68,7 +68,7 @@ namespace MealPlanService.BusinessLogic.Services
                 }
                 else
                 {
-                    await _brokerService.PublishMessageAsync(profileMealPlanDTO.ProfileId, QueueName.MealPlanChoosen);
+                    await _brokerService.PublishMessageAsync(profileMealPlanDTO.ProfileId, QueueName.MealPlanChoosen, exchangeName: null);
                 }
 
                 var usersMealPlan = _mapper.Map<ProfileMealPlan>(profileMealPlanDTO);
@@ -149,7 +149,7 @@ namespace MealPlanService.BusinessLogic.Services
 
                 await _usersMealPlanRepository.UpdateAsync(userPlan);
 
-                await _brokerService.PublishMessageAsync(profileId, QueueName.MealPlanRevoked);
+                await _brokerService.PublishMessageAsync(profileId, QueueName.MealPlanRevoked, exchangeName: null);
             }
             else
             {

@@ -2,22 +2,39 @@
 using RabbitMQ.Client.Events;
 using Microsoft.Extensions.Options;
 using UserService.Infrastructure.RabbitMQService.Settings;
+using UserService.Contracts.Broker.Enums;
 
 namespace UserService.Infrastructure.RabbitMQService;
 
 public class BaseRabbitMQConsumer : BaseRabbitMQService
 {
     protected readonly AsyncEventingBasicConsumer _consumer;
-    protected string _queueName;
+    protected QueueName _queueName;
 
     public BaseRabbitMQConsumer(IOptions<RabbitMqSettings> options) : base(options)
     {
         _consumer = new AsyncEventingBasicConsumer(_channel);
     }
 
-    public async Task AddListenerAsync(Func<BasicDeliverEventArgs, Task> handler, CancellationToken cancellationToken)
+    public async Task AddListenerAsync(
+        Func<BasicDeliverEventArgs, Task> handler,
+        ExchangeName? exchangeName = null,
+        string exchangeType = ExchangeType.Fanout,
+        string routingKey = "",
+        CancellationToken cancellationToken = default)
     {
-        await CreateQueueIfNotExistsAsync(_queueName, cancellationToken);
+        if (exchangeName.HasValue)
+        {
+            await CreateExchangeIfNotExistsAsync(exchangeName.Value);
+
+            await CreateQueueIfNotExistsAsync(_queueName.ToString(), cancellationToken);
+
+            await BindQueueToExchangeAsync(exchangeName.Value, _queueName);
+        }
+        else
+        {
+            await CreateQueueIfNotExistsAsync(_queueName.ToString(), cancellationToken);
+        }
 
         _consumer.ReceivedAsync += async (sender, ea) =>
         {
@@ -35,6 +52,6 @@ public class BaseRabbitMQConsumer : BaseRabbitMQService
             }
         };
 
-        await _channel.BasicConsumeAsync(queue: _queueName, autoAck: false, consumer: _consumer, cancellationToken);
+        await _channel.BasicConsumeAsync(queue: _queueName.ToString(), autoAck: false, consumer: _consumer, cancellationToken);
     }
 }

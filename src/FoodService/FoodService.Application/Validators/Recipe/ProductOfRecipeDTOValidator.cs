@@ -1,14 +1,13 @@
 ﻿using FluentValidation;
 using FoodService.Application.DTOs.Recipe.Requests;
 
-namespace FoodService.Application.Validators
+namespace FoodService.Application.Validators;
+
+public class ProductOfRecipeDTOValidator : AbstractValidator<CreateOrUpdateProductOfRecipeDTO>
 {
-    public class ProductOfRecipeDTOValidator : AbstractValidator<CreateOrUpdateProductOfRecipeDTO>
+    public ProductOfRecipeDTOValidator()
     {
-        public ProductOfRecipeDTOValidator()
-        {
-            RuleFor(i => i.Weight)
-                .GreaterThan(0).WithMessage("Weight must be greater than 0");
-        }
+        RuleFor(i => i.WeightInRecipe)
+            .GreaterThan(0).WithMessage("Weight must be greater than 0");
     }
 }

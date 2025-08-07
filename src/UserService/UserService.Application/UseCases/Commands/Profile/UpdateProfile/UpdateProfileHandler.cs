@@ -61,7 +61,7 @@ public class UpdateProfileHandler : ICommandHandler<UpdateProfileCommand>
                 NewWeight = request.ProfileDto.Weight
             });
 
-            await _brokerService.PublishMessageAsync(message, QueueName.ProfileWeightChanged);
+            await _brokerService.PublishMessageAsync(message, QueueName.ProfileWeightChanged, exchange: null);
         }
 
         _mapper.Map(request.ProfileDto, profile);
