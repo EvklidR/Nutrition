@@ -29,12 +29,14 @@ namespace MealPlanService.Infrastructure.RabbitMQService
             );
 
             _connection = factory.CreateConnectionAsync().GetAwaiter().GetResult();
+
             _channel = _connection.CreateChannelAsync(channelOpts).GetAwaiter().GetResult();
+
         }
 
         protected async Task CreateQueueIfNotExistsAsync(QueueName queueName)
         {
-            string dlqName = queueName + "-dlq";
+            string dlqName = queueName.ToString() + "-dlq";
 
             var mainQueueArgs = new Dictionary<string, object?>
             {
@@ -48,7 +50,7 @@ namespace MealPlanService.Infrastructure.RabbitMQService
             {
                 { "x-message-ttl", 60000 },
                 { "x-dead-letter-exchange", "" },
-                { "x-dead-letter-routing-key", queueName }
+                { "x-dead-letter-routing-key", queueName.ToString() }
             };
 
             await _channel.QueueDeclareAsync(dlqName, durable: true, exclusive: false, autoDelete: false, arguments: dlqArgs);
