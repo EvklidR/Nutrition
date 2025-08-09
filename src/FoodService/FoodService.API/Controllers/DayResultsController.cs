@@ -61,7 +61,7 @@ namespace FoodService.API.Controllers
         }
 
         /// <summary>
-        /// Retrieves a list of day results within a specific period.
+        /// Retrieves a list of day results by parameters.
         /// </summary>
         /// <param name="profileId">The profile ID.</param>
         /// <param name="periodParameters">The start and end date of the period.</param>

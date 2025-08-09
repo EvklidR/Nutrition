@@ -44,6 +44,10 @@ namespace FoodService.Api.Middleware
                     statusCode = HttpStatusCode.Unauthorized;
                     result = unauthorEx.Message;
                     break;
+                case Forbidden forbiddenEx:
+                    statusCode = HttpStatusCode.Forbidden;
+                    result = forbiddenEx.Message;
+                    break;
                 default:
                     statusCode = HttpStatusCode.InternalServerError;
                     result = exception.Message;

@@ -1,6 +1,4 @@
-﻿using FoodService.Domain.Entities.Interfaces;
-
-namespace FoodService.Domain.Entities;
+﻿namespace FoodService.Domain.Entities;
 
 public class Dish : Food
 {

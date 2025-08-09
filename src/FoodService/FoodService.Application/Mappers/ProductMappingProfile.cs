@@ -12,12 +12,12 @@ namespace FoodService.Application.Mappers
             CreateMap<CreateProductDTO, Product>()
                 .ForMember(
                 dest => dest.Calories, 
-                opt => opt.MapFrom(src => src.Carbohydrates * 4 + src.Proteins * 4 + src.Fats * 9));
+                opt => opt.MapFrom(src => Math.Round(src.Carbohydrates * 4 + src.Proteins * 4 + src.Fats * 9, 2)));
 
             CreateMap<UpdateProductDTO, Product>()
                 .ForMember(
                 dest => dest.Calories, 
-                opt => opt.MapFrom(src => src.Carbohydrates * 4 + src.Proteins * 4 + src.Fats * 9));
+                opt => opt.MapFrom(src => Math.Round(src.Carbohydrates * 4 + src.Proteins * 4 + src.Fats * 9, 2)));
 
             CreateMap<Product, ProductResponse>();
         }

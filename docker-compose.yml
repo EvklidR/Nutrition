@@ -13,6 +13,8 @@ services:
     depends_on:
       mssql_db:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
 
   mealplanservice.api:
     image: ${DOCKER_REGISTRY-}mealplanserviceapi
@@ -26,6 +28,8 @@ services:
       - "7132:7132"
     depends_on:
       mongodb:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
 
   foodservice.api:
@@ -45,6 +49,8 @@ services:
       mssql_db:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
 
   postservice.api:

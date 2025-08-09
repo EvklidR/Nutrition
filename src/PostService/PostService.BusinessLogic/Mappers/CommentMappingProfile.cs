@@ -12,7 +12,7 @@ namespace PostService.BusinessLogic.Mappers
             CreateMap<CreateCommentDTO, Comment>()
                 .ForMember(
                 dest => dest.CreationDate,
-                opt => opt.MapFrom((src, dest) => dest.CreationDate = DateTime.Now));
+                opt => opt.MapFrom(_ => DateTime.Now));
 
             CreateMap<UpdateCommentDTO, Comment>();
 

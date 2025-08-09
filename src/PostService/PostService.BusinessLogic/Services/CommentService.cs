@@ -86,6 +86,8 @@ namespace PostService.BusinessLogic.Services
 
             _mapper.Map(commentDTO, comment);
 
+            comment.IsEdited = true;
+
             await _commentRepository.UpdateAsync(comment);
         }
 

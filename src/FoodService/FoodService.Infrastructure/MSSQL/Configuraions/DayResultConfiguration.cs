@@ -13,7 +13,7 @@ namespace FoodService.Infrastructure.MSSQL.Configurations
                 .HasForeignKey(m => m.DayId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasIndex(dr => new { dr.ProfileId, dr.Date });
+            builder.HasIndex(dr => new { dr.ProfileId, dr.Date }).IsUnique();
         }
     }
 }

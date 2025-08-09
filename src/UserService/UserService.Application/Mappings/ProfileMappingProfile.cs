@@ -1,4 +1,5 @@
 ﻿using UserService.Application.DTOs.Requests.Profile;
+using UserService.Application.DTOs.Responces.Profile;
 using UserService.Application.DTOs.Responses.Profile;
 using UserService.Domain.Entities;
 
@@ -26,5 +27,6 @@ public class ProfileMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name));
 
+        CreateMap<Profile, ProfileResponse>();
     }
 }

@@ -17,6 +17,7 @@ namespace FoodService.Application.Validators
                 .GreaterThan(0).WithMessage("Amount should be grater than 0");
 
             RuleForEach(d => d.Ingredients)
+                .NotEmpty().WithMessage("Recipe must have ingredients")
                 .SetValidator(ingredientOfDishDTOValidator);
         }
     }

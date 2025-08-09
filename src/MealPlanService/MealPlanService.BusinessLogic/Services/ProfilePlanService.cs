@@ -187,6 +187,11 @@ namespace MealPlanService.BusinessLogic.Services
                 }
             }
 
+            response.Calories = Math.Round(response.Calories, 2);
+            response.Carbohydrates = Math.Round(response.Carbohydrates, 2);
+            response.Proteins = Math.Round(response.Proteins, 2);
+            response.Fats = Math.Round(response.Fats, 2);
+
             return response;
         }
 

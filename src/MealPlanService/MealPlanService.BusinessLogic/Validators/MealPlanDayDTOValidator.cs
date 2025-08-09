@@ -12,8 +12,8 @@ namespace MealPlanService.BusinessLogic.Validators
                 .GreaterThan(0).WithMessage("Day number must be greater than 0");
 
             RuleFor(x => x.CaloriePercentage)
-                .InclusiveBetween(0.1, 1)
-                .WithMessage("Calorie percentage must be between 0.1 and 1");
+                .GreaterThan(0)
+                .WithMessage("Calorie percentage must be graeter than 0");
 
             RuleForEach(x => x.Recommendations)
                 .SetValidator(recommendationDTOValidator);

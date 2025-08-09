@@ -154,7 +154,7 @@ namespace PostService.API.Controllers
         /// <param name="fileName">The path to image.</param>
         [HttpGet("/{fileName}")]
         [ProducesResponseType(typeof(FileStreamResult), StatusCodes.Status200OK)]
-        public async Task<ActionResult<FileStreamResult>> GetFileAsync(string fileName)
+        public async Task<ActionResult> GetFileAsync(string fileName)
         {
             var fileStream = await _postService.GetImageAsync(fileName);
 

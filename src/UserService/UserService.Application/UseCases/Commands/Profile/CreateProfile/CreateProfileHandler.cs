@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
+using MediatR;
+using Newtonsoft.Json;
 using UserService.Application.DTOs.Responces.Profile;
+using UserService.Contracts.Broker;
+using UserService.Contracts.Broker.Enums;
 using UserService.Contracts.DataAccess.Repositories;
 using UserService.Contracts.Exceptions;
 using UserService.Domain.Enums;
@@ -10,13 +14,19 @@ public class CreateProfileHandler : ICommandHandler<CreateProfileCommand, Profil
 {
     private readonly IProfileRepository _profileRepository;
     private readonly IUserRepository _userRepository;
+    private readonly IBrokerService _brokerService;
 
     private readonly IMapper _mapper;
 
-    public CreateProfileHandler(IProfileRepository profileRepository, IUserRepository userRepository, IMapper mapper)
+    public CreateProfileHandler(
+        IProfileRepository profileRepository, 
+        IUserRepository userRepository, 
+        IBrokerService brokerService,
+        IMapper mapper)
     {
         _profileRepository = profileRepository;
         _userRepository = userRepository;
+        _brokerService = brokerService;
         _mapper = mapper;
     }
 
@@ -49,6 +59,14 @@ public class CreateProfileHandler : ICommandHandler<CreateProfileCommand, Profil
         profile.DesiredGlassesOfWater = profile.Gender == Gender.Female ? 11 : 15;
 
         await _profileRepository.AddAsync(profile, cancellationToken);
+
+        var message = JsonConvert.SerializeObject(new
+        {
+            ProfileId = profile.Id,
+            Weight = command.ProfileDto.Weight
+        });
+
+        await _brokerService.PublishMessageAsync(message, QueueName.ProfileCreated, exchange: null, cancellationToken: cancellationToken);
 
         return _mapper.Map<ProfileResponse>(profile);
     }

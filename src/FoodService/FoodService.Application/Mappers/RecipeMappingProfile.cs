@@ -21,7 +21,8 @@ public class RecipeMappingProfile : Profile
 
         CreateMap<ProductOfRecipe, RecipeProductResponse>();
 
-        CreateMap<CreateRecipeDTO, Recipe>();
+        CreateMap<CreateRecipeDTO, Recipe>()
+            .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients));
         CreateMap<UpdateRecipeDTO, Recipe>();
         CreateMap<CreateOrUpdateProductOfRecipeDTO, ProductOfRecipe>();
     }

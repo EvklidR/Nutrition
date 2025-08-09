@@ -27,6 +27,8 @@ namespace FoodService.Application.UseCases.CommandHandlers.Product
 
             var product = _mapper.Map<Domain.Entities.Product>(request.CreateProductDTO);
 
+            product.UserId = request.UserId;
+
             _unitOfWork.ProductRepository.Add(product);
 
             await _unitOfWork.SaveChangesAsync();
