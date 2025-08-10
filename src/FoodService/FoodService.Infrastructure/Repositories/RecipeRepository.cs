@@ -28,6 +28,7 @@ public class RecipeRepository : BaseRepository<Recipe>, IRecipeRepository
         return await _dbSet
             .Where(r => r.Id == id)
             .Include(r => r.Ingredients)
+                .ThenInclude(i => i.Product)
             .Include(r => r.Dish)
             .FirstOrDefaultAsync();
     }

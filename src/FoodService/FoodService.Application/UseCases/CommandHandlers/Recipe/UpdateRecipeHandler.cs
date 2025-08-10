@@ -27,7 +27,7 @@ public class UpdateRecipeHandler : ICommandHandler<UpdateRecipeCommand>
 
         if (recipe == null)
         {
-            throw new NotFound("Dish not found");
+            throw new NotFound("Recipe not found");
         }
 
         if (recipe.Dish.UserId != request.UserId)
@@ -61,7 +61,7 @@ public class UpdateRecipeHandler : ICommandHandler<UpdateRecipeCommand>
 
             if (ingredientBD == null)
             {
-                throw new NotFound("Ingredient not found");
+                throw new NotFound($"Product with id {ingredient.ProductId} not found");
             }
 
             dish.Calories += ingredientBD.Calories * ingredient.WeightInRecipe;
@@ -71,10 +71,10 @@ public class UpdateRecipeHandler : ICommandHandler<UpdateRecipeCommand>
             weight += ingredient.WeightInRecipe;
         }
 
-        dish.Calories /= weight;
-        dish.Fats /= weight;
-        dish.Proteins /= weight;
-        dish.Carbohydrates /= weight;
+        dish.Calories = Math.Round(dish.Calories / weight, 2);
+        dish.Fats = Math.Round(dish.Fats / weight, 2);
+        dish.Proteins = Math.Round(dish.Proteins / weight, 2);
+        dish.Carbohydrates = Math.Round(dish.Carbohydrates / weight, 2);
 
         _unitOfWork.DishRepository.Update(dish);
     }

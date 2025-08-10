@@ -41,7 +41,9 @@ public class CreateRecipeHandler : ICommandHandler<CreateRecipeCommand, Calculat
 
         await _unitOfWork.SaveChangesAsync();
 
-        var recipeDTO = _mapper.Map<CalculatedRecipeResponse>(recipe);
+        var recipeEntity = await _unitOfWork.RecipeRepository.GetFullByIdAsync(recipe.Id);
+
+        var recipeDTO = _mapper.Map<CalculatedRecipeResponse>(recipeEntity);
 
         return recipeDTO;
     }
@@ -62,7 +64,7 @@ public class CreateRecipeHandler : ICommandHandler<CreateRecipeCommand, Calculat
 
             if (ingredientBD == null)
             {
-                throw new NotFound("Ingredient not found");
+                throw new NotFound($"Product with id {ingredient.ProductId} not found");
             }
 
             dish.Calories += ingredientBD.Calories * ingredient.WeightInRecipe;
@@ -72,10 +74,10 @@ public class CreateRecipeHandler : ICommandHandler<CreateRecipeCommand, Calculat
             weight += ingredient.WeightInRecipe;
         }
 
-        dish.Calories = dish.Calories / weight;
-        dish.Fats = dish.Fats / weight;
-        dish.Proteins = dish.Proteins / weight;
-        dish.Carbohydrates = dish.Carbohydrates / weight;
+        dish.Calories = Math.Round(dish.Calories / weight, 2);
+        dish.Fats = Math.Round(dish.Fats / weight, 2);
+        dish.Proteins = Math.Round(dish.Proteins / weight, 2);
+        dish.Carbohydrates = Math.Round(dish.Carbohydrates / weight, 2);
 
         _unitOfWork.DishRepository.Add(dish);
 

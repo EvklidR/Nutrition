@@ -10,7 +10,7 @@ public class RecipeConfiguration : IEntityTypeConfiguration<Recipe>
     {
         builder.HasOne(r => r.Dish)
             .WithOne(d => d.Recipe)
-            .HasForeignKey<Recipe>(r => r.DishId)
+            .HasForeignKey<Dish>(r => r.RecipeId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

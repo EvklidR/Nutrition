@@ -19,7 +19,14 @@ public class RecipeMappingProfile : Profile
             .ForMember(dest => dest.Proteins, opt => opt.MapFrom(src => src.Dish.Proteins))
             .ForMember(dest => dest.Fats, opt => opt.MapFrom(src => src.Dish.Fats));
 
-        CreateMap<ProductOfRecipe, RecipeProductResponse>();
+        CreateMap<ProductOfRecipe, RecipeProductResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ProductId))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Product.Name))
+            .ForMember(dest => dest.Calories, opt => opt.MapFrom(src => src.Product.Calories))
+            .ForMember(dest => dest.Proteins, opt => opt.MapFrom(src => src.Product.Proteins))
+            .ForMember(dest => dest.Carbohydrates, opt => opt.MapFrom(src => src.Product.Carbohydrates))
+            .ForMember(dest => dest.Fats, opt => opt.MapFrom(src => src.Product.Fats))
+            .ForMember(dest => dest.Weight, opt => opt.MapFrom(src => src.WeightInRecipe));
 
         CreateMap<CreateRecipeDTO, Recipe>()
             .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients));
