@@ -33,14 +33,12 @@ public class CreateMealHandler : ICommandHandler<CreateMealCommand, FullMealResp
             request.UserId,
             day.ProfileId);
 
-
         var isAllProductsExist = await _unitOfWork.ProductRepository.CheckIfAllEntitiesExistAsync(request.CreateMealDTO.Products.Select(pr => pr.FoodId));
 
         if (!isAllProductsExist)
         {
             throw new NotFound("Product not found");
         }
-
 
         var isAllDishesExist = await _unitOfWork.DishRepository.CheckIfAllEntitiesExistAsync(request.CreateMealDTO.Dishes.Select(d => d.FoodId));
 
@@ -54,6 +52,10 @@ public class CreateMealHandler : ICommandHandler<CreateMealCommand, FullMealResp
         day.Meals.Add(meal);
 
         await _unitOfWork.SaveChangesAsync();
+
+        day = await _unitOfWork.DayResultRepository.GetByIdAsync(meal.DayResultId);
+
+        meal = day!.Meals.FirstOrDefault(m => m.Id == meal.Id);
 
         var mealDTO = _mapper.Map<FullMealResponse>(meal);
 

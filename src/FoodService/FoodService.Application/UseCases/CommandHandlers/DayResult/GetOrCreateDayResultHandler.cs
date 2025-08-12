@@ -24,7 +24,7 @@ namespace FoodService.Application.UseCases.CommandHandlers.DayResult
             GetOrCreateDayResultCommand request,
             CancellationToken cancellationToken)
         {
-            var profileWeight = await _userService.GetProfileWeightAsync(request.ProfileId);
+            await _userService.CheckProfileBelongingAsync(request.UserId, request.ProfileId);
 
             var currentDay = DateOnly.FromDateTime(DateTime.Now);
 
@@ -32,6 +32,8 @@ namespace FoodService.Application.UseCases.CommandHandlers.DayResult
 
             if (dayResult == null)
             {
+                var profileWeight = await _userService.GetProfileWeightAsync(request.ProfileId);
+
                 dayResult = new Domain.Entities.DayResult
                 {
                     ProfileId = request.ProfileId,

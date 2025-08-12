@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ProfileModel } from '../../models/user-service/Models/profile.model';
+import { ProfileModel } from '../../models/user-service/Responces/profile-responce.model';
 import { ProfileService } from '../../services/user-service/profile.service';
 import { NgFor } from '@angular/common';
 

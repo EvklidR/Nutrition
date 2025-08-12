@@ -32,5 +32,5 @@ message GetProfileWeightRequest {
 }
 
 message GetProfileWeightResponse {
-    float weight = 1;
+    double weight = 1;
 }

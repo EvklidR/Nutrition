@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-import { ProfileModel } from '../../models/user-service/Models/profile.model';
+import { ProfileModel } from '../../models/user-service/Responces/profile-responce.model';
 import { UserService } from '../../services/user-service/user.service';
 import { DishService } from '../../services/food-service/dish.service';
 import { ProfileService } from '../../services/user-service/profile.service';

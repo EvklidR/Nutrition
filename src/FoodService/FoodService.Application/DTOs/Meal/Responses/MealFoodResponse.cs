@@ -4,15 +4,16 @@ public class MealFoodResponse
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = null!;
-    public double TotalProductCalories { get; set; }
-    public double TotalProductProteins { get; set; }
-    public double TotalProductFats { get; set; }
-    public double TotalProductCarbohydrates { get; set; }
+    public double ProductCalories { get; set; }
+    public double ProductProteins { get; set; }
+    public double ProductFats { get; set; }
+    public double ProductCarbohydrates { get; set; }
 }
 
 public class MealDishResponse : MealFoodResponse
 {
     public int AmountOfPortions { get; set; }
+    public double WeightOfPortion { get; set; }
 }
 
 public class MealProductResponse : MealFoodResponse

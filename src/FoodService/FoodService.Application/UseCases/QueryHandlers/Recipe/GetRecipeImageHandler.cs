@@ -1,9 +1,9 @@
 ﻿using FoodService.Application.Exceptions;
 using FoodService.Application.Interfaces;
-using FoodService.Application.UseCases.Queries.Recipe;
+using FoodService.Application.UseCases.Queries.Recipes;
 using FoodService.Domain.Interfaces;
 
-namespace FoodService.Application.UseCases.QueryHandlers.Dish
+namespace FoodService.Application.UseCases.QueryHandlers.Recipes
 {
     public class GetDishImageHandler : IQueryHandler<GetRecipeImageQuery, Stream>
     {

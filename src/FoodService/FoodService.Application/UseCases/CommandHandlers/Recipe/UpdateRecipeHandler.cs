@@ -75,6 +75,7 @@ public class UpdateRecipeHandler : ICommandHandler<UpdateRecipeCommand>
         dish.Fats = Math.Round(dish.Fats / weight, 2);
         dish.Proteins = Math.Round(dish.Proteins / weight, 2);
         dish.Carbohydrates = Math.Round(dish.Carbohydrates / weight, 2);
+        dish.WeightOfPortion = weight / recipe.AmountOfPortions;
 
         _unitOfWork.DishRepository.Update(dish);
     }

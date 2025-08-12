@@ -5,7 +5,7 @@ import { parseISO, eachDayOfInterval, format, sub, addDays } from 'date-fns';
 import { curveLinear, curveCardinal, curveMonotoneX, curveMonotoneY } from 'd3-shape';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
-import { ProfileModel } from '../../models/user-service/Models/profile.model';
+import { ProfileModel } from '../../models/user-service/Responces/profile-responce.model';
 import { DayResultModel } from '../../models/food-service/Responces/day-result.model';
 import { UserService } from '../../services/user-service/user.service';
 import { ProfileService } from '../../services/user-service/profile.service';

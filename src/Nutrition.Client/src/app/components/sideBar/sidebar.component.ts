@@ -3,7 +3,7 @@ import { RouterModule, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { NgIf, NgFor, AsyncPipe } from "@angular/common"
 
-import { ProfileModel } from '../../models/user-service/Models/profile.model';
+import { ProfileModel } from '../../models/user-service/Responces/profile-responce.model';
 import { UserService } from '../../services/user-service/user.service';
 import { ProfileService } from '../../services/user-service/profile.service';
 

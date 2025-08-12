@@ -15,13 +15,13 @@ namespace FoodService.Infrastructure.MSSQL.Configurations
             });
 
             builder.HasOne<Recipe>()
-                .WithMany(d => d.Ingredients)
-                .HasForeignKey(iod => iod.RecipeId)
+                .WithMany(r => r.Ingredients)
+                .HasForeignKey(por => por.RecipeId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.HasOne(iod => iod.Product)
+            builder.HasOne(por => por.Product)
                 .WithMany()
-                .HasForeignKey(iod => iod.ProductId)
+                .HasForeignKey(por => por.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

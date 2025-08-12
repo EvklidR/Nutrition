@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace FoodService.Infrastructure.MSSQL.Migrations
+namespace FoodService.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -48,32 +48,7 @@ namespace FoodService.Infrastructure.MSSQL.Migrations
                     b.ToTable("DayResults");
                 });
 
-            modelBuilder.Entity("FoodService.Domain.Entities.EatenFood", b =>
-                {
-                    b.Property<Guid>("FoodId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("MealId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("FoodId", "MealId");
-
-                    b.ToTable("EatenFood");
-
-                    b.HasDiscriminator().HasValue("EatenFood");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("FoodService.Domain.Entities.Food", b =>
+            modelBuilder.Entity("FoodService.Domain.Entities.Dish", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -85,10 +60,113 @@ namespace FoodService.Infrastructure.MSSQL.Migrations
                     b.Property<double>("Carbohydrates")
                         .HasColumnType("float");
 
-                    b.Property<string>("Discriminator")
+                    b.Property<double>("Fats")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Proteins")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("RecipeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("WeightOfPortion")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipeId")
+                        .IsUnique();
+
+                    b.ToTable("Dishes");
+                });
+
+            modelBuilder.Entity("FoodService.Domain.Entities.EatenDish", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AmountOfPortions")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("DishId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MealId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MealId");
+
+                    b.HasIndex("DishId", "MealId")
+                        .IsUnique();
+
+                    b.ToTable("EatenDishes");
+                });
+
+            modelBuilder.Entity("FoodService.Domain.Entities.EatenProduct", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MealId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Weight")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MealId");
+
+                    b.HasIndex("ProductId", "MealId")
+                        .IsUnique();
+
+                    b.ToTable("EatenProducts");
+                });
+
+            modelBuilder.Entity("FoodService.Domain.Entities.Meal", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DayResultId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DayResultId");
+
+                    b.ToTable("Meals");
+                });
+
+            modelBuilder.Entity("FoodService.Domain.Entities.Product", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Calories")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Carbohydrates")
+                        .HasColumnType("float");
 
                     b.Property<double>("Fats")
                         .HasColumnType("float");
@@ -105,30 +183,7 @@ namespace FoodService.Infrastructure.MSSQL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Food");
-
-                    b.HasDiscriminator().HasValue("Food");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("FoodService.Domain.Entities.Meal", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DayId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DayId");
-
-                    b.ToTable("Meals");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("FoodService.Domain.Entities.ProductOfRecipe", b =>
@@ -169,67 +224,56 @@ namespace FoodService.Infrastructure.MSSQL.Migrations
                     b.ToTable("Recipes");
                 });
 
+            modelBuilder.Entity("FoodService.Domain.Entities.Dish", b =>
+                {
+                    b.HasOne("FoodService.Domain.Entities.Recipe", "Recipe")
+                        .WithOne("Dish")
+                        .HasForeignKey("FoodService.Domain.Entities.Dish", "RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipe");
+                });
+
             modelBuilder.Entity("FoodService.Domain.Entities.EatenDish", b =>
                 {
-                    b.HasBaseType("FoodService.Domain.Entities.EatenFood");
+                    b.HasOne("FoodService.Domain.Entities.Dish", "Dish")
+                        .WithMany()
+                        .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
-                    b.Property<int>("AmountOfPortions")
-                        .HasColumnType("int");
+                    b.HasOne("FoodService.Domain.Entities.Meal", null)
+                        .WithMany("Dishes")
+                        .HasForeignKey("MealId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasIndex("MealId");
-
-                    b.HasDiscriminator().HasValue("EatenDish");
+                    b.Navigation("Dish");
                 });
 
             modelBuilder.Entity("FoodService.Domain.Entities.EatenProduct", b =>
                 {
-                    b.HasBaseType("FoodService.Domain.Entities.EatenFood");
+                    b.HasOne("FoodService.Domain.Entities.Meal", null)
+                        .WithMany("Products")
+                        .HasForeignKey("MealId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<double>("Weight")
-                        .HasColumnType("float");
-
-                    b.HasIndex("MealId");
-
-                    b.HasDiscriminator().HasValue("EatenProduct");
-                });
-
-            modelBuilder.Entity("FoodService.Domain.Entities.Dish", b =>
-                {
-                    b.HasBaseType("FoodService.Domain.Entities.Food");
-
-                    b.Property<Guid>("RecipeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("RecipeId")
-                        .IsUnique()
-                        .HasFilter("[RecipeId] IS NOT NULL");
-
-                    b.HasDiscriminator().HasValue("Dish");
-                });
-
-            modelBuilder.Entity("FoodService.Domain.Entities.Product", b =>
-                {
-                    b.HasBaseType("FoodService.Domain.Entities.Food");
-
-                    b.HasDiscriminator().HasValue("Product");
-                });
-
-            modelBuilder.Entity("FoodService.Domain.Entities.EatenFood", b =>
-                {
-                    b.HasOne("FoodService.Domain.Entities.Food", "Food")
+                    b.HasOne("FoodService.Domain.Entities.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("FoodId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Food");
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("FoodService.Domain.Entities.Meal", b =>
                 {
                     b.HasOne("FoodService.Domain.Entities.DayResult", null)
                         .WithMany("Meals")
-                        .HasForeignKey("DayId")
+                        .HasForeignKey("DayResultId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -249,35 +293,6 @@ namespace FoodService.Infrastructure.MSSQL.Migrations
                         .IsRequired();
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("FoodService.Domain.Entities.EatenDish", b =>
-                {
-                    b.HasOne("FoodService.Domain.Entities.Meal", null)
-                        .WithMany("Dishes")
-                        .HasForeignKey("MealId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("FoodService.Domain.Entities.EatenProduct", b =>
-                {
-                    b.HasOne("FoodService.Domain.Entities.Meal", null)
-                        .WithMany("Products")
-                        .HasForeignKey("MealId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("FoodService.Domain.Entities.Dish", b =>
-                {
-                    b.HasOne("FoodService.Domain.Entities.Recipe", "Recipe")
-                        .WithOne("Dish")
-                        .HasForeignKey("FoodService.Domain.Entities.Dish", "RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("FoodService.Domain.Entities.DayResult", b =>

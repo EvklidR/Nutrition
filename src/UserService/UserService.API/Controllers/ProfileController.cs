@@ -107,12 +107,12 @@ public class ProfileController : ControllerBase
     [HttpPut("desired-glasses-of-water")]
     public async Task<IActionResult> ChangeDesiredGlassesOfWater(
         [FromBody] int desiredGlassesOfWater,
-        [FromQuery] Guid profileid,
+        [FromQuery] Guid profileId,
         CancellationToken cancellationToken)
     {
         var userId = (Guid)HttpContext.Items["UserId"]!;
 
-        var command = new ChangeDesiredGlassesOfWaterCommand(desiredGlassesOfWater, profileid, userId);
+        var command = new ChangeDesiredGlassesOfWaterCommand(desiredGlassesOfWater, profileId, userId);
 
         await _mediator.Send(command, cancellationToken);
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ProfileModel } from '../../models/user-service/Models/profile.model';
+import { ProfileModel } from '../../models/user-service/Responces/profile-responce.model';
 import { ActivityLevel } from '../../models/user-service/Enums/activity-level.enum';
 import { ProfileService } from '../../services/user-service/profile.service';
 import { CommonModule } from '@angular/common';

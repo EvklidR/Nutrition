@@ -3,13 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { RegisterUserModel } from '../../models/user-service/Requests/register-user.model';
 import { LoginUserModel } from '../../models/user-service/Requests/login-user.model';
 import { map, tap } from 'rxjs/operators';
-import { Observable, BehaviorSubject, EMPTY } from 'rxjs';
+import { Observable, EMPTY } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 
 
 import { throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 import { AuthenticatedResponse } from '../../models/user-service/Responces/authenticated-response.model';
 import { RefreshTokenModel } from '../../models/user-service/Requests/refresh-token.model';
 import { RevokeTokenModel } from '../../models/user-service/Requests/revoke-token.model';

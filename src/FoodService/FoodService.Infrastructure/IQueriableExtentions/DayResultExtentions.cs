@@ -10,9 +10,9 @@ public static class DayResultExtentions
         return collection
             .Include(dr => dr.Meals)
                 .ThenInclude(m => m.Dishes)
-                    .ThenInclude(f => f.Food)
+                    .ThenInclude(f => f.Dish)
             .Include(d => d.Meals)
                 .ThenInclude(m => m.Products)
-                    .ThenInclude(p => p.Food);
+                    .ThenInclude(p => p.Product);
     }
 }

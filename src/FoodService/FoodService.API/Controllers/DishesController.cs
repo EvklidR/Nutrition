@@ -7,9 +7,8 @@ using FoodService.API.Filters;
 using FoodService.Application.DTOs.Recipe.Requests;
 using FoodService.Application.DTOs.Recipe.Responses;
 using FoodService.Application.DTOs.Dish.Responses;
-using FoodService.Application.UseCases.Queries.Recipe;
+using FoodService.Application.UseCases.Queries.Recipes;
 using FoodService.Application.UseCases.Commands.Recipes;
-using FoodService.Application.UseCases.Commands.Dishes;
 
 namespace FoodService.API.Controllers
 {
@@ -99,18 +98,18 @@ namespace FoodService.API.Controllers
         }
 
         /// <summary>
-        /// Deletes a dish by its ID.
+        /// Deletes a recipe with dish by its ID.
         /// </summary>
-        /// <param name="dishId">The dish ID.</param>
-        [HttpDelete("{dishId}")]
+        /// <param name="recipeId">The recipe ID.</param>
+        [HttpDelete("{recipeId}")]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> DeleteDish(Guid dishId)
+        public async Task<IActionResult> DeleteRecipe(Guid recipeId)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
-            await _mediator.Send(new DeleteDishCommand(dishId, userId));
+            await _mediator.Send(new DeleteRecipeCommand(recipeId, userId));
 
             return NoContent();
         }

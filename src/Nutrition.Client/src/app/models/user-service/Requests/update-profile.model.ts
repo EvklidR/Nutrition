@@ -6,5 +6,4 @@ export interface UpdateProfileModel {
   height: number;
   weight: number;
   activityLevel: ActivityLevel;
-  desiredGlassesOfWater: number;
 }

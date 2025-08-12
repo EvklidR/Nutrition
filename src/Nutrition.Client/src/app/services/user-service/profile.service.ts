@@ -5,8 +5,9 @@ import { tap } from 'rxjs/operators';
 
 import { CreateProfileModel } from '../../models/user-service/Requests/create-profile.model';
 import { UpdateProfileModel } from '../../models/user-service/Requests/update-profile.model';
-import { ProfileModel } from '../../models/user-service/Models/profile.model';
 import { DailyNeedsResponse } from '../../models/user-service/Responces/daily-needs.model';
+import { ShortProfileResponce } from '../../models/user-service/Responces/short-profile-responce.model';
+import { ProfileResponce } from '../../models/user-service/Responces/profile-responce.model';
 
 @Injectable({
   providedIn: 'root',
@@ -14,28 +15,28 @@ import { DailyNeedsResponse } from '../../models/user-service/Responces/daily-ne
 export class ProfileService {
   private readonly baseUrl: string = 'https://localhost/user_service/profile';
 
-  private currentProfileSubject = new BehaviorSubject<ProfileModel | null>(null);
+  private currentProfileSubject = new BehaviorSubject<ShortProfileResponce | null>(null);
   public currentProfile$ = this.currentProfileSubject.asObservable();
 
-  private profilesSubject = new BehaviorSubject<ProfileModel[]>([]);
+  private profilesSubject = new BehaviorSubject<ShortProfileResponce[]>([]);
   public profiles$ = this.profilesSubject.asObservable();
 
   constructor(private http: HttpClient) { }
 
-  createProfile(profile: CreateProfileModel): Observable<ProfileModel> {
-    return this.http.post<ProfileModel>(`${this.baseUrl}`, profile);
+  createProfile(profile: CreateProfileModel): Observable<ProfileResponce> {
+    return this.http.post<ProfileResponce>(`${this.baseUrl}`, profile);
   }
 
-  getUserProfiles(): Observable<ProfileModel[]> {
-    return this.http.get<ProfileModel[]>(`${this.baseUrl}/by-user`).pipe(
+  getUserProfiles(): Observable<ShortProfileResponce[]> {
+    return this.http.get<ShortProfileResponce[]>(`${this.baseUrl}/by-user`).pipe(
       tap((profiles) => {
         this.profilesSubject.next(profiles);
       })
     );
   }
 
-  getProfileById(profileId: string): Observable<ProfileModel> {
-    return this.http.get<ProfileModel>(`${this.baseUrl}/by-id/${profileId}`);
+  getProfileById(profileId: string): Observable<ProfileResponce> {
+    return this.http.get<ProfileResponce>(`${this.baseUrl}/by-id/${profileId}`);
   }
 
   calculateDailyNeeds(profileId: string): Observable<DailyNeedsResponse> {
@@ -48,6 +49,10 @@ export class ProfileService {
 
   deleteProfile(profileId: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${profileId}`);
+  }
+
+  changeDesiredGlassesOfWater(desiredGlassesOfWater: number, profileId: string): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/${profileId}`, { desiredGlassesOfWater });
   }
 
   setCurrentProfile(profileId: string): void {

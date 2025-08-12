@@ -10,7 +10,7 @@ namespace FoodService.Infrastructure.MSSQL.Configurations
         {
             builder.HasMany(dr => dr.Meals)
                 .WithOne()
-                .HasForeignKey(m => m.DayId)
+                .HasForeignKey(m => m.DayResultId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasIndex(dr => new { dr.ProfileId, dr.Date }).IsUnique();

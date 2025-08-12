@@ -8,10 +8,17 @@ namespace FoodService.Infrastructure.MSSQL.Configuraions
     {
         public void Configure(EntityTypeBuilder<EatenProduct> builder)
         {
+            builder.HasIndex(ep => new { ep.ProductId, ep.MealId }).IsUnique();
+
             builder.HasOne<Meal>()
                 .WithMany(m => m.Products)
                 .HasForeignKey(ef => ef.MealId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(ep => ep.Product)
+                .WithMany()
+                .HasForeignKey(ep => ep.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

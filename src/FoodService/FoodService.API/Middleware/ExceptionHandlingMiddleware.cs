@@ -48,6 +48,10 @@ namespace FoodService.Api.Middleware
                     statusCode = HttpStatusCode.Forbidden;
                     result = forbiddenEx.Message;
                     break;
+                case NotFound notFoundEx:
+                    statusCode = HttpStatusCode.NotFound;
+                    result = notFoundEx.Message;
+                    break;
                 default:
                     statusCode = HttpStatusCode.InternalServerError;
                     result = exception.Message;

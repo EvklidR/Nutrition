@@ -12,7 +12,7 @@ import { DayResultService } from '../../services/food-service/day-result.service
 import { ProfileService } from '../../services/user-service/profile.service';
 import { MealService } from '../../services/food-service/meal.service';
 import { DayResultModel } from '../../models/food-service/Responces/day-result.model';
-import { ProfileModel } from '../../models/user-service/Models/profile.model';
+import { ProfileModel } from '../../models/user-service/Responces/profile-responce.model';
 import { DailyNeedsResponse } from '../../models/user-service/Responces/daily-needs.model';
 import { UpdateProfileModel } from '../../models/user-service/Requests/update-profile.model';
 import { UpdateDayResultModel } from '../../models/food-service/Requests/update-day-result.model';

@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace FoodService.Infrastructure.MSSQL.Migrations
+namespace FoodService.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250131130312_InitCreate")]
-    partial class InitCreate
+    [Migration("20250812111910_FixRelations")]
+    partial class FixRelations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,12 +40,54 @@ namespace FoodService.Infrastructure.MSSQL.Migrations
                     b.Property<Guid>("ProfileId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double?>("Weight")
+                    b.Property<double>("Weight")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProfileId", "Date")
+                        .IsUnique();
+
                     b.ToTable("DayResults");
+                });
+
+            modelBuilder.Entity("FoodService.Domain.Entities.Dish", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Calories")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Carbohydrates")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Fats")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Proteins")
+                        .HasColumnType("float");
+
+                    b.Property<Guid>("RecipeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("WeightOfPortion")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RecipeId")
+                        .IsUnique();
+
+                    b.ToTable("Dishes");
                 });
 
             modelBuilder.Entity("FoodService.Domain.Entities.EatenFood", b =>
@@ -64,19 +106,35 @@ namespace FoodService.Infrastructure.MSSQL.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Weight")
-                        .HasColumnType("float");
-
                     b.HasKey("FoodId", "MealId");
 
-                    b.ToTable("EatenFoods");
+                    b.ToTable("EatenFood");
 
                     b.HasDiscriminator().HasValue("EatenFood");
 
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("FoodService.Domain.Entities.Food", b =>
+            modelBuilder.Entity("FoodService.Domain.Entities.Meal", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DayResultId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DayResultId");
+
+                    b.ToTable("Meals");
+                });
+
+            modelBuilder.Entity("FoodService.Domain.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -87,11 +145,6 @@ namespace FoodService.Infrastructure.MSSQL.Migrations
 
                     b.Property<double>("Carbohydrates")
                         .HasColumnType("float");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
 
                     b.Property<double>("Fats")
                         .HasColumnType("float");
@@ -108,54 +161,53 @@ namespace FoodService.Infrastructure.MSSQL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Food");
-
-                    b.HasDiscriminator().HasValue("Food");
-
-                    b.UseTphMappingStrategy();
+                    b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("FoodService.Domain.Entities.Meal", b =>
+            modelBuilder.Entity("FoodService.Domain.Entities.ProductOfRecipe", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("DayId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DayId");
-
-                    b.ToTable("Meals");
-                });
-
-            modelBuilder.Entity("FoodService.Domain.Entities.ProductOfDish", b =>
-                {
-                    b.Property<Guid>("DishId")
+                    b.Property<Guid>("RecipeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("WeightPerPortion")
+                    b.Property<double>("WeightInRecipe")
                         .HasColumnType("float");
 
-                    b.HasKey("DishId", "ProductId");
+                    b.HasKey("RecipeId", "ProductId");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductsOfDishes");
+                    b.ToTable("ProductsOfRecipes");
+                });
+
+            modelBuilder.Entity("FoodService.Domain.Entities.Recipe", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AmountOfPortions")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Recipes");
                 });
 
             modelBuilder.Entity("FoodService.Domain.Entities.EatenDish", b =>
                 {
                     b.HasBaseType("FoodService.Domain.Entities.EatenFood");
+
+                    b.Property<int>("AmountOfPortions")
+                        .HasColumnType("int");
 
                     b.HasIndex("MealId");
 
@@ -166,6 +218,9 @@ namespace FoodService.Infrastructure.MSSQL.Migrations
                 {
                     b.HasBaseType("FoodService.Domain.Entities.EatenFood");
 
+                    b.Property<double>("Weight")
+                        .HasColumnType("float");
+
                     b.HasIndex("MealId");
 
                     b.HasDiscriminator().HasValue("EatenProduct");
@@ -173,56 +228,36 @@ namespace FoodService.Infrastructure.MSSQL.Migrations
 
             modelBuilder.Entity("FoodService.Domain.Entities.Dish", b =>
                 {
-                    b.HasBaseType("FoodService.Domain.Entities.Food");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("Dish");
-                });
-
-            modelBuilder.Entity("FoodService.Domain.Entities.Product", b =>
-                {
-                    b.HasBaseType("FoodService.Domain.Entities.Food");
-
-                    b.HasDiscriminator().HasValue("Product");
-                });
-
-            modelBuilder.Entity("FoodService.Domain.Entities.EatenFood", b =>
-                {
-                    b.HasOne("FoodService.Domain.Entities.Food", "Food")
-                        .WithMany()
-                        .HasForeignKey("FoodId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("FoodService.Domain.Entities.Recipe", "Recipe")
+                        .WithOne("Dish")
+                        .HasForeignKey("FoodService.Domain.Entities.Dish", "RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Food");
+                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("FoodService.Domain.Entities.Meal", b =>
                 {
                     b.HasOne("FoodService.Domain.Entities.DayResult", null)
                         .WithMany("Meals")
-                        .HasForeignKey("DayId")
+                        .HasForeignKey("DayResultId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("FoodService.Domain.Entities.ProductOfDish", b =>
+            modelBuilder.Entity("FoodService.Domain.Entities.ProductOfRecipe", b =>
                 {
-                    b.HasOne("FoodService.Domain.Entities.Dish", null)
-                        .WithMany("Ingredients")
-                        .HasForeignKey("DishId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("FoodService.Domain.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("FoodService.Domain.Entities.Recipe", null)
+                        .WithMany("Ingredients")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
@@ -230,20 +265,36 @@ namespace FoodService.Infrastructure.MSSQL.Migrations
 
             modelBuilder.Entity("FoodService.Domain.Entities.EatenDish", b =>
                 {
+                    b.HasOne("FoodService.Domain.Entities.Dish", "Dish")
+                        .WithMany()
+                        .HasForeignKey("FoodId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("FoodService.Domain.Entities.Meal", null)
                         .WithMany("Dishes")
                         .HasForeignKey("MealId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Dish");
                 });
 
             modelBuilder.Entity("FoodService.Domain.Entities.EatenProduct", b =>
                 {
+                    b.HasOne("FoodService.Domain.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("FoodId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("FoodService.Domain.Entities.Meal", null)
                         .WithMany("Products")
                         .HasForeignKey("MealId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("FoodService.Domain.Entities.DayResult", b =>
@@ -258,8 +309,11 @@ namespace FoodService.Infrastructure.MSSQL.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("FoodService.Domain.Entities.Dish", b =>
+            modelBuilder.Entity("FoodService.Domain.Entities.Recipe", b =>
                 {
+                    b.Navigation("Dish")
+                        .IsRequired();
+
                     b.Navigation("Ingredients");
                 });
 #pragma warning restore 612, 618

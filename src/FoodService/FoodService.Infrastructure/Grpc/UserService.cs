@@ -74,20 +74,11 @@ namespace FoodService.Infrastructure.Grpc
 
         public async Task<double> GetProfileWeightAsync(Guid profileId)
         {
-            var cachedResponse = await _cacheService.GetCachedAsync<double>("weight-" + profileId.ToString());
-
-            if (cachedResponse.isFound)
-            {
-                return cachedResponse.data;
-            }
-
             var request = new GetProfileWeightRequest { ProfileId = profileId.ToString() };
 
             try
             {
                 var response = await _client.GetProfileWeightAsync(request);
-
-                await _cacheService.WriteAsync("weight-" + profileId.ToString(), response.Weight);
 
                 return response.Weight;
             }

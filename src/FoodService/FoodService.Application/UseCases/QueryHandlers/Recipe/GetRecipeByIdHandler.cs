@@ -2,9 +2,9 @@
 using FoodService.Domain.Interfaces;
 using FoodService.Application.Exceptions;
 using FoodService.Application.DTOs.Recipe.Responses;
-using FoodService.Application.UseCases.Queries.Recipe;
+using FoodService.Application.UseCases.Queries.Recipes;
 
-namespace FoodService.Application.UseCases.QueryHandlers.Recipe
+namespace FoodService.Application.UseCases.QueryHandlers.Recipes
 {
     public class GetRecipeByIdHandler : IQueryHandler<GetRecipeByIdQuery, CalculatedRecipeResponse>
     {

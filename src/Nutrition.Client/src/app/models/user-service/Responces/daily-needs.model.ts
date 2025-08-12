@@ -3,4 +3,5 @@ export interface DailyNeedsResponse {
   proteins: number;
   fats: number;
   carbohydrates: number;
+  desiredGlassesOfWater: number;
 }

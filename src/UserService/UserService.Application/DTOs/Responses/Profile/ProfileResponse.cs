@@ -11,4 +11,5 @@ public class ProfileResponse
     public DateOnly Birthday { get; set; }
     public Gender Gender { get; set; }
     public ActivityLevel ActivityLevel { get; set; }
+    public bool ThereIsMealPlan { get; set; }
 }

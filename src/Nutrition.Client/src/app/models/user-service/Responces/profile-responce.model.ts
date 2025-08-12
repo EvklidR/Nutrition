@@ -1,9 +1,8 @@
 import { ActivityLevel } from "../Enums/activity-level.enum";
 import { Gender } from "../Enums/gender.enum";
 
-export interface ProfileModel {
+export interface ProfileResponce {
   id: string;
-  userId: string;
   name: string;
   height: number;
   weight: number;

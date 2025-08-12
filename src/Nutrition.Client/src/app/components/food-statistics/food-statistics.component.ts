@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { sub, format, addDays } from 'date-fns';
 import { CommonModule } from '@angular/common';
 
-import { ProfileModel } from '../../models/user-service/Models/profile.model';
+import { ProfileModel } from '../../models/user-service/Responces/profile-responce.model';
 import { DayResultModel } from '../../models/food-service/Responces/day-result.model';
 import { ProfileService } from '../../services/user-service/profile.service';
 import { DayResultService } from '../../services/food-service/day-result.service';
