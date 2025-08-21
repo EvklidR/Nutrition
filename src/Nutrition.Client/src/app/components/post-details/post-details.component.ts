@@ -14,6 +14,7 @@ import { LineBreaksPipe } from '../../pipes/line-breaks.pipe';
 import { MarkdownModule, provideMarkdown } from 'ngx-markdown';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../modals/confirm-dialog-modal/confirm-dialog.component';
+import { MarkdownImgServicePipe } from '../../pipes/markdown-img.pipe';
 
 @Component({
   selector: 'app-post-details',
@@ -23,6 +24,8 @@ import { ConfirmDialogComponent } from '../modals/confirm-dialog-modal/confirm-d
     ReactiveFormsModule,
     FontAwesomeModule,
     LineBreaksPipe,
+    MarkdownImgServicePipe,
+
     MarkdownModule
   ],
   providers: [
@@ -105,8 +108,6 @@ export class PostDetailsComponent implements OnInit {
 
     const commentData: CreateCommentModel = {
       postId: this.postId,
-      ownerEmail: '',
-      ownerId: '',
       text: text
     };
 

@@ -10,12 +10,9 @@ namespace FoodService.Application.Mappers
     {
         public DayResultMappingProfile()
         {
-            CreateMap<CreateDayResultDTO, DayResult>();
-
             CreateMap<UpdateDayResultDTO, DayResult>();
 
-            CreateMap<DayResult, DayResultResponse>()
-                ;
+            CreateMap<DayResult, DayResultResponse>();
 
             CreateMap<DayResult, ShortDayResultResponse>()
                 .ForMember(d => d.Calories, opt => opt.MapFrom(s => CalculationHelper.CalculateCaloriesOfDayResult(s)))

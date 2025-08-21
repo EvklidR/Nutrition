@@ -217,3 +217,12 @@
   right: 0%;
   top: 0%;
 }
+
+.edit-icon {
+  color: #555;
+  cursor: pointer;
+}
+
+  .edit-icon:hover {
+    color: #35792A;
+  }

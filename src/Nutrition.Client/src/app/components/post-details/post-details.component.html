@@ -16,9 +16,10 @@
     <span class="date">{{ post.creationDate | date: 'dd.MM.yyyy HH:mm' }}</span>
   </div>
 
-  <div class="post-text">
-    <markdown [data]="post.text"></markdown>
+  <div class="post-text" *ngIf="post">
+    <markdown [data]="post.text | markdownImgService | async"></markdown>
   </div>
+
 
   <div class="post-footer">
     <div class="icon-group like" (click)="likePost()">
@@ -43,7 +44,7 @@
       <div class="comment-header">
         <div class="author-info">
           <span class="author">{{ comment.ownerEmail }}</span> |
-          <span class="date">{{ comment.date | date: 'dd.MM.yyyy HH:mm' }}</span>
+          <span class="date">{{ comment.creationDate | date: 'dd.MM.yyyy HH:mm' }}</span>
         </div>
         <div class="actions" *ngIf="comment.isOwner">
           <fa-icon [icon]="faEdit" (click)="editComment(comment)" class="edit-icon"></fa-icon>

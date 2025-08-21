@@ -3,9 +3,9 @@ import { RouterModule, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { NgIf, NgFor, AsyncPipe } from "@angular/common"
 
-import { ProfileModel } from '../../models/user-service/Responces/profile-responce.model';
 import { UserService } from '../../services/user-service/user.service';
 import { ProfileService } from '../../services/user-service/profile.service';
+import { ShortProfileResponse } from '../../models/user-service/Responses/short-profile-response.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -20,8 +20,8 @@ import { ProfileService } from '../../services/user-service/profile.service';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-  profiles$!: Observable<ProfileModel[]>;
-  currentUser$!: Observable<ProfileModel | null>;
+  profiles$!: Observable<ShortProfileResponse[]>;
+  currentUser$!: Observable<ShortProfileResponse | null>;
   showProfileList: boolean = false;
 
   constructor(
@@ -50,7 +50,7 @@ export class SidebarComponent implements OnInit {
     this.showProfileList = !this.showProfileList;
   }
 
-  selectProfile(profile: ProfileModel, event: MouseEvent): void {
+  selectProfile(profile: ShortProfileResponse, event: MouseEvent): void {
     event.stopPropagation();
 
     this.profileService.setCurrentProfile(profile.id);

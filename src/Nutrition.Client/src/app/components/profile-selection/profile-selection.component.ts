@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { ProfileModel } from '../../models/user-service/Responces/profile-responce.model';
 import { ProfileService } from '../../services/user-service/profile.service';
 import { NgFor } from '@angular/common';
+import { ShortProfileResponse } from '../../models/user-service/Responses/short-profile-response.model';
 
 @Component({
   selector: 'app-profile-selection',
@@ -15,7 +15,7 @@ import { NgFor } from '@angular/common';
   styleUrls: ['./profile-selection.component.css']
 })
 export class ProfileSelectionComponent implements OnInit {
-  profiles: ProfileModel[] = [];
+  profiles: ShortProfileResponse[] = [];
 
   constructor(private router: Router, private profileService: ProfileService) { }
 
@@ -34,7 +34,7 @@ export class ProfileSelectionComponent implements OnInit {
     });
   }
 
-  selectProfile(profile: ProfileModel): void {
+  selectProfile(profile: ShortProfileResponse): void {
     this.profileService.setCurrentProfile(profile.id);
     this.profileService.loadCurrentProfile()
     this.router.navigate(['/home']);

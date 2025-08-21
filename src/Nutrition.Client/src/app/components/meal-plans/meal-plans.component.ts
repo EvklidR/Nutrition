@@ -1,19 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 
-import { ProfileModel } from '../../models/user-service/Responces/profile-responce.model';
-import { MealPlanModel } from '../../models/meal-plan-service/Models/meal-plan.model';
 import { MealPlanType } from '../../models/meal-plan-service/Enums/meal-plan-type.enum';
 import { UserService } from '../../services/user-service/user.service';
 import { MealPlanService } from '../../services/meal-plan-service/meal-plan.service';
 import { ProfileService } from '../../services/user-service/profile.service';
 import { ProfilePlanService } from '../../services/meal-plan-service/profile-plan.service';
-import { ProfileMealPlanWithDetailsModel } from '../../models/meal-plan-service/Responces/profile-meal-plan-with-details.model';
-import { MealPlanResponseModel } from '../../models/meal-plan-service/Responces/meal-plan-response.model';
+import { MealPlanResponseModel } from '../../models/meal-plan-service/Responses/meal-plan-response.model';
 import { CreateProfileMealPlanModel } from '../../models/meal-plan-service/Requests/create-profile-meal-plan.model';
 import { CommonModule } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ShortProfileResponse } from '../../models/user-service/Responses/short-profile-response.model';
+import { ProfileMealPlanWithDetailsResponse } from '../../models/meal-plan-service/Responses/profile-meal-plan-with-details.model';
 
 @Component({
   selector: 'app-meal-plans',
@@ -27,8 +25,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class MealPlansComponent implements OnInit {
   userRole: string | null = null;
 
-  profile: ProfileModel | null = null;
-  private profileSubscription!: Subscription;
+  profile: ShortProfileResponse | null = null;
 
   mealPlanCategories = Object.values(MealPlanType).filter(value => typeof value === 'number') as number[];
   mealPlansByCategory: { [key: number]: { mealPlans: MealPlanResponseModel[], totalCount: number } } = {};
@@ -36,7 +33,7 @@ export class MealPlansComponent implements OnInit {
   expandedPlanId: string | null = null;
   pageSize: number = 3;
 
-  choosenMealPlan: ProfileMealPlanWithDetailsModel | null = null;
+  choosenMealPlan: ProfileMealPlanWithDetailsResponse | null = null;
 
   isLoading: boolean = false;
 
@@ -56,7 +53,7 @@ export class MealPlansComponent implements OnInit {
       this.userRole = 'admin'
     }
 
-    this.profileSubscription = this.profileService.currentProfile$.subscribe((profile) => {
+    this.profileService.currentProfile$.subscribe((profile) => {
       this.profile = profile;
 
       console.log(this.profile, this.userRole)
@@ -67,12 +64,8 @@ export class MealPlansComponent implements OnInit {
           this.loadMealPlansForCategory(category);
         });
       }
-      if (profile?.thereIsMealPlan) {
-        this.loadChoosenMealPlan(profile.id)
-      }
-      else {
-        this.choosenMealPlan = null
-      }
+
+      this.loadChoosenMealPlan()
     })
   }
 
@@ -99,24 +92,6 @@ export class MealPlansComponent implements OnInit {
           this.isLoading = false;
         }
       });
-  }
-
-  loadChoosenMealPlan(profileId: string): void {
-    this.profileMealPlanService.getProfilePlanHistory(profileId).subscribe({
-      next: (mealPlans) => {
-        const activePlan = mealPlans.find(plan => plan.isActive);
-        if (activePlan) {
-          this.choosenMealPlan = activePlan
-        }
-        else {
-          this.choosenMealPlan = null
-        }
-      },
-      error: (err) => {
-        console.log("Не удалось загрузить текущий план")
-      }
-    }
-    )
   }
 
   nextPage(category: MealPlanType): void {
@@ -161,8 +136,7 @@ export class MealPlansComponent implements OnInit {
     this.profileMealPlanService.createProfilePlan(createProfilePlan).subscribe(
       () => {
         console.log("Новая подписка успешна")
-        this.loadChoosenMealPlan(this.profile!.id)
-        this.profile!.thereIsMealPlan = true;
+        this.loadChoosenMealPlan()
         this.sendPopUpNotification("План питания успешно выбран!")
       }
     )
@@ -190,7 +164,7 @@ export class MealPlansComponent implements OnInit {
 
   canselPlan() {
     this.profileMealPlanService.completeProfilePlan(this.profile!.id).subscribe(() => {
-      this.loadChoosenMealPlan(this.profile!.id)
+      this.loadChoosenMealPlan()
       this.sendPopUpNotification("План питания успешно отменен!")
     })
   }
@@ -200,5 +174,13 @@ export class MealPlansComponent implements OnInit {
       duration: 3000
     });
     return
+  }
+
+  loadChoosenMealPlan() {
+    this.profileMealPlanService.getActiveMealPlan(this.profile!.id).subscribe(
+      (profileMealPlan) => {
+        this.choosenMealPlan = profileMealPlan
+      }
+    )
   }
 }

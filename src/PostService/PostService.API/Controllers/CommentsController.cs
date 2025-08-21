@@ -54,9 +54,9 @@ namespace PostService.API.Controllers
             var userId = (string)HttpContext.Items["UserId"]!;
             var userName = (string)HttpContext.Items["UserName"]!;
 
-            var responce = await _commentService.AddCommentAsync(createCommentDTO, userName, userId);
+            var response = await _commentService.AddCommentAsync(createCommentDTO, userName, userId);
 
-            return Ok(responce);
+            return Ok(response);
         }
 
         /// <summary>

@@ -1,0 +1,16 @@
+<div class="food-card"
+     (click)="onCardClick()">
+
+  <div class="food-header">
+    <h3>{{ name }}</h3>
+    <div class="actions">
+      <fa-icon [icon]="faEdit" class="edit-icon" (click)="onEditClick($event)"></fa-icon>
+      <fa-icon [icon]="faTrash" class="delete-icon" (click)="onDeleteClick($event)"></fa-icon>
+    </div>
+  </div>
+
+  <p>Калории: {{ calories | number:'1.1-1' }} ккал</p>
+  <p>Белки: {{ proteins | number:'1.1-1' }} г</p>
+  <p>Жиры: {{ fats | number:'1.1-1' }} г</p>
+  <p>Углеводы: {{ carbohydrates | number:'1.1-1' }} г</p>
+</div>

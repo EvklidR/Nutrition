@@ -30,7 +30,13 @@ public class RecipeMappingProfile : Profile
 
         CreateMap<CreateRecipeDTO, Recipe>()
             .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients));
-        CreateMap<UpdateRecipeDTO, Recipe>();
-        CreateMap<CreateOrUpdateProductOfRecipeDTO, ProductOfRecipe>();
+
+        CreateMap<UpdateRecipeDTO, Recipe>()
+            .ForPath(dest => dest.Dish.Name, opt => opt.MapFrom(src => src.Name))
+            .ForMember(dest => dest.Ingredients, opt => opt.MapFrom(src => src.Ingredients));
+
+        CreateMap<CreateOrUpdateProductOfRecipeDTO, ProductOfRecipe>()
+            .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductId))
+            .ForMember(dest => dest.WeightInRecipe, opt => opt.MapFrom(src => src.WeightInRecipe));
     }
 }

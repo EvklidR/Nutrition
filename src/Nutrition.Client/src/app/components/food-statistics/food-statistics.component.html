@@ -54,13 +54,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let food of topFoods">
+        <tr *ngFor="let food of eatenFood">
           <td>{{ food.name }}</td>
-          <td>{{ food.weight | number:'1.0-0' }}</td>
-          <td>{{ food.calories | number:'1.0-0' }}</td>
-          <td>{{ food.proteins | number:'1.0-1' }}</td>
-          <td>{{ food.fats | number:'1.0-1' }}</td>
-          <td>{{ food.carbs | number:'1.0-1' }}</td>
+          <td>{{ food.totalWeight | number:'1.0-0' }}</td>
+          <td>{{ food.totalCalories | number:'1.0-0' }}</td>
+          <td>{{ food.totalProteins | number:'1.0-1' }}</td>
+          <td>{{ food.totalFats | number:'1.0-1' }}</td>
+          <td>{{ food.totalCarbohydrates | number:'1.0-1' }}</td>
         </tr>
       </tbody>
     </table>

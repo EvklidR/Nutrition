@@ -1,5 +1,4 @@
 ﻿using UserService.Application.DTOs.Requests.Profile;
-using UserService.Application.DTOs.Responces.Profile;
 using UserService.Application.DTOs.Responses.Profile;
 using UserService.Domain.Entities;
 
@@ -17,6 +16,7 @@ public class ProfileMappingProfile : AutoMapper.Profile
             .ForMember(dest => dest.Birthday, opt => opt.Ignore())
             .ForMember(dest => dest.Gender, opt => opt.Ignore())
             .ForMember(dest => dest.ThereIsMealPlan, opt => opt.Ignore())
+            .ForMember(dest => dest.DesiredGlassesOfWater, opt => opt.Ignore())
 
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.Weight, opt => opt.MapFrom(src => src.Weight))

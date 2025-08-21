@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using UserService.Application.DTOs.Responces.Profile;
+using UserService.Application.DTOs.Responses.Profile;
 using UserService.Contracts.DataAccess.Repositories;
 using UserService.Contracts.Exceptions;
 

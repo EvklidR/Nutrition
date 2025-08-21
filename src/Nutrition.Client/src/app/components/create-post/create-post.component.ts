@@ -118,8 +118,6 @@ export class CreatePostComponent implements OnInit {
         title: title ?? '',
         text: content,
         keyWords: ['angular', 'markdown'],
-        ownerEmail: null,
-        ownerId: null,
         files: []
       };
 

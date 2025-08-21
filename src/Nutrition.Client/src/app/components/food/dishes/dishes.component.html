@@ -1,0 +1,30 @@
+<div class="dish-list">
+
+  <app-filter [(params)]="params"
+              [totalCount]="totalCount"
+              (reload)="loadDishes()">
+  </app-filter>
+
+  <button class="add-button" (click)="openAddDishModal()">Добавить блюдо</button>
+
+  <div *ngIf="isLoading" class="loading">Загрузка...</div>
+
+  <div *ngIf="!isLoading && dishes.length === 0" class="no-data">
+    <p>У вас пока нет блюд.</p>
+  </div>
+
+  <div class="dishes-container" *ngIf="!isLoading && dishes.length > 0">
+    <app-food-card *ngFor="let dish of dishes"
+                   [id]="dish.recipeId"
+                   [name]="dish.name"
+                   [calories]="dish.calories"
+                   [proteins]="dish.proteins"
+                   [fats]="dish.fats"
+                   [carbohydrates]="dish.carbohydrates"
+                   (cardClick)="openDatailsModal($event)"
+                   (editClick)="openEditDishModal(dish.recipeId)"
+                   (deleteClick)="openDeleteConfirmation(dish.recipeId)">
+  </app-food-card>
+  </div>
+
+</div>

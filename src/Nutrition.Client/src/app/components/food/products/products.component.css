@@ -1,0 +1,45 @@
+.ingredient-list {
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.add-button {
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #d3d347;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+  .add-button:hover {
+    background-color: #c1c12f;
+  }
+
+.loading {
+  font-size: 18px;
+  color: #555;
+}
+
+.no-data {
+  font-size: 18px;
+  color: #999;
+}
+
+.ingredients-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.dishes-btn {
+  color: green;
+  background-color: transparent;
+  border: 2px solid green;
+}
+
+  .dishes-btn:hover {
+    color: white;
+  }

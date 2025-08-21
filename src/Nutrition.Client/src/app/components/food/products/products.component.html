@@ -1,0 +1,31 @@
+<div class="ingredient-list">
+
+  <app-filter [(params)]="params"
+              [totalCount]="totalCount"
+              (reload)="loadProducts()">
+
+  </app-filter>
+
+  <button class="add-button" (click)="openAddProductModal()">Добавить продукт</button>
+
+  <div *ngIf="isLoading" class="loading">Загрузка...</div>
+
+  <div *ngIf="!isLoading && products.length === 0" class="no-data">
+    <p>У вас пока нет ингредиентов.</p>
+  </div>
+
+  <div class="ingredients-container" *ngIf="!isLoading && products.length > 0">
+    <app-food-card *ngFor="let product of products"
+                   [id]="product.id"
+                   [name]="product.name"
+                   [calories]="product.calories"
+                   [proteins]="product.proteins"
+                   [fats]="product.fats"
+                   [carbohydrates]="product.carbohydrates"
+                   (cardClick)="openEditProductModal(product)"
+                   (editClick)="openEditProductModal(product)"
+                   (deleteClick)="openDeleteConfirmation($event)">
+    </app-food-card>
+  </div>
+
+</div>

@@ -1,8 +1,9 @@
-import { EatenFoodModel } from "./eaten-food.model";
+import { EatenDishModel } from "./eaten-dish.model";
+import { EatenProductModel } from "./eaten-product.model";
 
 export interface CreateMealModel {
-  dayId: string,
-  name: string,
-  products: EatenFoodModel[],
-  dishes: EatenFoodModel[]
+  dayResultId: string,
+  name: string | null,
+  products: EatenProductModel[],
+  dishes: EatenDishModel[]
 }

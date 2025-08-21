@@ -7,6 +7,8 @@ using FoodService.API.Filters;
 using FoodService.Application.DTOs.DayResult.Requests;
 using FoodService.Application.DTOs.DayResult.Responses;
 using FoodService.Domain.Interfaces.Repositories.Models;
+using FoodService.Application.UseCases.Queries.Statistics;
+using FoodService.Application.DTOs.Statistics;
 
 namespace FoodService.API.Controllers
 {
@@ -73,8 +75,8 @@ namespace FoodService.API.Controllers
         [ProducesResponseType(typeof(IEnumerable<DayResultResponse>), 200)]
         public async Task<ActionResult<IEnumerable<DayResultResponse>>> GetDayResults(
             Guid profileId,
-            [FromQuery] PeriodParameters periodParameters,
-            [FromQuery] PaginatedParameters paginatedParameters)
+            [FromQuery] PeriodParameters? periodParameters,
+            [FromQuery] PaginatedParameters? paginatedParameters)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
@@ -100,6 +102,27 @@ namespace FoodService.API.Controllers
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
             var results = await _mediator.Send(new GetDayResultByIdQuery(profileId, userId, dayResultId));
+
+            return Ok(results);
+        }
+
+        /// <summary>
+        /// Retrieves a list of eaten food by period.
+        /// </summary>
+        /// <param name="profileId">The profile ID.</param>
+        /// <param name="periodParameters">Period parameters.</param>
+        /// <returns>List of eaten food.</returns>
+        [HttpGet("eaten-food/{profileId}")]
+        [Authorize]
+        [ServiceFilter(typeof(UserIdFilter))]
+        [ProducesResponseType(typeof(IEnumerable<EatenFoodResponse>), 200)]
+        public async Task<ActionResult<IEnumerable<EatenFoodResponse>>> GetEatenFood(
+            [FromRoute] Guid profileId,
+            [FromQuery] PeriodParameters periodParameters)
+        {
+            var userId = (Guid)HttpContext.Items["UserId"]!;
+
+            var results = await _mediator.Send(new GetEatenFoodByPeriodQuery(profileId, userId, periodParameters));
 
             return Ok(results);
         }

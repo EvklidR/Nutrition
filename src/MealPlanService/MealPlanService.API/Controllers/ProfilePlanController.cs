@@ -28,14 +28,13 @@ namespace MealPlanService.API.Controllers
         [HttpPost]
         [ServiceFilter(typeof(UserIdFilter))]
         [Authorize]
-        [ProducesResponseType(typeof(ProfileMealPlan), StatusCodes.Status200OK)]
-        public async Task<ActionResult<ProfileMealPlan?>> CreateProfilePlan(ProfileMealPlanDTO profilePlan)
+        public async Task<IActionResult> CreateProfilePlan(ProfileMealPlanDTO profilePlan)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
 
-            var mealplan = await _userPlanService.CreateProfilePlanAsync(userId, profilePlan);
+            await _userPlanService.CreateProfilePlanAsync(userId, profilePlan);
 
-            return Ok(mealplan);
+            return Ok();
         }
 
         /// <summary>
@@ -84,6 +83,23 @@ namespace MealPlanService.API.Controllers
             var recommendations = await _userPlanService.GetRecommendations(profileId);
 
             return Ok(recommendations);
+        }
+
+        /// <summary>
+        /// Retrieves active meal plan of user.
+        /// </summary>
+        /// <param name="profileId">The profile identifier for which to retrieve meal plans.</param>
+        [HttpGet("active-plan/{profileId}")]
+        [ServiceFilter(typeof(UserIdFilter))]
+        [Authorize]
+        [ProducesResponseType(typeof(ProfileMealPlanWithDetailsDto), StatusCodes.Status200OK)]
+        public async Task<ActionResult<ProfileMealPlanWithDetailsDto?>> GetActiveProfilePlan(string profileId)
+        {
+            var userId = (string)HttpContext.Items["UserId"]!;
+
+            var plans = await _userPlanService.GetActiveProfilePlanAsync(userId, profileId);
+
+            return Ok(plans);
         }
     }
 }

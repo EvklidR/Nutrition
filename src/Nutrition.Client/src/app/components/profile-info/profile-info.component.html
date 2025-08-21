@@ -10,15 +10,14 @@
 
   <div class="card">
     <h2>Физические параметры</h2>
-    <p><strong>Рост:</strong> {{ currentHeight }} см</p>
-    <p><strong>Вес:</strong> {{ currentWeight }} кг</p>
+    <p><strong>Рост:</strong> {{ profile.height }} см</p>
+    <p><strong>Вес:</strong> {{ profile.weight }} кг</p>
     <p><strong>ИМТ:</strong> {{ bmi | number:'1.1-1' }}</p>
   </div>
 
   <div class="card">
-    <h2>Уровень активности и вода</h2>
-    <p><strong>Активность:</strong> {{ getActivityLevelString(activityLevel) }}</p>
-    <p><strong>Цель по воде:</strong> {{ profile.desiredGlassesOfWater }} стак.</p>
+    <h2>Активность</h2>
+    <p><strong>Активность:</strong> {{ getActivityLevelString(profile.activityLevel) }}</p>
     <p><strong>Есть план питания:</strong> {{ profile.thereIsMealPlan ? 'Да' : 'Нет' }}</p>
   </div>
 

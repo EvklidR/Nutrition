@@ -2,14 +2,14 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProductService } from '../../../services/food-service/product.service';
 import { CreateProductModel } from '../../../models/food-service/Requests/create-product.model';
-import { ProductResponseModel } from '../../../models/food-service/Responces/product.model';
-import { ProductResponseFromAPIModel } from '../../../models/food-service/Responces/product-from-api.model';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { UpdateProductModel } from '../../../models/food-service/Requests/update-product.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ProductResponseFromAPI } from '../../../models/food-service/Responses/product-from-api.model';
+import { ProductResponse } from '../../../models/food-service/Responses/product.model';
 
 @Component({
   selector: 'app-add-ingredient-modal',
@@ -27,7 +27,7 @@ export class AddProductModalComponent {
   isSaving: boolean = false;
 
   productSearchTerm: string = '';
-  productsFromApi: ProductResponseFromAPIModel[] = [];
+  productsFromApi: ProductResponseFromAPI[] = [];
   searchDebounce: Subject<string> = new Subject<string>();
 
   isEditMode: boolean = false;
@@ -36,7 +36,7 @@ export class AddProductModalComponent {
   constructor(
     private productService: ProductService,
     private dialogRef: MatDialogRef<AddProductModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ProductResponseModel | null,
+    @Inject(MAT_DIALOG_DATA) public data: ProductResponse | null,
     private snackBar: MatSnackBar
   ) {
     if (data) {
@@ -69,7 +69,7 @@ export class AddProductModalComponent {
     });
   }
 
-  selectProduct(product: ProductResponseFromAPIModel): void {
+  selectProduct(product: ProductResponseFromAPI): void {
     this.name = product.name;
     this.proteins = product.proteins;
     this.fats = product.fats;
@@ -102,7 +102,6 @@ export class AddProductModalComponent {
       });
     } else {
       const createPayload: CreateProductModel = {
-        userId: null,
         name: this.name,
         proteins: this.proteins,
         fats: this.fats,

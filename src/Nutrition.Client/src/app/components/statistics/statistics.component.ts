@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { parseISO, eachDayOfInterval, format, sub, addDays } from 'date-fns';
-import { curveLinear, curveCardinal, curveMonotoneX, curveMonotoneY } from 'd3-shape';
+import { Subscription } from 'rxjs';
+import { format, sub, addDays } from 'date-fns';
+import { curveMonotoneX } from 'd3-shape';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
-import { ProfileModel } from '../../models/user-service/Responces/profile-responce.model';
-import { DayResultModel } from '../../models/food-service/Responces/day-result.model';
 import { UserService } from '../../services/user-service/user.service';
 import { ProfileService } from '../../services/user-service/profile.service';
 import { DayResultService } from '../../services/food-service/day-result.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ShortDayResultResponse } from '../../models/food-service/Responses/short-day-result.model';
+import { PeriodParameters } from '../../models/food-service/Requests/period-parameters.model';
+import { ProfileResponse } from '../../models/user-service/Responses/profile-response.model';
 
 @Component({
   selector: 'app-statistics',
@@ -25,17 +26,17 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './statistics.component.css'
 })
 export class StatisticsComponent implements OnInit {
-  profile!: ProfileModel | null;
+  profile!: ProfileResponse | null;
   private profileSubscription!: Subscription;
 
-  dayResults: DayResultModel[] = [];
+  dayResults: ShortDayResultResponse[] = [];
 
   weeksAgo: number = 1;
   availablePeriods: number[] = [1, 2, 3, 4, 8, 12, 18, 24];
 
 
-  start: Date = sub(new Date(), { weeks: this.weeksAgo });
-  end: Date = new Date();
+  startDate: Date = sub(new Date(), { weeks: this.weeksAgo });
+  endDate: Date = new Date();
 
   weightData: { date: string, weight: number }[] = [];
   imtData: { date: string, imt: number }[] = [];
@@ -59,24 +60,26 @@ export class StatisticsComponent implements OnInit {
 
   ngOnInit(): void {
     this.profileSubscription = this.profileService.currentProfile$.subscribe((profile) => {
-      this.profile = profile;
 
       if (profile) {
+
+        this.profileService.getProfileById(profile!.id).subscribe(
+          (fullProfile) => {
+            this.profile = fullProfile
+          }
+        )
         this.loadDayResults(profile.id);
       }
     });
   }
 
-  get startDate(): string {
-    return format(this.start, 'yyyy-MM-dd');
-  }
-
-  get endDate(): string {
-    return format(this.end, 'yyyy-MM-dd');
-  }
-
   loadDayResults(profileId: string): void {
-    this.dayResultService.getDayResultsByPeriod(profileId, this.startDate, this.endDate).subscribe(
+    const periodParams: PeriodParameters = {
+      startDate: this.startDate,
+      endDate: this.endDate
+    }
+
+    this.dayResultService.getDayResults(profileId, periodParams, null).subscribe(
       (days) => {
         this.dayResults = days;
         console.log(this.dayResults);
@@ -88,7 +91,7 @@ export class StatisticsComponent implements OnInit {
   }
 
   generateData(): void {
-    for (let currentDate = addDays(this.start, 1); currentDate <= this.end; currentDate = addDays(currentDate, 1)) {
+    for (let currentDate = addDays(this.startDate, 1); currentDate <= this.endDate; currentDate = addDays(currentDate, 1)) {
       const formattedDate = format(currentDate, 'yyyy-MM-dd');
 
       this.dayResults = this.dayResults.map(d => ({
@@ -96,7 +99,7 @@ export class StatisticsComponent implements OnInit {
         date: new Date(d.date)
       }));
 
-      let day: DayResultModel | undefined = this.dayResults.find(
+      let day: ShortDayResultResponse | undefined = this.dayResults.find(
         d => format(d.date, 'yyyy-MM-dd') === formattedDate
       );
       this.imtData.push({ date: formattedDate, imt: -1 });
@@ -175,7 +178,7 @@ export class StatisticsComponent implements OnInit {
 
   updatePeriod(): void {
     if (this.profile) {
-      this.start = sub(this.end, { weeks: this.weeksAgo });
+      this.startDate = sub(this.endDate, { weeks: this.weeksAgo });
       this.loadDayResults(this.profile.id);
     }
   }

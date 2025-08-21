@@ -6,6 +6,6 @@ namespace FoodService.Application.UseCases.Queries.DayResult;
 public record GetAllDayResultsQuery(
     Guid ProfileId, 
     Guid UserId,
-    PaginatedParameters PaginatedParameters,
+    PaginatedParameters? PaginatedParameters,
     PeriodParameters? PeriodParameters
     ) : IQuery<IEnumerable<ShortDayResultResponse>>;

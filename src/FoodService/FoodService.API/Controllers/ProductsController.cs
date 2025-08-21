@@ -92,7 +92,7 @@ namespace FoodService.API.Controllers
         /// Deletes a product by its ID.
         /// </summary>
         /// <param name="productId">The ID of the product to delete.</param>
-        [HttpDelete]
+        [HttpDelete("{productId}")]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         public async Task<IActionResult> DeleteProduct(Guid productId)

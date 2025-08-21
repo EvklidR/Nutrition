@@ -1,8 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { NgIf, NgFor, CommonModule } from "@angular/common"
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { UserService } from '../../services/user-service/user.service';
@@ -11,14 +10,12 @@ import { MealDetailsModalComponent } from '../modals/meal-details-modal/meal-det
 import { DayResultService } from '../../services/food-service/day-result.service';
 import { ProfileService } from '../../services/user-service/profile.service';
 import { MealService } from '../../services/food-service/meal.service';
-import { DayResultModel } from '../../models/food-service/Responces/day-result.model';
-import { ProfileModel } from '../../models/user-service/Responces/profile-responce.model';
-import { DailyNeedsResponse } from '../../models/user-service/Responces/daily-needs.model';
-import { UpdateProfileModel } from '../../models/user-service/Requests/update-profile.model';
+import { DailyNeedsResponse } from '../../models/user-service/Responses/daily-needs.model';
 import { UpdateDayResultModel } from '../../models/food-service/Requests/update-day-result.model';
 import { CreateMealComponent } from '../modals/create-meal-modal/create-meal.component';
-import { BriefMealModel } from '../../models/food-service/Responces/brief-meal.model';
 import { ConfirmDialogComponent } from '../modals/confirm-dialog-modal/confirm-dialog.component';
+import { DayResultResponse } from '../../models/food-service/Responses/day-result.model';
+import { ShortProfileResponse } from '../../models/user-service/Responses/short-profile-response.model';
 
 
 @Component({
@@ -35,9 +32,10 @@ import { ConfirmDialogComponent } from '../modals/confirm-dialog-modal/confirm-d
 })
 export class HomeComponent implements OnInit {
   faTrash = faTrash;
+  faEdit = faEdit;
 
-  dayResult!: DayResultModel | null;
-  profile!: ProfileModel | null;
+  dayResult!: DayResultResponse | null;
+  profile!: ShortProfileResponse | null;
   dayResultId!: string | null;
 
   dailyNeeads!: DailyNeedsResponse;
@@ -50,8 +48,6 @@ export class HomeComponent implements OnInit {
   };
 
   showAddMealModal: boolean = false
-
-  private profileSubscription!: Subscription;
 
   constructor(
     private userService: UserService,
@@ -68,7 +64,7 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    this.profileSubscription = this.profileService.currentProfile$.subscribe((profile) => {
+    this.profileService.currentProfile$.subscribe((profile) => {
       this.profile = profile;
       console.log("инициализация хоум, текущий профиль:", profile)
       if (profile) {
@@ -146,16 +142,17 @@ export class HomeComponent implements OnInit {
     return total !== 0 ? (current / total) * 100 : 0;
   }
 
-  openMealDetails(meal: BriefMealModel): void {
+  openMealDetails(mealId: string): void {
     const dialogRef = this.dialog.open(MealDetailsModalComponent, {
       width: '900px',
       maxWidth: '900px',
       minWidth: '830px',
       height: '500px',
-      data: { mealId: meal.id, dayId: this.dayResultId }
+      data: { mealId: mealId, dayId: this.dayResultId }
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      this.getOrCreateDayResult()
       console.log('Диалог закрыт');
     });
   }
@@ -193,31 +190,16 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  adjustWaterGoal(action: 'increase' | 'decrease'): void {
+  adjustWaterGoal(number: number): void {
     if (!this.profile) {
       console.error('Profile is not defined');
       return;
     }
 
-    if (action === 'increase') {
-      this.profile.desiredGlassesOfWater++;
-    } else if (action === 'decrease' && this.profile.desiredGlassesOfWater > 0) {
-      this.profile.desiredGlassesOfWater--;
-    }
-
-    let profile: UpdateProfileModel =
-    {
-      id: this.profile.id,
-      name: this.profile.name,
-      weight: this.profile.weight,
-      height: this.profile.height,
-      activityLevel: this.profile.activityLevel,
-      desiredGlassesOfWater: this.profile.desiredGlassesOfWater
-    }
-
-    this.profileService.updateProfile(profile).subscribe({
+    this.profileService.changeDesiredGlassesOfWater(number, this.profile.id).subscribe({
       next: () => {
-        console.log('Water goal updated successfully:', profile);
+        this.dailyNeeads.desiredGlassesOfWater = number
+        console.log('Water goal updated successfully:', this.profile!.id);
       },
       error: (error) => {
         console.error('Error updating water goal:', error);

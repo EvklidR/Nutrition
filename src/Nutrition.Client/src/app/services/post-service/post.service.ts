@@ -11,7 +11,8 @@ import { PostsModel } from '../../models/post-service/Responses/posts.model'
   providedIn: 'root'
 })
 export class PostService {
-  private readonly baseUrl: string = 'https://localhost/post_service/posts';
+  public readonly baseUrl: string = 'https://localhost/post_service';
+  private readonly serviceUrl = this.baseUrl + "/posts"
 
   constructor(private http: HttpClient) { }
 
@@ -22,15 +23,15 @@ export class PostService {
       params += `&words=${words.join(',')}`;
     }
 
-    return this.http.get<PostsModel>(`${this.baseUrl}${params}`);
+    return this.http.get<PostsModel>(`${this.serviceUrl}${params}`);
   }
 
   getPost(postId: string): Observable<PostModel> {
-    return this.http.get<PostModel>(`${this.baseUrl}/${postId}`);
+    return this.http.get<PostModel>(`${this.serviceUrl}/${postId}`);
   }
 
   getUserPosts(page: number = 1, size: number = 10): Observable<PostsModel> {
-    return this.http.get<PostsModel>(`${this.baseUrl}/by_user?page=${page}&size=${size}`);
+    return this.http.get<PostsModel>(`${this.serviceUrl}/by_user?page=${page}&size=${size}`);
   }
 
   createPost(postData: CreatePostModel): Observable<PostModel> {
@@ -46,12 +47,12 @@ export class PostService {
       formData.append('files', file);
     });
 
-    return this.http.post<PostModel>(`${this.baseUrl}`, formData);
+    return this.http.post<PostModel>(`${this.serviceUrl}`, formData);
   }
 
 
   deletePost(postId: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${postId}`);
+    return this.http.delete<void>(`${this.serviceUrl}/${postId}`);
   }
 
   updatePost(postData: UpdatePostModel): Observable<void> {
@@ -68,14 +69,16 @@ export class PostService {
       formData.append('newFiles', file);
     });
 
-    return this.http.put<void>(`${this.baseUrl}`, formData);
+    return this.http.put<void>(`${this.serviceUrl}`, formData);
   }
 
   likePost(postId: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/${postId}/like`, {});
+    return this.http.post<void>(`${this.serviceUrl}/${postId}/like`, {});
   }
 
   getPostImage(fileName: string): Observable<Blob> {
-    return this.http.get(`${this.baseUrl}/${fileName}`, { responseType: 'blob' });
+    const params = { fileName };
+    return this.http.get(`${this.serviceUrl}/get-image`, { params, responseType: 'blob' });
   }
+
 }

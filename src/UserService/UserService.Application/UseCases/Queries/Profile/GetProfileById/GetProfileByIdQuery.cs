@@ -1,4 +1,4 @@
-﻿using UserService.Application.DTOs.Responces.Profile;
+﻿using UserService.Application.DTOs.Responses.Profile;
 
 namespace UserService.Application.UseCases.Queries;
 

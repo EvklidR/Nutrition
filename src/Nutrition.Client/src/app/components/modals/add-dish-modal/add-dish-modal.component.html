@@ -53,7 +53,7 @@
             <tr *ngFor="let ingredient of selectedProducts">
               <td>{{ getProductName(ingredient.productId) }}</td>
               <td>
-                <input type="number" [(ngModel)]="ingredient.weight" />
+                <input type="number" [(ngModel)]="ingredient.weightInRecipe" />
               </td>
               <td>
                 <button class="delete-button" (click)="removeProduct(ingredient.productId)">&#10006;</button>

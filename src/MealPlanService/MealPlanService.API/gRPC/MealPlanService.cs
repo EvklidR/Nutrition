@@ -23,15 +23,15 @@ namespace MealPlanService.API.gRPC
                 BodyWeight = request.BodyWeight,
                 DailyKcal = request.DailyKcal
             };
-            var responce = new CalculateKcalAndMacrosResponse();
+            var response = new CalculateKcalAndMacrosResponse();
             try
             {
                 var resp = await _userPlanService.CalculateDailyNutrientsAsync(requestForCalc);
 
-                responce.Calories = resp.Calories;
-                responce.Proteins = resp.Proteins;
-                responce.Fats = resp.Fats;
-                responce.Carbohydrates = resp.Carbohydrates;
+                response.Calories = resp.Calories;
+                response.Proteins = resp.Proteins;
+                response.Fats = resp.Fats;
+                response.Carbohydrates = resp.Carbohydrates;
             }
             catch (NotFound ex)
             {
@@ -41,7 +41,7 @@ namespace MealPlanService.API.gRPC
             {
                 throw new RpcException(new Status(StatusCode.Unknown, ex.Message));
             }
-            return responce;
+            return response;
         }
     }
 }

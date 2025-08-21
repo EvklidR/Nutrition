@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserService.API.Filters;
 using UserService.Application.DTOs.Requests.Profile;
-using UserService.Application.DTOs.Responces.Profile;
 using UserService.Application.DTOs.Responses.Profile;
 using UserService.Application.UseCases.Commands;
 using UserService.Application.UseCases.Commands.Profile.IncreaseDesiredGlassesOfWater;

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using MediatR;
 using Newtonsoft.Json;
-using UserService.Application.DTOs.Responces.Profile;
+using UserService.Application.DTOs.Responses.Profile;
 using UserService.Contracts.Broker;
 using UserService.Contracts.Broker.Enums;
 using UserService.Contracts.DataAccess.Repositories;

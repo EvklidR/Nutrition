@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { MealPlanModel } from '../../models/meal-plan-service/Models/meal-plan.model';
 import { CreateMealPlanModel } from '../../models/meal-plan-service/Requests/create-meal-plan.model';
-import { MealPlansResponseModel } from '../../models/meal-plan-service/Responces/meal-plans-response.model';
+import { MealPlansResponseModel } from '../../models/meal-plan-service/Responses/meal-plans-response.model';
 import { MealPlanType } from '../../models/meal-plan-service/Enums/meal-plan-type.enum'
 
 @Injectable({

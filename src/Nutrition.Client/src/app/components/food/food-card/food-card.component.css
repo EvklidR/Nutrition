@@ -1,0 +1,61 @@
+.food-card {
+  flex: 1;
+  min-width: 200px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #E7FFCA;
+  text-align: left;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+  .food-card:hover {
+    transform: scale(1.02);
+  }
+
+  .food-card h3 {
+    margin: 0;
+    font-size: 20px;
+  }
+
+  .food-card p {
+    margin: 5px 0;
+    font-size: 14px;
+  }
+
+.food-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.actions {
+  font-size: 14px;
+  display: flex;
+  gap: 5px;
+}
+
+.edit-icon {
+  color: #555;
+  cursor: pointer;
+}
+
+  .edit-icon:hover {
+    color: #35792A;
+  }
+
+.delete-icon {
+  color: #444;
+  cursor: pointer;
+}
+
+  .delete-icon:hover {
+    color: #d9534f;
+  }
+
+:host {
+  display: contents;
+}

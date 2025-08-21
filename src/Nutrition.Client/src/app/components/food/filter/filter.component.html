@@ -1,0 +1,29 @@
+<input type="text"
+       class="filter-input"
+       placeholder="Поиск..."
+       [(ngModel)]="params!.name"
+       (ngModelChange)="onFilterChange()" />
+
+<div class="controls">
+  <div class="sorting">
+    <label>Сортировка:</label>
+    <select [(ngModel)]="params!.sortingCriteria" (change)="onFilterChange()">
+      <option [ngValue]="null">Без сортировки</option>
+      <option [ngValue]="0">Калории</option>
+      <option [ngValue]="1">Белки</option>
+      <option [ngValue]="2">Жиры</option>
+      <option [ngValue]="3">Углеводы</option>
+    </select>
+
+    <label>
+      <input type="checkbox" [(ngModel)]="sortAsc" (change)="onFilterChange()"> По возрастанию
+    </label>
+  </div>
+
+  <div class="pagination">
+    <label>Страница:</label>
+    <button (click)="changePage(-1)" [disabled]="currentPage() === 1">←</button>
+    <span>{{ currentPage() }} / {{ totalPages() }}</span>
+    <button (click)="changePage(1)" [disabled]="!hasNextPage()">→</button>
+  </div>
+</div>

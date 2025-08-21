@@ -1,6 +1,6 @@
 <div class="modal-content">
 
-  <label class="meal-name">Название приема пищи <input [(ngModel)]="mealToCreate.name"></label>
+  <label class="meal-name">Название приема пищи <input [(ngModel)]="name"></label>
 
   <div class="products-wrapper">
 
@@ -60,6 +60,6 @@
 
   </div>
   <div class="modal-footer">
-    <button class="add-meal-btn" (click)="addMeal()">Добавить прием пищи</button>
+    <button class="add-meal-btn" (click)="save()">{{ isEditMode ? 'Сохранить изменения' : 'Добавить прием пищи' }}</button>
   </div>
 </div>

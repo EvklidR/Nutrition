@@ -51,7 +51,6 @@ export class CreateProfileComponent {
     }
 
     const newProfile: CreateProfileModel = {
-      userId: null,
       name: this.profileName,
       weight: this.weight,
       height: this.height,

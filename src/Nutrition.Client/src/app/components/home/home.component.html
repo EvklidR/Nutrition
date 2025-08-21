@@ -3,11 +3,11 @@
 
     <div class="water-info">
       <div class="water-info-buttons">
-        <button class="change-water-goal" (click)="adjustWaterGoal('increase')">Увеличить норму</button>
-        <button class="change-water-goal" (click)="adjustWaterGoal('decrease')">Уменьшить норму</button>
+        <button class="change-water-goal" (click)="adjustWaterGoal(dailyNeeads.desiredGlassesOfWater + 1)">Увеличить норму</button>
+        <button class="change-water-goal" (click)="adjustWaterGoal(dailyNeeads.desiredGlassesOfWater - 1)">Уменьшить норму</button>
       </div>
       <p>Выпито стаканов воды:</p>
-      <p>{{ dayResult?.glassesOfWater }} / {{ profile?.desiredGlassesOfWater }}</p>
+      <p>{{ dayResult?.glassesOfWater }} / {{ dailyNeeads.desiredGlassesOfWater }}</p>
       <button class="drink-water" (click)="drinkWater()">Стакан выпит</button>
     </div>
 
@@ -62,7 +62,7 @@
   <div *ngIf="dayResult" class="day-result">
     <ul *ngIf="dayResult.meals.length > 0">
       <li *ngFor="let meal of dayResult.meals">
-        <div class="meal-container" (click)="openMealDetails(meal)">
+        <div class="meal-container" (click)="openMealDetails(meal.id)">
           <div class="actions">
             <fa-icon [icon]="faTrash" (click)="openDeleteConfirmation(meal.id, $event)" class="delete-icon"></fa-icon>
           </div>

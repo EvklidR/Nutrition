@@ -1,6 +1,6 @@
 ﻿using UserService.Domain.Enums;
 
-namespace UserService.Application.DTOs.Responces.Profile;
+namespace UserService.Application.DTOs.Responses.Profile;
 
 public class ProfileResponse
 {

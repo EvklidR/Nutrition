@@ -1,0 +1,29 @@
+.header-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.switch-button {
+  padding: 10px 20px;
+  border: solid 2px #367f39;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  font-size: 16px;
+  transition: background-color 0.2s;
+  margin: 30px 30px 10px;
+  width: 200px;
+  color: #367f39;
+}
+
+  .switch-button.active {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+  }
+
+  .switch-button:hover {
+    background-color: #367f39;
+    color: white;
+  }

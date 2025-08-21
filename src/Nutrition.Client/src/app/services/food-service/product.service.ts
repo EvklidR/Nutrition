@@ -5,9 +5,9 @@ import { Observable } from 'rxjs';
 import { CreateProductModel } from '../../models/food-service/Requests/create-product.model';
 import { UpdateProductModel } from '../../models/food-service/Requests/update-product.model';
 import { GetFoodRequestParameters } from '../../models/food-service/Requests/get-food-request-parameters.model';
-import { ProductResponseModel } from '../../models/food-service/Responces/product.model';
-import { ProductsResponseModel } from '../../models/food-service/Responces/products.model';
-import { ProductResponseFromAPIModel } from '../../models/food-service/Responces/product-from-api.model';
+import { ProductsResponse } from '../../models/food-service/Responses/products.model';
+import { ProductResponseFromAPI } from '../../models/food-service/Responses/product-from-api.model';
+import { ProductResponse } from '../../models/food-service/Responses/product.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class ProductService {
 
   constructor(private http: HttpClient) { }
 
-  getProducts(paramsObj: GetFoodRequestParameters): Observable<ProductsResponseModel> {
+  getProducts(paramsObj: GetFoodRequestParameters): Observable<ProductsResponse> {
     let params = new HttpParams();
 
     for (const key in paramsObj) {
@@ -27,15 +27,15 @@ export class ProductService {
       }
     }
 
-    return this.http.get<ProductsResponseModel>(this.baseUrl, { params });
+    return this.http.get<ProductsResponse>(this.baseUrl, { params });
   }
 
-  searchProductByName(name: string): Observable<ProductResponseFromAPIModel[]> {
-    return this.http.get<ProductResponseFromAPIModel[]>(`${this.baseUrl}/search-product/${encodeURIComponent(name)}`);
+  searchProductByName(name: string): Observable<ProductResponseFromAPI[]> {
+    return this.http.get<ProductResponseFromAPI[]>(`${this.baseUrl}/search-product/${encodeURIComponent(name)}`);
   }
 
-  createProduct(productData: CreateProductModel): Observable<ProductResponseModel> {
-    return this.http.post<ProductResponseModel>(this.baseUrl, productData);
+  createProduct(productData: CreateProductModel): Observable<ProductResponse> {
+    return this.http.post<ProductResponse>(this.baseUrl, productData);
   }
 
   updateProduct(productData: UpdateProductModel): Observable<void> {
@@ -43,6 +43,6 @@ export class ProductService {
   }
 
   deleteProduct(productId: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}?productId=${productId}`);
+    return this.http.delete<void>(`${this.baseUrl}/${productId}`);
   }
 }

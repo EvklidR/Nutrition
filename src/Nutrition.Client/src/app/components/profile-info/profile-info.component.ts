@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { ProfileModel } from '../../models/user-service/Responces/profile-responce.model';
 import { ActivityLevel } from '../../models/user-service/Enums/activity-level.enum';
 import { ProfileService } from '../../services/user-service/profile.service';
 import { CommonModule } from '@angular/common';
@@ -13,6 +11,7 @@ import { Gender } from '../../models/user-service/Enums/gender.enum';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../modals/confirm-dialog-modal/confirm-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ProfileResponse } from '../../models/user-service/Responses/profile-response.model';
 
 @Component({
   selector: 'app-profile-info',
@@ -25,8 +24,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./profile-info.component.css']
 })
 export class ProfileInfoComponent implements OnInit {
-  profile!: ProfileModel | null;
-  private profileSubscription!: Subscription;
+  profile!: ProfileResponse | null;
 
   currentWeight: number = 0;
   currentHeight: number = 0;
@@ -51,14 +49,20 @@ export class ProfileInfoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.profileSubscription = this.profileService.currentProfile$.subscribe((profile) => {
-      this.profile = profile;
+    this.profileService.currentProfile$.subscribe((profile) => {
 
       if (profile) {
-        this.currentWeight = profile.weight || 0;
-        this.currentHeight = profile.height || 0;
-        this.activityLevel = profile.activityLevel;
-        this.calculateBMI();
+
+        this.profileService.getProfileById(profile!.id).subscribe(
+          (fullProfile) => {
+            this.profile = fullProfile
+            this.currentWeight = this.profile!.weight || 0;
+            this.currentHeight = this.profile!.height || 0;
+            this.activityLevel = this.profile!.activityLevel;
+            this.calculateBMI();
+          }
+        )
+
       }
     });
   }
@@ -74,32 +78,24 @@ export class ProfileInfoComponent implements OnInit {
       const updatedProfile: UpdateProfileModel = {
         id: this.profile.id,
         name: this.profile.name,
-        desiredGlassesOfWater: this.profile.desiredGlassesOfWater,
         weight: this.currentWeight,
         height: this.currentHeight,
         activityLevel: Number(this.activityLevel)
       }
 
-      this.profileService.updateProfile(updatedProfile).subscribe((updatedProfile) => {
+      this.profileService.updateProfile(updatedProfile).subscribe(
+        () => {
         console.log("Обновлено");
         this.sendPopUpNotification("Информация успешно обновлена!")
-        const dayResult = this.dayResultService.getOrCreateDayResult(this.profile!.id).subscribe({
-          next: (currentDayResult) => {
-            const updateDayResult: UpdateDayResultModel = {
-              id: currentDayResult.id,
-              glassesOfWater: currentDayResult.glassesOfWater,
-              weight: this.currentWeight
+          this.profileService.getProfileById(this.profile!.id).subscribe(
+            (fullProfile) => {
+              this.profile = fullProfile
+              this.currentWeight = this.profile!.weight || 0;
+              this.currentHeight = this.profile!.height || 0;
+              this.activityLevel = this.profile!.activityLevel;
+              this.calculateBMI();
             }
-
-            this.dayResultService.updateDayResult(updateDayResult).subscribe({
-              next: () => {
-                console.log("обновился результат дня")
-              }
-            })
-          }
-        })
-
-        this.calculateBMI();
+          )
       });
     }
   }

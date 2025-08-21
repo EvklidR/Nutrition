@@ -1,19 +1,20 @@
 ﻿using AutoMapper;
-using MealPlanService.BusinessLogic.Exceptions;
 using MealPlanService.BusinessLogic.DTOs;
+using MealPlanService.BusinessLogic.Exceptions;
 using MealPlanService.BusinessLogic.Models;
 using MealPlanService.Core.Entities;
 using MealPlanService.Core.Enums;
-using MealPlanService.Infrastructure.Repositories.Interfaces;
-using MealPlanService.Infrastructure.Services.Interfaces;
 using MealPlanService.Infrastructure.Enums;
 using MealPlanService.Infrastructure.RabbitMQService;
+using MealPlanService.Infrastructure.Repositories.Interfaces;
+using MealPlanService.Infrastructure.Services.Interfaces;
+using System.Numerics;
 
 namespace MealPlanService.BusinessLogic.Services
 {
     public class ProfilePlanService
     {
-        private readonly IProfileMealPlanRepository _usersMealPlanRepository;
+        private readonly IProfileMealPlanRepository _profileMealPlanRepository;
         private readonly IMealPlanRepository _mealPlanRepository;
 
         private readonly MealPlanService _mealPlanService;
@@ -24,14 +25,14 @@ namespace MealPlanService.BusinessLogic.Services
         private readonly IMapper _mapper;
 
         public ProfilePlanService(
-            IProfileMealPlanRepository usersMealPlanRepository,
+            IProfileMealPlanRepository profileMealPlanRepository,
             IMealPlanRepository mealPlanRepository,
             MealPlanService mealPlanService,
             IUserService userService,
             IBrokerService brokerService,
             IMapper mapper)
         {
-            _usersMealPlanRepository = usersMealPlanRepository;
+            _profileMealPlanRepository = profileMealPlanRepository;
             _mealPlanRepository = mealPlanRepository;
             _mealPlanService = mealPlanService;
             _userService = userService;
@@ -57,14 +58,14 @@ namespace MealPlanService.BusinessLogic.Services
                     throw new NotFound("Meal plan not found");
                 }
 
-                var userPlan = await _usersMealPlanRepository.GetActiveProfilePlan(profileMealPlanDTO.ProfileId);
+                var userPlan = await _profileMealPlanRepository.GetActiveProfilePlan(profileMealPlanDTO.ProfileId);
 
                 if (userPlan != null)
                 {
                     userPlan.EndDate = DateOnly.FromDateTime(DateTime.Now);
                     userPlan.IsActive = false;
 
-                    await _usersMealPlanRepository.UpdateAsync(userPlan);
+                    await _profileMealPlanRepository.UpdateAsync(userPlan);
                 }
                 else
                 {
@@ -73,7 +74,7 @@ namespace MealPlanService.BusinessLogic.Services
 
                 var usersMealPlan = _mapper.Map<ProfileMealPlan>(profileMealPlanDTO);
 
-                await _usersMealPlanRepository.CreateAsync(usersMealPlan);
+                await _profileMealPlanRepository.CreateAsync(usersMealPlan);
 
                 return usersMealPlan;
             }
@@ -83,6 +84,41 @@ namespace MealPlanService.BusinessLogic.Services
             }
         }
 
+        public async Task<ProfileMealPlanWithDetailsDto?> GetActiveProfilePlanAsync(string userId, string profileId)
+        {
+            if (!await _userService.CheckProfileBelonging(userId, profileId))
+            {
+                throw new BadRequest("You don't have access to this profile");
+            }
+
+            var profilePlan = await _profileMealPlanRepository.GetActiveProfilePlan(profileId);
+
+            if (profilePlan == null)
+            {
+                return null;
+            }
+
+            var mealPlan = await _mealPlanRepository.GetByIdAsync(profilePlan.MealPlanId);
+
+            if (mealPlan == null)
+            {
+                throw new NotFound("Meal plan not found");
+            }
+
+            return new ProfileMealPlanWithDetailsDto
+            {
+                Id = profilePlan.Id,
+                ProfileId = profilePlan.ProfileId,
+                MealPlanId = profilePlan.MealPlanId,
+                IsActive = profilePlan.IsActive,
+                StartDate = profilePlan.StartDate,
+                EndDate = profilePlan.EndDate,
+                MealPlanName = mealPlan.Name,
+                MealPlanDescription = mealPlan.Description
+            };
+        }
+
+
         public async Task<List<ProfileMealPlanWithDetailsDto>> GetProfilePlansAsync(string userId, string profileId)
         {
             if (!await _userService.CheckProfileBelonging(userId, profileId))
@@ -90,7 +126,7 @@ namespace MealPlanService.BusinessLogic.Services
                 throw new BadRequest("You don't have access to this profile");
             }
 
-            var profilePlans = await _usersMealPlanRepository.GetAllAsync(profileId);
+            var profilePlans = await _profileMealPlanRepository.GetAllAsync(profileId);
 
             if (profilePlans == null || !profilePlans.Any())
             {
@@ -125,11 +161,11 @@ namespace MealPlanService.BusinessLogic.Services
 
         public async Task DeleteProfilePlansAsync(string profileId)
         {
-            var plans = await _usersMealPlanRepository.GetAllAsync(profileId);
+            var plans = await _profileMealPlanRepository.GetAllAsync(profileId);
 
             foreach (var plan in plans)
             {
-                await _usersMealPlanRepository.DeleteAsync(plan.Id);
+                await _profileMealPlanRepository.DeleteAsync(plan.Id);
             }
         }
 
@@ -137,7 +173,7 @@ namespace MealPlanService.BusinessLogic.Services
         {
             if (await _userService.CheckProfileBelonging(userId, profileId))
             {
-                var userPlan = await _usersMealPlanRepository.GetActiveProfilePlan(profileId);
+                var userPlan = await _profileMealPlanRepository.GetActiveProfilePlan(profileId);
 
                 if (userPlan == null)
                 {
@@ -147,7 +183,7 @@ namespace MealPlanService.BusinessLogic.Services
                 userPlan.EndDate = DateOnly.FromDateTime(DateTime.Now);
                 userPlan.IsActive = false;
 
-                await _usersMealPlanRepository.UpdateAsync(userPlan);
+                await _profileMealPlanRepository.UpdateAsync(userPlan);
 
                 await _brokerService.PublishMessageAsync(profileId, QueueName.MealPlanRevoked, exchangeName: null);
             }

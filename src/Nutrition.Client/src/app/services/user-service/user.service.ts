@@ -9,7 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 
 import { throwError } from 'rxjs';
-import { AuthenticatedResponse } from '../../models/user-service/Responces/authenticated-response.model';
+import { AuthenticatedResponse } from '../../models/user-service/Responses/authenticated-response.model';
 import { RefreshTokenModel } from '../../models/user-service/Requests/refresh-token.model';
 import { RevokeTokenModel } from '../../models/user-service/Requests/revoke-token.model';
 import { SendConfirmationToEmailModel } from '../../models/user-service/Requests/send-confirmation.model';

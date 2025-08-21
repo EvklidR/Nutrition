@@ -1,0 +1,14 @@
+<div class="header-buttons">
+  <button class="switch-button"
+          [class.active]="activeTab === 'products'"
+          (click)="switch('products')">
+    Продукты
+  </button>
+  <button class="switch-button"
+          [class.active]="activeTab === 'dishes'"
+          (click)="switch('dishes')">
+    Блюда
+  </button>
+</div>
+
+<router-outlet></router-outlet>

@@ -71,7 +71,7 @@ namespace FoodService.API.Controllers
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(typeof(CalculatedRecipeResponse), StatusCodes.Status201Created)]
-        public async Task<ActionResult<CalculatedRecipeResponse>> CreateDish([FromForm] CreateRecipeDTO createRecipeDTO)
+        public async Task<ActionResult<CalculatedRecipeResponse>> CreateRecipe([FromForm] CreateRecipeDTO createRecipeDTO)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
@@ -88,7 +88,7 @@ namespace FoodService.API.Controllers
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateDish([FromForm] UpdateRecipeDTO updateRecipeDTO)
+        public async Task<IActionResult> UpdateRecipe([FromForm] UpdateRecipeDTO updateRecipeDTO)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
