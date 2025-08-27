@@ -12,23 +12,6 @@
   gap: 10px;
 }
 
-.switch-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  background-color: #4CAF50;
-  color: white;
-  font-size: 16px;
-  transition: background-color 0.3s;
-  width: 200px;
-  margin: 25px 25px 10px;
-}
-
-  .switch-button:hover {
-    background-color: #45a049;
-  }
-
 .food-btn {
   color: green;
   background-color: transparent;

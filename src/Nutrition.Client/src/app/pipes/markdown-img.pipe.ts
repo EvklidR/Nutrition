@@ -24,10 +24,10 @@ export class MarkdownImgServicePipe implements PipeTransform {
       const promise = firstValueFrom(this.postService.getPostImage(url))
         .then(blob => {
           const blobUrl = URL.createObjectURL(blob);
-          result = result.replace(full, `<img src="${blobUrl}" alt="${alt}">`);
+          result = result.replace(full, `</br><img src="${blobUrl}" alt="${alt}" width="300px">`);
         })
         .catch(() => {
-          result = result.replace(full, `<img alt="${alt}">`);
+          result = result.replace(full, `</br><img alt="${alt}">`);
         });
 
       promises.push(promise);

@@ -26,7 +26,7 @@
   <div class="posts-container" *ngIf="!isLoading && posts.length > 0">
     <div class="post-card" *ngFor="let post of posts" (click)="navigateToPost(post.id)">
       <h3>{{ post.title }}</h3>
-      <markdown [data]="post.text" class="post-text"></markdown>
+      <markdown [data]="post.text | markdownImgService | async" class="post-text"></markdown>
       <div class="post-footer">
         <div class="icon-group">
           <fa-icon [icon]="faComment"></fa-icon>

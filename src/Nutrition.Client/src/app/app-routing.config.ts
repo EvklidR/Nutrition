@@ -15,14 +15,16 @@ import { tokenInterceptor } from "./interceptors/token.interceptor";
 import { ProfileInfoComponent } from "./components/profile-info/profile-info.component";
 import { MealPlansComponent } from "./components/meal-plans/meal-plans.component";
 import { CreateMealPlanComponent } from "./components/create-meal-plan/create-meal-plan.component";
-import { StatisticsComponent } from "./components/statistics/statistics.component";
-import { FoodStatisticsComponent } from "./components/food-statistics/food-statistics.component";
+import { BodyStatisticsComponent } from "./components/statistics/body-statistics/body-statistics.component";
+import { FoodStatisticsComponent } from "./components/statistics/food-statistics/food-statistics.component";
 import { PostsComponent } from "./components/posts/posts.component";
 import { PostDetailsComponent } from "./components/post-details/post-details.component";
 import { CreatePostComponent } from "./components/create-post/create-post.component";
 import { FoodSwitcherComponent } from "./components/food/food-switcher/food-switcher.component";
 import { ProductsComponent } from "./components/food/products/products.component";
 import { DishesComponent } from "./components/food/dishes/dishes.component";
+import { StatisticsSwitcherComponent } from "./components/statistics/statistics-switcher/statistics-switcher.component";
+import { HistorySwitcherComponent } from "./components/history/history-switcher/history-switcher.component";
 
 const appRoutes: Routes = [
   { path: "login", component: LoginComponent },
@@ -48,8 +50,27 @@ const appRoutes: Routes = [
       { path: 'profile-info', component: ProfileInfoComponent, canActivate: [ProfileGuard] },
       { path: 'meal-plans', component: MealPlansComponent, canActivate: [ProfileGuard] },
       { path: 'create-meal-plan', component: CreateMealPlanComponent },
-      { path: 'statistics', component: StatisticsComponent, canActivate: [ProfileGuard] },
-      { path: 'food-statistics', component: FoodStatisticsComponent, canActivate: [ProfileGuard] },
+      { path: 'meal-plan/edit/:id', component: CreateMealPlanComponent },
+      {
+        path: 'statistics',
+        component: StatisticsSwitcherComponent,
+        canActivate: [ProfileGuard],
+        children: [
+          { path: 'body', component: BodyStatisticsComponent },
+          { path: 'food', component: FoodStatisticsComponent },
+          { path: '', redirectTo: 'body', pathMatch: 'full' }
+        ]
+      },
+      {
+        path: 'history',
+        component: HistorySwitcherComponent,
+        canActivate: [ProfileGuard],
+        children: [
+          { path: 'days', component: BodyStatisticsComponent },
+          { path: 'meal-plans', component: FoodStatisticsComponent },
+          { path: '', redirectTo: 'days', pathMatch: 'full' }
+        ]
+      },
       { path: 'posts', component: PostsComponent },
       { path: 'post-details/:id', component: PostDetailsComponent },
       { path: 'create-post', component: CreatePostComponent },

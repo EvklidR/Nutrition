@@ -53,7 +53,7 @@ namespace FoodService.API.Controllers
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
         [ProducesResponseType(204)]
-        public async Task<IActionResult> Update([FromBody] UpdateDayResultDTO dto)
+        public async Task<IActionResult> UpdateDayResult([FromBody] UpdateDayResultDTO dto)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
@@ -67,20 +67,20 @@ namespace FoodService.API.Controllers
         /// </summary>
         /// <param name="profileId">The profile ID.</param>
         /// <param name="periodParameters">The start and end date of the period.</param>
-        /// <param name="paginatedParameters">Page number and size.</param>
+        /// <param name="paginationParameters">Page number and size.</param>
         /// <returns>A list of day results.</returns>
         [HttpGet("{profileId}")]
         [Authorize]
         [ServiceFilter(typeof(UserIdFilter))]
-        [ProducesResponseType(typeof(IEnumerable<DayResultResponse>), 200)]
-        public async Task<ActionResult<IEnumerable<DayResultResponse>>> GetDayResults(
+        [ProducesResponseType(typeof(DayResultsResponse), 200)]
+        public async Task<ActionResult<DayResultsResponse>> GetDayResults(
             Guid profileId,
-            [FromQuery] PeriodParameters? periodParameters,
-            [FromQuery] PaginatedParameters? paginatedParameters)
+            [FromQuery] PeriodParameters? periodParameters = null,
+            [FromQuery] PaginationParameters? paginationParameters = null)
         {
             var userId = (Guid)HttpContext.Items["UserId"]!;
 
-            var results = await _mediator.Send(new GetAllDayResultsQuery(profileId, userId, paginatedParameters, periodParameters));
+            var results = await _mediator.Send(new GetAllDayResultsQuery(profileId, userId, paginationParameters, periodParameters));
 
             return Ok(results);
         }

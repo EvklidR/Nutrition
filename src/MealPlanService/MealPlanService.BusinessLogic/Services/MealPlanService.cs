@@ -42,6 +42,18 @@ namespace MealPlanService.BusinessLogic.Services
             return mealPlansResponse;
         }
 
+        public async Task<MealPlan> GetMealPlanAsync(string id)
+        {
+            var mealPlan = await _mealPlanRepository.GetByIdAsync(id);
+
+            if (mealPlan == null)
+            {
+                throw new NotFound("Meal plan not found");
+            }
+
+            return mealPlan;
+        }
+
         public async Task<MealPlan> CreateMealPlanAsync(CreateMealPlanDTO mealPlanDto)
         {
             var mealPlan = _mapper.Map<MealPlan>(mealPlanDto);

@@ -5,5 +5,5 @@ namespace FoodService.Domain.Repositories.Models;
 public record GetFoodRequestParameters(
     string? Name,
     bool? SortAsc,
-    PaginatedParameters? PaginationParameters,
+    PaginationParameters? PaginationParameters,
     SortingCriteria SortingCriteria = SortingCriteria.Calories);

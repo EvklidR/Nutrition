@@ -2,6 +2,7 @@
 
   <div class="post-header">
     <h1 class="post-title">{{ post.title }}</h1>
+
     <div class="post-actions" *ngIf="post.isOwner">
       <button class="menu-button" (click)="togglePostMenu()">⋮</button>
       <ul class="dropdown-menu" *ngIf="showPostMenu">
@@ -16,10 +17,16 @@
     <span class="date">{{ post.creationDate | date: 'dd.MM.yyyy HH:mm' }}</span>
   </div>
 
+  <!-- Ключевые слова -->
+  <div class="post-keywords" *ngIf="post.keyWords?.length">
+    <span class="keyword" *ngFor="let kw of post.keyWords">
+      {{ kw }}
+    </span>
+  </div>
+
   <div class="post-text" *ngIf="post">
     <markdown [data]="post.text | markdownImgService | async"></markdown>
   </div>
-
 
   <div class="post-footer">
     <div class="icon-group like" (click)="likePost()">
@@ -44,7 +51,8 @@
       <div class="comment-header">
         <div class="author-info">
           <span class="author">{{ comment.ownerEmail }}</span> |
-          <span class="date">{{ comment.creationDate | date: 'dd.MM.yyyy HH:mm' }}</span>
+          <span class="date">{{ comment.creationDate | date: 'dd.MM.yyyy HH:mm' }}</span> |
+          <span *ngIf="comment.isEdited" class="isEdited"> (Edited)</span>
         </div>
         <div class="actions" *ngIf="comment.isOwner">
           <fa-icon [icon]="faEdit" (click)="editComment(comment)" class="edit-icon"></fa-icon>

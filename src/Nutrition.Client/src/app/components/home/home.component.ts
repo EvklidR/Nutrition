@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgIf, NgFor, CommonModule } from "@angular/common"
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faInfoCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { UserService } from '../../services/user-service/user.service';
@@ -16,6 +16,8 @@ import { CreateMealComponent } from '../modals/create-meal-modal/create-meal.com
 import { ConfirmDialogComponent } from '../modals/confirm-dialog-modal/confirm-dialog.component';
 import { DayResultResponse } from '../../models/food-service/Responses/day-result.model';
 import { ShortProfileResponse } from '../../models/user-service/Responses/short-profile-response.model';
+import { RecommendationModel } from '../../models/meal-plan-service/Models/recommendation.model';
+import { ProfilePlanService } from '../../services/meal-plan-service/profile-plan.service';
 
 
 @Component({
@@ -37,6 +39,7 @@ export class HomeComponent implements OnInit {
   dayResult!: DayResultResponse | null;
   profile!: ShortProfileResponse | null;
   dayResultId!: string | null;
+  recommendations: RecommendationModel[] = [];
 
   dailyNeeads!: DailyNeedsResponse;
 
@@ -49,11 +52,14 @@ export class HomeComponent implements OnInit {
 
   showAddMealModal: boolean = false
 
+  faInfoCircle = faInfoCircle;
+
   constructor(
     private userService: UserService,
     private router: Router,
     private dayResultService: DayResultService,
     private profileService: ProfileService,
+    private profilePlanService: ProfilePlanService,
     private mealService: MealService,
     private dialog: MatDialog,
   ) { }
@@ -72,6 +78,9 @@ export class HomeComponent implements OnInit {
           console.log(dailyNeeads)
           this.dailyNeeads = dailyNeeads;
           this.getOrCreateDayResult();
+        });
+        this.profilePlanService.getRecommendations(profile.id).subscribe(recs => {
+          this.recommendations = recs;
         });
       }
     });

@@ -38,6 +38,20 @@ namespace MealPlanService.API.Controllers
         }
 
         /// <summary>
+        /// Retrieves the meal plans by id.
+        /// </summary>
+        /// <param name="mealPlanId">Id of meal plan.</param>
+        [HttpGet("{mealPlanId}")]
+        [ProducesResponseType(typeof(MealPlan), StatusCodes.Status200OK)]
+        [Authorize]
+        public async Task<ActionResult<MealPlan>> GetMealPlans([FromRoute] string mealPlanId)
+        {
+            var response = await _mealPlanService.GetMealPlanAsync(mealPlanId);
+
+            return Ok(response);
+        }
+
+        /// <summary>
         /// Creates a new meal plan.
         /// </summary>
         /// <param name="mealPlanDto">Details of the meal plan to be created.</param>

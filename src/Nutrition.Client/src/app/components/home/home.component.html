@@ -1,6 +1,16 @@
 <div class="home-container">
   <div class="header">
 
+    <div *ngIf="recommendations?.length" class="recommendations-icon-wrapper">
+      <fa-icon [icon]="faInfoCircle" class="recommendations-icon"></fa-icon>
+      <div class="recommendations-popup" *ngIf="recommendations?.length">
+        <ul>
+          <li *ngFor="let rec of recommendations">{{ rec.text }}</li>
+        </ul>
+      </div>
+    </div>
+
+
     <div class="water-info">
       <div class="water-info-buttons">
         <button class="change-water-goal" (click)="adjustWaterGoal(dailyNeeads.desiredGlassesOfWater + 1)">Увеличить норму</button>

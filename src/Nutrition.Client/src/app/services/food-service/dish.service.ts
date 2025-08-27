@@ -29,7 +29,7 @@ export class DishService {
           for (const subKey in value) {
             const subValue = (value as any)[subKey];
             if (subValue !== null && subValue !== undefined) {
-              params = params.set(subKey, subValue.toString());
+              params = params.set(key + "." + subKey, subValue.toString());
             }
           }
         } else {

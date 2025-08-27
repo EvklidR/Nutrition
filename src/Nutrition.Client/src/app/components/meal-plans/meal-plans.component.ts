@@ -53,19 +53,19 @@ export class MealPlansComponent implements OnInit {
       this.userRole = 'admin'
     }
 
+    this.mealPlanCategories.forEach(category => {
+      this.currentPageByCategory[category] = 1;
+      this.loadMealPlansForCategory(category);
+    });
+
     this.profileService.currentProfile$.subscribe((profile) => {
       this.profile = profile;
 
       console.log(this.profile, this.userRole)
 
       if (profile) {
-        this.mealPlanCategories.forEach(category => {
-          this.currentPageByCategory[category] = 1;
-          this.loadMealPlansForCategory(category);
-        });
+        this.loadChoosenMealPlan()
       }
-
-      this.loadChoosenMealPlan()
     })
   }
 
@@ -142,10 +142,6 @@ export class MealPlansComponent implements OnInit {
     )
   }
 
-  navigateToTest(): void {
-    this.router.navigate(['/test']);
-  }
-
   navigateToMyPlans(): void {
     this.router.navigate(['/my-meal-plans']);
   }
@@ -160,6 +156,10 @@ export class MealPlansComponent implements OnInit {
 
   navigateToAddingPlan() {
     this.router.navigate(["/create-meal-plan"])
+  }
+
+  navigateToEditingPlan(id: string) {
+    this.router.navigate(['/meal-plan/edit', id]);
   }
 
   canselPlan() {

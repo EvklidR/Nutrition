@@ -1,0 +1,8 @@
+<div class="header-buttons">
+  <button *ngFor="let tab of tabs"
+          class="switch-button"
+          [class.active]="activeTab === tab.key"
+          (click)="onSwitch(tab.key)">
+    {{ tab.label }}
+  </button>
+</div>

@@ -2,11 +2,12 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { GetFoodRequestParameters } from '../../../models/food-service/Requests/get-food-request-parameters.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { PaginationComponent } from '../../pagination/pagination.component';
 
 @Component({
   selector: 'app-filter',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PaginationComponent],
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.css']
 })
@@ -24,14 +25,14 @@ export class FilterComponent implements OnInit {
       this.params = {
         name: null,
         sortAsc: null,
-        paginatedParameters: {
+        paginationParameters: {
           page: 1,
           pageSize: 10
         },
         sortingCriteria: null
       };
       this.paramsChange.emit(this.params);
-      this.reload.emit();
+      this.reload.emit()
     }
   }
 
@@ -45,26 +46,10 @@ export class FilterComponent implements OnInit {
     this.reload.emit();
   }
 
-  changePage(offset: number) {
-    if (!this.params!.paginatedParameters?.page) {
-      this.params!.paginatedParameters!.page = 1;
+  changePage() {
+    if (this.params!.paginationParameters?.page) {
+      this.paramsChange.emit(this.params!);
+      this.reload.emit();
     }
-
-    this.params!.paginatedParameters!.page += offset;
-    this.paramsChange.emit(this.params!);
-    this.reload.emit();
-  }
-
-  totalPages(): number {
-    return Math.ceil(this.totalCount / (this.params?.paginatedParameters?.pageSize || 1));
-  }
-
-  hasNextPage(): boolean {
-    if (!this.params?.paginatedParameters?.page) return false;
-    return this.params.paginatedParameters.page < this.totalPages();
-  }
-
-  currentPage(): number {
-    return this.params?.paginatedParameters?.page || 1;
   }
 }

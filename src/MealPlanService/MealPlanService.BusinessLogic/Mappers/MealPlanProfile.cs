@@ -8,7 +8,6 @@ namespace MealPlanService.BusinessLogic.Mappers
     {
         public MealPlanProfile()
         {
-            // MealPlanDTO -> MealPlan
             CreateMap<CreateMealPlanDTO, MealPlan>();
         }
     }

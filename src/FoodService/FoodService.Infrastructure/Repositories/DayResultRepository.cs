@@ -19,17 +19,24 @@ namespace FoodService.Infrastructure.Repositories
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<DayResult>> GetAllByParametersAsync(
+        public async Task<(IEnumerable<DayResult>, long)> GetAllByParametersAsync(
             Guid ProfileId, 
-            PaginatedParameters? paginatedParameters, 
+            PaginationParameters? paginationParameters, 
             PeriodParameters? periodParameters)
         {
-            return await _dbSet
+            var dayResults = await _dbSet
                 .GetByPeriod(periodParameters)
-                .GetPaginated(paginatedParameters)
+                .GetPaginated(paginationParameters)
                 .Where(dr => dr.ProfileId == ProfileId)
                 .IncludeFood()
                 .ToListAsync();
+
+            var totalCount = await _dbSet
+                .GetByPeriod(periodParameters)
+                .Where(dr => dr.ProfileId == ProfileId)
+                .CountAsync();
+
+            return (dayResults, totalCount);
         }
 
         public async Task<DayResult?> GetByDateAsync(Guid ProfileId, DateOnly date)

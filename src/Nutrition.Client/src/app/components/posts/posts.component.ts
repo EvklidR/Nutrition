@@ -9,6 +9,7 @@ import { faComment, faHeart as solidHeart } from '@fortawesome/free-solid-svg-ic
 import { faHeart as regularHeart } from '@fortawesome/free-regular-svg-icons';
 import { Router } from '@angular/router';
 import { MarkdownModule, provideMarkdown } from 'ngx-markdown';
+import { MarkdownImgServicePipe } from '../../pipes/markdown-img.pipe';
 
 @Component({
   selector: 'app-posts',
@@ -17,6 +18,7 @@ import { MarkdownModule, provideMarkdown } from 'ngx-markdown';
     CommonModule,
     FormsModule,
     FontAwesomeModule,
+    MarkdownImgServicePipe,
     MarkdownModule
   ],
   providers: [

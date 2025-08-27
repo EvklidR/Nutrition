@@ -5,10 +5,10 @@ namespace FoodService.Domain.Interfaces.Repositories;
 
 public interface IDayResultRepository : IBaseRepository<DayResult>
 {
-    Task<IEnumerable<DayResult>> GetAllByParametersAsync(
+    Task<(IEnumerable<DayResult>, long)> GetAllByParametersAsync(
         Guid profileId, 
-        PaginatedParameters? paginatedParameters, 
-        PeriodParameters? periodParameters);
+        PaginationParameters? paginationParameters = null, 
+        PeriodParameters? periodParameters = null);
     Task<DayResult?> GetByDateAsync(Guid profileId, DateOnly date);
     Task<bool> DoesAnyDayResultContainsFoodByIdAsync(Guid id, bool aboutProduct);
 }

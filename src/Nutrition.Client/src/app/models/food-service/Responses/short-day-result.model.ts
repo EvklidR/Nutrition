@@ -1,6 +1,6 @@
 export interface ShortDayResultResponse {
   id: string,
-  date: Date,
+  date: string,
   weight: number,
   calories: number,
   proteins: number,

@@ -13,6 +13,7 @@ namespace MealPlanService.Core.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public MealPlanType Type { get; set; }
+        public List<Recommendation> Recommendations { get; set; } = [];
 
         public List<MealPlanDay> Days { get; set; }
     }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CreateMealPlanModel } from '../../models/meal-plan-service/Requests/create-meal-plan.model';
 import { CalculationType } from '../../models/meal-plan-service/Enums/calculation-type.enum';
 import { MealPlanType } from '../../models/meal-plan-service/Enums/meal-plan-type.enum';
@@ -8,6 +8,7 @@ import { MealPlanService } from '../../services/meal-plan-service/meal-plan.serv
 import { NutrientType } from '../../models/meal-plan-service/Enums/nutrient-type.enum';
 import { MealPlanDayModel } from '../../models/meal-plan-service/Models/meal-plan-day.model';
 import { FormsModule } from '@angular/forms';
+import { MealPlanModel } from '../../models/meal-plan-service/Models/meal-plan.model';
 
 @Component({
   selector: 'app-create-meal-plan',
@@ -21,24 +22,48 @@ import { FormsModule } from '@angular/forms';
 })
 export class CreateMealPlanComponent implements OnInit {
   createMealPlan!: CreateMealPlanModel;
+  isEditMode = false;
+  mealPlanId: string | null = null;
+
   nutrientTypes = ['Белки', 'Жиры', 'Углеводы'];
   calculationTypes = CalculationType;
   mealPlanType = MealPlanType;
 
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private mealPlanService: MealPlanService
   ) {}
 
   ngOnInit(): void {
-    this.createMealPlan = {
-      name: '',
-      description: '',
-      type: MealPlanType.Maintenance,
-      days: []
-    };
+    this.mealPlanId = this.route.snapshot.paramMap.get('id');
 
-    this.addDay()
+    if (this.mealPlanId) {
+      this.isEditMode = true;
+      this.loadMealPlan(this.mealPlanId);
+    } else {
+      this.isEditMode = false;
+      this.createMealPlan = {
+        name: '',
+        description: '',
+        type: MealPlanType.Maintenance,
+        recommendations: [],
+        days: []
+      };
+      this.addDay();
+    }
+  }
+
+  loadMealPlan(id: string) {
+    this.mealPlanService.getMealPlanById(id).subscribe((plan: MealPlanModel) => {
+      this.createMealPlan = {
+        name: plan.name,
+        description: plan.description,
+        type: plan.type,
+        recommendations: plan.recommendations,
+        days: plan.days
+      };
+    });
   }
 
   addDay() {
@@ -67,15 +92,40 @@ export class CreateMealPlanComponent implements OnInit {
   }
 
   onSubmit() {
-    this.createMealPlan.type = Number(this.createMealPlan.type)
+    this.createMealPlan.type = Number(this.createMealPlan.type);
 
-    console.log(this.createMealPlan);
-    this.mealPlanService.createMealPlan(this.createMealPlan).subscribe(
-      (plan) => {
-        console.log("создан ", plan)
-        this.router.navigate(["/meal-plans"])
-      }
-    )
+    if (this.isEditMode && this.mealPlanId) {
+      const updatedPlan: MealPlanModel = {
+        id: this.mealPlanId,
+        ...this.createMealPlan
+      };
+      this.mealPlanService.updateMealPlan(updatedPlan).subscribe(() => {
+        console.log("обновлено");
+        this.router.navigate(["/meal-plans"]);
+      });
+    } else {
+      // создание
+      this.mealPlanService.createMealPlan(this.createMealPlan).subscribe((plan) => {
+        console.log("создан ", plan);
+        this.router.navigate(["/meal-plans"]);
+      });
+    }
+  }
+
+  addPlanRecommendation() {
+    this.createMealPlan.recommendations.push({ text: '' });
+  }
+
+  deletePlanRecommendation(index: number) {
+    this.createMealPlan.recommendations.splice(index, 1);
+  }
+
+  addDayRecommendation(dayIndex: number) {
+    this.createMealPlan.days[dayIndex].recommendations.push({ text: '' });
+  }
+
+  deleteDayRecommendation(dayIndex: number, recIndex: number) {
+    this.createMealPlan.days[dayIndex].recommendations.splice(recIndex, 1);
   }
 
   getCalculationDescription(calculationType: CalculationType): string {

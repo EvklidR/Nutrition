@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MarkdownModule, provideMarkdown } from 'ngx-markdown';
 import { CommonModule } from '@angular/common';
 import { PostService } from '../../services/post-service/post.service';
@@ -8,6 +8,7 @@ import { PostModel } from '../../models/post-service/Responses/post.model';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UpdatePostModel } from '../../models/post-service/Requests/update-post.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MarkdownImgServicePipe } from '../../pipes/markdown-img.pipe';
 
 @Component({
   selector: 'app-create-post',
@@ -15,7 +16,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MarkdownModule
+    MarkdownImgServicePipe,
+    MarkdownModule,
+    FormsModule
   ],
   providers: [provideMarkdown()],
   templateUrl: './create-post.component.html',
@@ -27,6 +30,10 @@ export class CreatePostComponent implements OnInit {
   previewMode = false;
 
   postToEdit: PostModel | null = null;
+
+  selectedFiles: File[] = [];
+  keywords: string[] = [];
+  newKeyword: string = '';
 
   @ViewChild('contentArea') contentArea!: ElementRef<HTMLTextAreaElement>;
 
@@ -43,6 +50,7 @@ export class CreatePostComponent implements OnInit {
       this.postService.getPost(postId).subscribe({
         next: (post) => {
           this.postToEdit = post;
+          this.keywords = post.keyWords || []
           this.titleControl.setValue(post.title);
           this.contentControl.setValue(post.text);
         },
@@ -104,8 +112,8 @@ export class CreatePostComponent implements OnInit {
         id: this.postToEdit.id,
         title: title ?? '',
         text: content,
-        keyWords: this.postToEdit.keyWords ?? ['angular', 'markdown'],
-        newFiles: []
+        keyWords: this.keywords,
+        newFiles: this.selectedFiles
       };
 
       this.postService.updatePost(updateData).subscribe({
@@ -117,8 +125,8 @@ export class CreatePostComponent implements OnInit {
       const postData: CreatePostModel = {
         title: title ?? '',
         text: content,
-        keyWords: ['angular', 'markdown'],
-        files: []
+        keyWords: this.keywords,
+        files: this.selectedFiles
       };
 
       this.postService.createPost(postData).subscribe({
@@ -131,5 +139,38 @@ export class CreatePostComponent implements OnInit {
         error: (err) => console.error('Ошибка при создании поста:', err)
       });
     }
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+
+    const file = input.files[0];
+    this.selectedFiles.push(file);
+
+    const fileName = file.name;
+    const textarea = this.contentArea.nativeElement;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+
+    const before = this.contentControl.value?.substring(0, start) || '';
+    const after = this.contentControl.value?.substring(end) || '';
+    const markdownImage = `![](${fileName})`;
+
+    this.contentControl.setValue(before + markdownImage + after);
+
+    input.value = '';
+  }
+
+  addKeyword(): void {
+    const value = this.newKeyword.trim();
+    if (value && !this.keywords.includes(value)) {
+      this.keywords.push(value);
+    }
+    this.newKeyword = '';
+  }
+
+  removeKeyword(index: number): void {
+    this.keywords.splice(index, 1);
   }
 }

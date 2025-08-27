@@ -57,7 +57,7 @@ export class AddDishModalComponent {
   ngOnInit(): void {
     const params: GetFoodRequestParameters = {
       name: null,
-      paginatedParameters: null,
+      paginationParameters: null,
       sortAsc: null,
       sortingCriteria: null
     }

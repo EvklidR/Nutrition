@@ -23,7 +23,16 @@ export class ProductService {
     for (const key in paramsObj) {
       const value = (paramsObj as any)[key];
       if (value !== null && value !== undefined) {
-        params = params.set(key, value.toString());
+        if (typeof value === 'object' && !Array.isArray(value)) {
+          for (const subKey in value) {
+            const subValue = (value as any)[subKey];
+            if (subValue !== null && subValue !== undefined) {
+              params = params.set(key + "." + subKey, subValue.toString());
+            }
+          }
+        } else {
+          params = params.set(key, value.toString());
+        }
       }
     }
 

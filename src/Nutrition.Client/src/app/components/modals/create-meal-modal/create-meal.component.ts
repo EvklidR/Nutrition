@@ -74,7 +74,7 @@ export class CreateMealComponent implements OnInit {
   private getDefaultParams(): GetFoodRequestParameters {
     return {
       name: null,
-      paginatedParameters: null,
+      paginationParameters: null,
       sortAsc: null,
       sortingCriteria: null
     };

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { UserService } from '../../../services/user-service/user.service';
 import { DishService } from '../../../services/food-service/dish.service';
-import { ProfileService } from '../../../services/user-service/profile.service';
 import { GetFoodRequestParameters } from '../../../models/food-service/Requests/get-food-request-parameters.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DishDetailsModalComponent } from '../../modals/recipe-details-modal/recipe-details-modal.component';
@@ -37,7 +35,15 @@ export class DishesComponent implements OnInit {
   dishes: DishResponse[] = [];
   totalCount: number = 0;
 
-  params!: GetFoodRequestParameters
+  params: GetFoodRequestParameters = {
+    name: null,
+    sortAsc: null,
+    paginationParameters: {
+      page: 1,
+      pageSize: 10
+    },
+    sortingCriteria: null
+  };
 
   hasNextPage: boolean = false;
 
@@ -47,9 +53,7 @@ export class DishesComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private userService: UserService,
     private dishService: DishService,
-    private profileService: ProfileService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) { }

@@ -15,28 +15,22 @@ public static class GeneralExtentions
         var startDate = periodParameters.StartDate;
         var endDate = periodParameters.EndDate;
 
-        if (startDate != null && endDate != null)
-        {
-            collection = collection.Where(dr => dr.Date >= startDate && dr.Date <= endDate);
-        }
+        collection = collection.Where(dr => dr.Date >= startDate && dr.Date <= endDate);
 
         return collection;
     }
 
-    public static IQueryable<T> GetPaginated<T>(this IQueryable<T> collection, PaginatedParameters? paginatedParameters)
+    public static IQueryable<T> GetPaginated<T>(this IQueryable<T> collection, PaginationParameters? paginationParameters)
     {
-        if (paginatedParameters == null)
+        if (paginationParameters == null || paginationParameters.Page == 0 || paginationParameters.PageSize == 0)
         {
             return collection;
         }
 
-        var page = paginatedParameters.Page;
-        var pageSize = paginatedParameters.PageSize;
+        var page = paginationParameters.Page;
+        var pageSize = paginationParameters.PageSize;
 
-        if (page != null && pageSize != null)
-        {
-            collection = collection.Skip((int)pageSize * ((int)page - 1)).Take((int)pageSize);
-        }
+        collection = collection.Skip((int)pageSize * ((int)page - 1)).Take((int)pageSize);
 
         return collection;
     }

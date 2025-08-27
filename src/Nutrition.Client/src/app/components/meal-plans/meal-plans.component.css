@@ -139,7 +139,7 @@
   background-color: #32CD32;
 }
 
-.select-button, .cansel-button {
+.select-button, .cansel-button, .edit-button {
   padding: 5px 10px;
   border-radius: 8px;
   font-size: 16px;

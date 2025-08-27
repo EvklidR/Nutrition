@@ -6,7 +6,7 @@ using FoodService.Domain.Interfaces;
 
 namespace FoodService.Application.UseCases.QueryHandlers.DayResult;
 
-public class GetAllDayResultsHandler : IQueryHandler<GetAllDayResultsQuery, IEnumerable<ShortDayResultResponse>>
+public class GetAllDayResultsHandler : IQueryHandler<GetAllDayResultsQuery, DayResultsResponse>
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserService _userService;
@@ -19,19 +19,25 @@ public class GetAllDayResultsHandler : IQueryHandler<GetAllDayResultsQuery, IEnu
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<ShortDayResultResponse>> Handle(GetAllDayResultsQuery request, CancellationToken cancellationToken)
+    public async Task<DayResultsResponse> Handle(GetAllDayResultsQuery request, CancellationToken cancellationToken)
     {
         await _userService.CheckProfileBelongingAsync(
                 request.UserId,
                 request.ProfileId);
 
-        var dayResults = await _unitOfWork.DayResultRepository.GetAllByParametersAsync(
+        var (dayResults, totalCount) = await _unitOfWork.DayResultRepository.GetAllByParametersAsync(
             request.ProfileId,
-            request.PaginatedParameters,
+            request.PaginationParameters,
             request.PeriodParameters);
 
         var dayResultsDTO = _mapper.Map<List<ShortDayResultResponse>>(dayResults);
 
-        return dayResultsDTO;
+        var response = new DayResultsResponse
+        {
+            DayResults = dayResultsDTO,
+            TotalCount = totalCount
+        };
+
+        return response;
     }
 }

@@ -9,6 +9,11 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="src\app\components\modals\NewFolder\**" />
+    <None Remove="src\app\models\NewFolder\**" />
     <TypeScriptConfiguration Remove="src\app\components\modals\NewFolder\**" />
+    <TypeScriptConfiguration Remove="src\app\models\NewFolder\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\app\components\history\day-result-history\" />
   </ItemGroup>
 </Project>

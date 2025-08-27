@@ -30,6 +30,10 @@ export class MealPlanService {
     return this.http.get<MealPlansResponseModel>(`${this.baseUrl}/meal_plans`, { params });
   }
 
+  getMealPlanById(id: string): Observable<MealPlanModel> {
+    return this.http.get<MealPlanModel>(`${this.baseUrl}/${id}`);
+  }
+
   createMealPlan(mealPlanData: CreateMealPlanModel): Observable<MealPlanModel> {
     return this.http.post<MealPlanModel>(this.baseUrl, mealPlanData);
   }

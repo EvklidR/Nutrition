@@ -3,6 +3,17 @@
 
   <input type="text" [formControl]="titleControl" placeholder="Заголовок" />
 
+  <div class="keywords-container">
+
+    <input type="text"
+           placeholder="Добавить ключевое слово"
+           [(ngModel)]="newKeyword"
+           (keydown.enter)="addKeyword(); $event.preventDefault()">
+    <div class="keyword" *ngFor="let kw of keywords; let i = index">
+      {{ kw }} <span class="remove" (click)="removeKeyword(i)">×</span>
+    </div>
+  </div>
+
   <div class="work-area">
     <div class="editor-header">
       <div class="editor-toolbar">
@@ -12,7 +23,13 @@
         <button (click)="formatText('heading1')">H1</button>
         <button (click)="formatText('heading2')">H2</button>
         <button (click)="formatText('heading3')">H3</button>
+
+        <label class="upload-btn">
+          🖼️ Картинка
+          <input type="file" (change)="onFileSelected($event)" hidden accept="image/*">
+        </label>
       </div>
+
 
       <div class="editor-tabs">
         <button [class.active]="!previewMode" (click)="togglePreview()">Редактировать</button>
@@ -29,8 +46,9 @@
     </textarea>
 
       <div *ngIf="previewMode" class="markdown-preview">
-        <markdown [data]="contentControl.value"></markdown>
+        <markdown [data]="contentControl.value! | markdownImgService | async"></markdown>
       </div>
+
     </div>
   </div>
 

@@ -94,9 +94,7 @@ namespace PostService.BusinessLogic.Services
                 throw new Unauthorized("There is no user with this id");
             }
 
-            var markdown = await UploadImagesAsync(postDTO.Files, postDTO.Text);
-
-            postDTO.Text = markdown;
+            postDTO.Text = await UploadImagesAsync(postDTO.Files, postDTO.Text);
 
             var post = _mapper.Map<Post>(postDTO);
             post.OwnerEmail = ownerEmail;
@@ -145,7 +143,7 @@ namespace PostService.BusinessLogic.Services
                 throw new Forbidden("You don't have permission to this action");
             }
 
-            var markdown = await UploadImagesAsync(postDTO.NewFiles, postDTO.Text);
+           postDTO.Text = await UploadImagesAsync(postDTO.NewFiles, postDTO.Text);
 
             var oldImageLinks = ExtractLinks(post.Text);
 

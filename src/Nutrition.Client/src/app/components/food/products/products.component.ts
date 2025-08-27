@@ -32,7 +32,15 @@ export class ProductsComponent implements OnInit {
   products: ProductResponse[] = [];
   totalCount: number = 0;
 
-  params!: GetFoodRequestParameters;
+  params: GetFoodRequestParameters = {
+    name: null,
+    sortAsc: null,
+    paginationParameters: {
+      page: 1,
+      pageSize: 10
+    },
+    sortingCriteria: null
+  };
 
   isLoading: boolean = true;
 

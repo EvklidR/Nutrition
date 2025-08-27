@@ -1,0 +1,6 @@
+<div class="pagination">
+  <label>Страница:</label>
+  <button (click)="changePage(-1)" [disabled]="currentPage() === 1">←</button>
+  <span>{{ currentPage() }} / {{ totalPages() }}</span>
+  <button (click)="changePage(1)" [disabled]="!hasNextPage()">→</button>
+</div>

@@ -6,10 +6,10 @@ import { format } from 'date-fns';
 
 import { UpdateDayResultModel } from '../../models/food-service/Requests/update-day-result.model';
 import { DayResultResponse } from '../../models/food-service/Responses/day-result.model';
-import { ShortDayResultResponse } from '../../models/food-service/Responses/short-day-result.model';
-import { PaginatedParameters } from '../../models/food-service/Requests/paginated-parameters.model';
-import { PeriodParameters } from '../../models/food-service/Requests/period-parameters.model';
 import { EatenFoodResponse } from '../../models/food-service/Responses/eaten-food.model';
+import { PeriodParameters } from '../../models/request-parameters/period-parameters.model';
+import { PaginationParameters } from '../../models/request-parameters/pagination-parameters.model';
+import { DayResultsResponse } from '../../models/food-service/Responses/day-results.model';
 
 @Injectable({
   providedIn: 'root'
@@ -35,9 +35,13 @@ export class DayResultService {
     return this.http.get<DayResultResponse>(`${this.baseUrl}/${profileId}/${dayResultId}`);
   }
 
-  getDayResults(profileId: string, periodParameters: PeriodParameters | null, paginatedParameters: PaginatedParameters | null): Observable<ShortDayResultResponse[]> {
-    const params = this.buildParams({ ...periodParameters, ...paginatedParameters });
-    return this.http.get<ShortDayResultResponse[]>(`${this.baseUrl}/${profileId}`, { params });
+  getDayResults(
+    profileId: string,
+    periodParameters: PeriodParameters | null,
+    paginationParameters: PaginationParameters | null): Observable<DayResultsResponse>
+  {
+    const params = this.buildParams({ ...periodParameters, ...paginationParameters });
+    return this.http.get<DayResultsResponse>(`${this.baseUrl}/${profileId}`, { params });
   }
 
   getEatenFood(profileId: string, periodParameters: PeriodParameters): Observable<EatenFoodResponse[]> {

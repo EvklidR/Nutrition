@@ -1,0 +1,11 @@
+.date-range-picker {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+  .date-range-picker label {
+    font-size: 16px;
+    font-weight: 500;
+  }

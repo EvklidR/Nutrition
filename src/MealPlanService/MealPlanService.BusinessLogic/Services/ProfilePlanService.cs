@@ -7,8 +7,8 @@ using MealPlanService.Core.Enums;
 using MealPlanService.Infrastructure.Enums;
 using MealPlanService.Infrastructure.RabbitMQService;
 using MealPlanService.Infrastructure.Repositories.Interfaces;
+using MealPlanService.Infrastructure.Repositories.Models;
 using MealPlanService.Infrastructure.Services.Interfaces;
-using System.Numerics;
 
 namespace MealPlanService.BusinessLogic.Services
 {
@@ -44,7 +44,15 @@ namespace MealPlanService.BusinessLogic.Services
         {
             var day = await _mealPlanService.GetCurrentDay(profileId);
 
-            return day.Recommendations.ToList();
+            var userPlan = await _profileMealPlanRepository.GetActiveProfilePlan(profileId);
+
+            var mealPlan = await _mealPlanRepository.GetByIdAsync(userPlan.MealPlanId);
+
+            var recommendations = day.Recommendations;
+
+            recommendations.AddRange(mealPlan!.Recommendations);
+
+            return recommendations;
         }
 
         public async Task<ProfileMealPlan> CreateProfilePlanAsync(string userId, ProfileMealPlanDTO profileMealPlanDTO)
@@ -119,27 +127,26 @@ namespace MealPlanService.BusinessLogic.Services
         }
 
 
-        public async Task<List<ProfileMealPlanWithDetailsDto>> GetProfilePlansAsync(string userId, string profileId)
+        public async Task<ProfileMealPlansResponse> GetProfilePlansAsync(
+            string userId, 
+            string profileId,
+            PaginationParameters? paginationParameters,
+            PeriodParameters? periodParameters)
         {
             if (!await _userService.CheckProfileBelonging(userId, profileId))
             {
                 throw new BadRequest("You don't have access to this profile");
             }
 
-            var profilePlans = await _profileMealPlanRepository.GetAllAsync(profileId);
+            var (profileMealPlans, totalCount) = await _profileMealPlanRepository.GetAllAsync(profileId, paginationParameters, periodParameters);
 
-            if (profilePlans == null || !profilePlans.Any())
-            {
-                return new List<ProfileMealPlanWithDetailsDto>();
-            }
-
-            var mealPlanIds = profilePlans.Select(p => p.MealPlanId).Distinct().ToList();
+            var mealPlanIds = profileMealPlans.Select(p => p.MealPlanId).Distinct().ToList();
 
             var mealPlans = await _mealPlanRepository.GetManyByIdsAsync(mealPlanIds);
 
             var mealPlanMap = mealPlans.ToDictionary(mp => mp.Id);
 
-            var result = profilePlans.Select(p =>
+            var plans = profileMealPlans.Select(p =>
             {
                 var plan = mealPlanMap.GetValueOrDefault(p.MealPlanId);
 
@@ -156,12 +163,18 @@ namespace MealPlanService.BusinessLogic.Services
                 };
             }).ToList();
 
-            return result;
+            var response = new ProfileMealPlansResponse
+            {
+                ProfileMealPlans = plans,
+                TotalCount = totalCount
+            };
+
+            return response;
         }
 
         public async Task DeleteProfilePlansAsync(string profileId)
         {
-            var plans = await _profileMealPlanRepository.GetAllAsync(profileId);
+            var (plans, _) = await _profileMealPlanRepository.GetAllAsync(profileId);
 
             foreach (var plan in plans)
             {

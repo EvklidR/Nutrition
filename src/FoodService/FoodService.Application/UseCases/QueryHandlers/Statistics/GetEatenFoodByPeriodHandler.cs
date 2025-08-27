@@ -28,7 +28,7 @@ public class GetEatenFoodByPeriodHandler : IQueryHandler<GetEatenFoodByPeriodQue
     {
         await _userService.CheckProfileBelongingAsync(request.UserId, request.ProfileId);
 
-        var dayResults = await _unitOfWork.DayResultRepository.GetAllByParametersAsync(request.ProfileId, paginatedParameters: null, request.PeriodParameters);
+        var (dayResults, _) = await _unitOfWork.DayResultRepository.GetAllByParametersAsync(request.ProfileId, paginationParameters: null, request.PeriodParameters);
 
         var meals = dayResults.SelectMany(dayResult => dayResult.Meals);
 

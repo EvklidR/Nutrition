@@ -41,6 +41,9 @@
           <button *ngIf="expandedPlanId === plan.id" class="select-button" (click)="selectPlan(plan, $event)">
             Выбрать
           </button>
+          <button *ngIf="expandedPlanId === plan.id && userRole == 'admin'" class="edit-button" (click)="navigateToEditingPlan(plan.id)">
+            Редактировать
+          </button>
         </div>
       </div>
     </div>

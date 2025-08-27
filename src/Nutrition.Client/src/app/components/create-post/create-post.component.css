@@ -110,3 +110,30 @@ textarea {
   flex-direction: column;
   width: 100%;
 }
+
+.keywords-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 10px 0;
+}
+
+.keyword {
+  background-color: #e0e0e0;
+  border-radius: 12px;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+  .keyword .remove {
+    margin-left: 6px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  .keywords-container input {
+    width: 200px;
+    font-size: 14px;
+  }

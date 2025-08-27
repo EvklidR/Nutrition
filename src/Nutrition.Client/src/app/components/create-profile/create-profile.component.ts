@@ -67,23 +67,7 @@ export class CreateProfileComponent {
           next: () => {
             this.profileService.setCurrentProfile(profile.id);
             this.profileService.loadCurrentProfile();
-          }
-        });
-
-        this.dayResultService.getOrCreateDayResult(profile.id).subscribe({
-          next: (currentDayResult) => {
-            const updateDayResult: UpdateDayResultModel = {
-              id: currentDayResult.id,
-              glassesOfWater: currentDayResult.glassesOfWater,
-              weight: profile.weight
-            };
-
-            this.dayResultService.updateDayResult(updateDayResult).subscribe({
-              next: () => {
-                this.router.navigate(['/home']);
-                console.log("Обновился результат дня");
-              }
-            });
+            this.router.navigate(['/home']);
           }
         });
 

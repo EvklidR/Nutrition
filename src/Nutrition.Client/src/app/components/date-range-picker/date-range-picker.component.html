@@ -1,0 +1,15 @@
+<div class="date-range-picker">
+  <label>
+    Начало:
+    <input type="date"
+           [(ngModel)]="params!.startDate"
+           (ngModelChange)="onDateChange()">
+  </label>
+
+  <label>
+    Конец:
+    <input type="date"
+           [(ngModel)]="params!.endDate"
+           (ngModelChange)="onDateChange()">
+  </label>
+</div>

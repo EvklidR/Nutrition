@@ -2,6 +2,7 @@
 using MealPlanService.BusinessLogic.DTOs;
 using MealPlanService.BusinessLogic.Services;
 using MealPlanService.Core.Entities;
+using MealPlanService.Infrastructure.Repositories.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,17 +42,22 @@ namespace MealPlanService.API.Controllers
         /// Retrieves the meal plan history for a specific profile of the user.
         /// </summary>
         /// <param name="profileId">The profile identifier for which to retrieve meal plans.</param>
+        /// <param name="paginationParameters">Pagination parameters.</param>
+        /// <param name="periodParameters">Period parameters.</param>
         [HttpGet("history")]
         [ServiceFilter(typeof(UserIdFilter))]
         [Authorize]
-        [ProducesResponseType(typeof(IEnumerable<ProfileMealPlan>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<ProfileMealPlanWithDetailsDto>>> GetAllProfilePlans(string profileId)
+        [ProducesResponseType(typeof(ProfileMealPlansResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult<ProfileMealPlansResponse>> GetAllProfilePlans(
+            string profileId, 
+            [FromQuery] PaginationParameters? paginationParameters, 
+            [FromQuery] PeriodParameters? periodParameters)
         {
             var userId = (string)HttpContext.Items["UserId"]!;
 
-            var plans = await _userPlanService.GetProfilePlansAsync(userId, profileId);
+            var response = await _userPlanService.GetProfilePlansAsync(userId, profileId, paginationParameters, periodParameters);
 
-            return Ok(plans);
+            return Ok(response);
         }
 
         /// <summary>
