@@ -1,5 +1,5 @@
 import { provideRouter, Routes } from "@angular/router";
-import { ApplicationConfig, importProvidersFrom } from "@angular/core";
+import { ApplicationConfig } from "@angular/core";
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { LoginComponent } from "../app/components/login/login.component"
@@ -25,6 +25,7 @@ import { ProductsComponent } from "./components/food/products/products.component
 import { DishesComponent } from "./components/food/dishes/dishes.component";
 import { StatisticsSwitcherComponent } from "./components/statistics/statistics-switcher/statistics-switcher.component";
 import { HistorySwitcherComponent } from "./components/history/history-switcher/history-switcher.component";
+import { MealPlanHistoryComponent } from "./components/history/meal-plan-history/meal-plan-history.component";
 
 const appRoutes: Routes = [
   { path: "login", component: LoginComponent },
@@ -67,7 +68,7 @@ const appRoutes: Routes = [
         canActivate: [ProfileGuard],
         children: [
           { path: 'days', component: BodyStatisticsComponent },
-          { path: 'meal-plans', component: FoodStatisticsComponent },
+          { path: 'meal-plans', component: MealPlanHistoryComponent },
           { path: '', redirectTo: 'days', pathMatch: 'full' }
         ]
       },

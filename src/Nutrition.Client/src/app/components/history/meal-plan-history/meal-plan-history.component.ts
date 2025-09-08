@@ -13,6 +13,10 @@ import { ShortProfileResponse } from '../../../models/user-service/Responses/sho
 import { PeriodParameters } from '../../../models/request-parameters/period-parameters.model';
 import { subDays } from 'date-fns';
 import { ProfileMealPlansResponse } from '../../../models/meal-plan-service/Responses/profile-meal-plans.model';
+import format from 'date-fns/esm/format/index';
+import sub from 'date-fns/esm/sub/index.js';
+import { DateRangePickerComponent } from '../../date-range-picker/date-range-picker.component';
+import { PaginationComponent } from '../../pagination/pagination.component';
 
 @Component({
   selector: 'app-meal-plan-historyw',
@@ -21,6 +25,8 @@ import { ProfileMealPlansResponse } from '../../../models/meal-plan-service/Resp
     CommonModule,
     FormsModule,
     FontAwesomeModule,
+    DateRangePickerComponent,
+    PaginationComponent
   ],
   templateUrl: './meal-plan-history.component.html',
   styleUrls: ['./meal-plan-history.component.css']
@@ -37,8 +43,8 @@ export class MealPlanHistoryComponent implements OnInit {
   }
 
   periodParams: PeriodParameters = {
-    startDate: subDays(new Date(Date.now()), 30),
-    endDate: new Date(Date.now())
+    startDate: format(sub(new Date(), { months: 1 }), "yyyy-MM-dd"),
+    endDate: format(new Date(), "yyyy-MM-dd")
   }
 
   hasNextPage: boolean = false;

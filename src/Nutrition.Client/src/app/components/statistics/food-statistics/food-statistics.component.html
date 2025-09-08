@@ -7,12 +7,9 @@
         <button class="choose-button" [class.active]="viewMode === 'calories'" (click)="switchViewMode('calories')">Калории</button>
         <button class="choose-button" [class.active]="viewMode === 'macros'" (click)="switchViewMode('macros')">БЖУ</button>
       </div>
-      <div class="select-period">
-        <label for="weekPeriod">Выберите период (недели):</label>
-        <select id="weekPeriod" [(ngModel)]="weeksAgo" (change)="updatePeriod()">
-          <option *ngFor="let period of availablePeriods" [value]="period">{{ period }} недели</option>
-        </select>
-      </div>
+      <app-date-range-picker [(params)]="periodParams"
+                             (reload)="onUpdatePeriod()">
+      </app-date-range-picker>
     </div>
 
     <div *ngIf="chartData.length > 0">

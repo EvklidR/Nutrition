@@ -55,9 +55,6 @@ export class DayResultService {
     for (const key in obj) {
       if (obj[key] !== null && obj[key] !== undefined) {
         let value = obj[key];
-        if (value instanceof Date) {
-          value = format(value, 'yyyy-MM-dd');
-        }
         params = params.set(key, String(value));
       }
     }

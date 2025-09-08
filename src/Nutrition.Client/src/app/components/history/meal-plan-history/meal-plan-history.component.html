@@ -1,10 +1,62 @@
-// This file allows you to configure ESLint according to your project's needs, so that you
-// can control the strictness of the linter, the plugins to use, and more.
+<div class="meal-plan-history">
 
-// For more information about configuring ESLint, visit https://eslint.org/docs/user-guide/configuring/
+  <app-date-range-picker [(params)]="periodParams"
+                         (reload)="loadProfilePlans()">
+  </app-date-range-picker>
 
-module.exports = [
-    {
-        rules: {}
-    }
-];
+  <div *ngIf="isLoading" class="loading">
+    Загрузка...
+  </div>
+
+  <div *ngIf="!isLoading && profileMealPlans.length === 0" class="empty">
+    Нет планов за выбранный период.
+  </div>
+
+  <table *ngIf="!isLoading && profileMealPlans.length > 0" class="meal-plan-table">
+    <colgroup>
+      <col class="col-name">
+      <col class="col-description">
+      <col class="col-date">
+      <col class="col-date">
+      <col class="col-active">
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="name">Название плана</th>
+        <th class="description">Описание</th>
+        <th class="start">Дата начала</th>
+        <th class="end">Дата окончания</th>
+        <th class="active">Активный</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let plan of profileMealPlans">
+        <td class="name">
+          <div class="cell-content">{{ plan.mealPlanName }}</div>
+        </td>
+        <td class="description">
+          <div class="cell-content">{{ plan.mealPlanDescription }}</div>
+        </td>
+        <td class="start">
+          <div class="cell-content">{{ plan.startDate | date: 'yyyy-MM-dd' }}</div>
+        </td>
+        <td class="end">
+          <div class="cell-content">{{ plan.endDate | date: 'yyyy-MM-dd' }}</div>
+        </td>
+        <td class="active">
+          <div class="cell-content">
+            <span>
+              {{ plan.isActive ? 'Да' : 'Нет' }}
+            </span>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <app-pagination [(params)]="paginationParams"
+                  [totalCount]="totalCount"
+                  (reload)="loadProfilePlans()">
+  </app-pagination>
+</div>

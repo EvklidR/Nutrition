@@ -27,8 +27,8 @@ export class ProfilePlanService {
     paginationParameters: PaginationParameters | null,
     periodParameters: PeriodParameters | null): Observable<ProfileMealPlansResponse> {
 
-    const params = this.buildParams({ ...periodParameters, ...paginationParameters });
-    params.append(profileId.toString(), profileId);
+    let params = this.buildParams({ ...periodParameters, ...paginationParameters });
+    params = params.append("profileId", profileId); // ← правильно
 
     return this.http.get<ProfileMealPlansResponse>(`${this.baseUrl}/history`, {
       params
@@ -57,9 +57,6 @@ export class ProfilePlanService {
     for (const key in obj) {
       if (obj[key] !== null && obj[key] !== undefined) {
         let value = obj[key];
-        if (value instanceof Date) {
-          value = format(value, 'yyyy-MM-dd');
-        }
         params = params.set(key, String(value));
       }
     }

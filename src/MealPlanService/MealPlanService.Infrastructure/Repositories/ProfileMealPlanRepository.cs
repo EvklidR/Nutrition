@@ -23,12 +23,16 @@ namespace MealPlanService.Infrastructure.Repositories
             var filter = periodParameters == null ?
                 Builders<ProfileMealPlan>.Filter.Empty :
                 Builders<ProfileMealPlan>.Filter.Where(profileMealPlan => 
+                    profileMealPlan.ProfileId == profileId &&
                     profileMealPlan.StartDate <= periodParameters.EndDate &&
-                    profileMealPlan.EndDate >= periodParameters.StartDate);
+                    (profileMealPlan.EndDate == null || profileMealPlan.EndDate >= periodParameters.StartDate));
 
             var totalCount = await _collection.CountDocumentsAsync(filter);
 
-            var query = _collection.Find(filter);
+            var query = _collection
+                .Find(filter)
+                .SortByDescending(profilePlan => profilePlan.StartDate)
+                .ThenByDescending(profilePlan => profilePlan.EndDate);
 
             if (paginationParameters != null)
             {

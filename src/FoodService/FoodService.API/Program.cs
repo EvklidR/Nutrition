@@ -1,4 +1,3 @@
-
 using FoodService.Api.Middleware;
 using FoodService.API.DependencyInjection;
 using FoodService.API.Extentions;

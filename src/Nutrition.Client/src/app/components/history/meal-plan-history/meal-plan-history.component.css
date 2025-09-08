@@ -1,10 +1,65 @@
-// This file allows you to configure ESLint according to your project's needs, so that you
-// can control the strictness of the linter, the plugins to use, and more.
+.meal-plan-history {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
-// For more information about configuring ESLint, visit https://eslint.org/docs/user-guide/configuring/
+.loading,
+.empty {
+  text-align: center;
+  font-size: 18px;
+  color: #777;
+  margin-top: 20px;
+}
 
-module.exports = [
-    {
-        rules: {}
-    }
-];
+.meal-plan-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  table-layout: fixed;
+}
+
+  .meal-plan-table th,
+  .meal-plan-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+
+  .meal-plan-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+  }
+
+  .meal-plan-table tr:nth-child(even) {
+    background-color: #fafafa;
+  }
+
+  .meal-plan-table tr:hover {
+    background-color: #f0f0f0;
+  }
+
+.meal-plan-table .cell-content {
+  display: block;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+
+  .meal-plan-table col.col-date {
+    width: 15%;
+  }
+
+  .meal-plan-table col.col-name {
+    width: 20%;
+  }
+
+  .meal-plan-table col.col-description {
+    width: 35%;
+  }
+
+  .meal-plan-table col.col-active {
+    width: 15%;
+  }

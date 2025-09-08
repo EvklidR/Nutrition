@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PeriodParameters } from '../../models/request-parameters/period-parameters.model';
 import sub from 'date-fns/esm/sub/index.js';
+import format from 'date-fns/format/index';
 
 export interface DateRange {
   startDate: Date;
@@ -25,8 +26,8 @@ export class DateRangePickerComponent implements OnInit {
   ngOnInit() {
     if (!this.params) {
       this.params = {
-        startDate: sub(new Date(), { weeks: 1 }),
-        endDate: new Date()
+        startDate: format(sub(new Date(), { weeks: 1 }), "yyyy-MM-dd"),
+        endDate: format(new Date(), "yyyy-MM-dd")
       };
       this.paramsChange.emit(this.params)
       this.reload.emit()

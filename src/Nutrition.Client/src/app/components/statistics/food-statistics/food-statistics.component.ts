@@ -12,6 +12,7 @@ import { EatenFoodResponse } from '../../../models/food-service/Responses/eaten-
 import addDays from 'date-fns/esm/addDays/index.js';
 import format from 'date-fns/format/index';
 import { PeriodParameters } from '../../../models/request-parameters/period-parameters.model';
+import { DateRangePickerComponent } from '../../date-range-picker/date-range-picker.component';
 
 @Component({
   selector: 'app-food-statistics',
@@ -19,7 +20,8 @@ import { PeriodParameters } from '../../../models/request-parameters/period-para
   imports: [
     CommonModule,
     FormsModule,
-    NgxChartsModule
+    NgxChartsModule,
+    DateRangePickerComponent
   ],
   templateUrl: './food-statistics.component.html',
   styleUrls: ['./food-statistics.component.css']
@@ -28,13 +30,13 @@ export class FoodStatisticsComponent implements OnInit {
   profile!: ShortProfileResponse | null;
 
   dayResults: ShortDayResultResponse[] = [];
-  weeksAgo: number = 1;
-  availablePeriods: number[] = [1, 2, 3, 4, 8, 12, 18, 24];
 
   eatenFood: EatenFoodResponse[] = []
 
-  startDate: Date = sub(new Date(), { weeks: this.weeksAgo });
-  endDate: Date = new Date();
+  periodParams: PeriodParameters = {
+    startDate: format(sub(new Date(), { days: 6 }), "yyyy-MM-dd"),
+    endDate: format(new Date(), "yyyy-MM-dd")
+  }
 
   caloriesData: { date: string, calories: number }[] = [];
   macrosData: { date: string, proteins: number, fats: number, carbs: number }[] = [];
@@ -58,24 +60,23 @@ export class FoodStatisticsComponent implements OnInit {
       this.profile = profile;
 
       if (profile) {
-        this.loadDayResults(profile.id);
+        this.loadDayResults();
         this.getTopFoods()
       }
     });
   }
 
-  loadDayResults(profileId: string): void {
+  onUpdatePeriod() {
+    this.loadDayResults();
+    this.getTopFoods()
+  }
 
-    const periodParams: PeriodParameters = {
-      startDate: this.startDate,
-      endDate: this.endDate
-    }
-
-    this.dayResultService.getDayResults(profileId, periodParams, null).subscribe(
+  loadDayResults(): void {
+    this.dayResultService.getDayResults(this.profile!.id, this.periodParams, null).subscribe(
       (response) => {
         this.dayResults = response.dayResults;
 
-        for (let currentDate = addDays(this.startDate, 1); currentDate <= this.endDate; currentDate = addDays(currentDate, 1)) {
+        for (let currentDate = addDays(new Date(this.periodParams.startDate), 1); currentDate <= new Date(this.periodParams.endDate); currentDate = addDays(currentDate, 1)) {
 
           let day: ShortDayResultResponse | undefined = this.dayResults.find(
             d => this.toDateString(d.date) === this.toDateString(currentDate)
@@ -127,13 +128,6 @@ export class FoodStatisticsComponent implements OnInit {
     }
   }
 
-  updatePeriod(): void {
-    if (this.profile) {
-      this.startDate = sub(this.endDate, { weeks: Number(this.weeksAgo) });
-      this.loadDayResults(this.profile.id);
-    }
-  }
-
   switchViewMode(mode: 'calories' | 'macros'): void {
     this.viewMode = mode;
     this.updateChartData();
@@ -141,7 +135,7 @@ export class FoodStatisticsComponent implements OnInit {
 
   getTopFoods(): void {
     if (this.profile) {
-      this.dayResultService.getEatenFood(this.profile!.id, { startDate: this.startDate, endDate: this.endDate }).subscribe(
+      this.dayResultService.getEatenFood(this.profile!.id, this.periodParams).subscribe(
         (food) => {
           this.eatenFood = food
         }

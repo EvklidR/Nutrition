@@ -1,4 +1,4 @@
 export interface PeriodParameters {
-  startDate: Date,
-  endDate: Date
+  startDate: string,
+  endDate: string
 }

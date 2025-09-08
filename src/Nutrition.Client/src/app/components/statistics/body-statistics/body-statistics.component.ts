@@ -30,8 +30,8 @@ export class BodyStatisticsComponent implements OnInit {
   dayResults: ShortDayResultResponse[] = [];
 
   periodParams: PeriodParameters = {
-    startDate: sub(new Date(), { weeks: 1 }),
-    endDate: new Date()
+    startDate: format(sub(new Date(), { days: 6 }), "yyyy-MM-dd"),
+    endDate: format(new Date(), "yyyy-MM-dd")
   }
 
   weightData: { date: string, weight: number }[] = [];
@@ -80,7 +80,7 @@ export class BodyStatisticsComponent implements OnInit {
   }
 
   generateData(): void {
-    for (let currentDate = this.periodParams.startDate; currentDate <= this.periodParams.endDate; currentDate = addDays(currentDate, 1)) {
+    for (let currentDate = new Date(this.periodParams.startDate); currentDate <= new Date(this.periodParams.endDate); currentDate = addDays(currentDate, 1)) {
       const formattedDate = format(currentDate, 'yyyy-MM-dd');
 
       let day: ShortDayResultResponse | undefined = this.dayResults.find(
